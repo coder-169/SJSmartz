@@ -61,7 +61,9 @@ const Navbar: React.FC<NavbarProps> = () => {
             </button>
             <Link href={"/"}>
               <Logo />
+              <span>Sj Smartz.com</span>
             </Link>
+            
           </div>
 
           <div className="hidden basis-2/4 lg:block">
