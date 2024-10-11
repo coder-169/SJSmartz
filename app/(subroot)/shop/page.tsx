@@ -156,7 +156,7 @@ export default function Page() {
           <Text className="lg:text-lg">
             Good Sounds make the Environment. Great Sounds heal the Soul!
             <br />
-            SJ Smartz.
+            Sj Smartz.
           </Text>
         </div>
 

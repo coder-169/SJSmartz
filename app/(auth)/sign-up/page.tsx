@@ -91,7 +91,7 @@ export default function Page() {
       if (data.success) {
         toast.success("Account verified");
       } else toast.error("incorrect code or expired!");
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message);
     }
     setLoading(false);
@@ -119,7 +119,7 @@ export default function Page() {
       } else {
         toast.error(data.message);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message);
     }
     setResendLoading(false);
@@ -152,135 +152,136 @@ export default function Page() {
 
         <div className="flex justify-center bg-white lg:rounded-r-lg">
           {!signUp ? (
-          <form
-            onSubmit={handleSignUp}
-            className={cn([
-              "w-full",
-              "flex flex-col gap-4 lg:justify-center",
-              "px-8 py-4 lg:px-[88px]",
-              "sm:max-w-[480px] md:max-w-[520px] lg:max-w-[700px]",
-            ])}
-          >
-            <div className="space-y-4">
-              <h1 className="mb-2 font-poppins text-[40px] font-medium text-[#121212]">
-                Sign Up
-              </h1>
-              <Text weight={400} color="gray">
-                Already have an account?{" "}
-                <span className="font-semibold text-[#38CB89] hover:underline">
-                  <Link href="/sign-in">Sign In</Link>
-                </span>
-              </Text>
-            </div>
-            <div className="space-y-6">
-              <div className="flex flex-col gap-4 md:flex-row">
-                <div className="w-1/2 border-b border-[#E8ECEF] pb-2 transition-all duration-200 focus-within:border-[#141718]">
-                  <Input
-                    intent="secondary"
-                    type="text"
-                    placeholder="First name"
-                    name="first_name"
-                    value={values.first_name}
-                    onChange={handler}
-                  />
-                </div>
-                <div className="w-1/2 border-b border-[#E8ECEF] pb-2 transition-all duration-200 focus-within:border-[#141718]">
-                  <Input
-                    intent="secondary"
-                    type="text"
-                    placeholder="Last name"
-                    name="last_name"
-                    value={values.last_name}
-                    onChange={handler}
-                  />
-                </div>
-              </div>
-              <div className="border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
-                <Input
-                  intent="secondary"
-                  type="text"
-                  placeholder="Username"
-                  name="username"
-                  value={values.username}
-                  onChange={handler}
-                />
-              </div>
-              <div className="border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
-                <Input
-                  intent="secondary"
-                  type="email"
-                  placeholder="Email address"
-                  name="email"
-                  value={values.email}
-                  onChange={handler}
-                />
-              </div>
-              <div className="border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
-                <Input
-                  intent="secondary"
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  value={values.password}
-                  onChange={handler}
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  className="h-6 w-6 rounded-xl border border-[#6C7275] checked:text-red-300"
-                />
-                <Text
-                  size="xs"
-                  weight={400}
-                  color="gray"
-                  className="md:text-sm"
-                >
-                  I agree with{" "}
-                  <span className="font-semibold text-[#141718]">
-                    Privacy Policy
-                  </span>{" "}
-                  and{" "}
-                  <span className="font-semibold text-[#141718]">
-                    Terms of Use
+            <form
+              onSubmit={handleSignUp}
+              className={cn([
+                "w-full",
+                "flex flex-col gap-4 lg:justify-center",
+                "px-8 py-4 lg:px-[88px]",
+                "sm:max-w-[480px] md:max-w-[520px] lg:max-w-[700px]",
+              ])}
+            >
+              <div className="space-y-4">
+                <h1 className="mb-2 font-poppins text-[40px] font-medium text-[#121212]">
+                  Sign Up
+                </h1>
+                <span>Sj Smartz</span>
+                <Text weight={400} color="gray">
+                  Already have an account?{" "}
+                  <span className="font-semibold text-[#38CB89] hover:underline">
+                    <Link href="/sign-in">Sign In</Link>
                   </span>
                 </Text>
-                <p></p>
               </div>
-            </div>
+              <div className="space-y-6">
+                <div className="flex flex-col gap-4 md:flex-row">
+                  <div className="w-1/2 border-b border-[#E8ECEF] pb-2 transition-all duration-200 focus-within:border-[#141718]">
+                    <Input
+                      intent="secondary"
+                      type="text"
+                      placeholder="First name"
+                      name="first_name"
+                      value={values.first_name}
+                      onChange={handler}
+                    />
+                  </div>
+                  <div className="w-1/2 border-b border-[#E8ECEF] pb-2 transition-all duration-200 focus-within:border-[#141718]">
+                    <Input
+                      intent="secondary"
+                      type="text"
+                      placeholder="Last name"
+                      name="last_name"
+                      value={values.last_name}
+                      onChange={handler}
+                    />
+                  </div>
+                </div>
+                <div className="border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
+                  <Input
+                    intent="secondary"
+                    type="text"
+                    placeholder="Username"
+                    name="username"
+                    value={values.username}
+                    onChange={handler}
+                  />
+                </div>
+                <div className="border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
+                  <Input
+                    intent="secondary"
+                    type="email"
+                    placeholder="Email address"
+                    name="email"
+                    value={values.email}
+                    onChange={handler}
+                  />
+                </div>
+                <div className="border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
+                  <Input
+                    intent="secondary"
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    value={values.password}
+                    onChange={handler}
+                  />
+                </div>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    className="h-6 w-6 rounded-xl border border-[#6C7275] checked:text-red-300"
+                  />
+                  <Text
+                    size="xs"
+                    weight={400}
+                    color="gray"
+                    className="md:text-sm"
+                  >
+                    I agree with{" "}
+                    <span className="font-semibold text-[#141718]">
+                      Privacy Policy
+                    </span>{" "}
+                    and{" "}
+                    <span className="font-semibold text-[#141718]">
+                      Terms of Use
+                    </span>
+                  </Text>
+                  <p></p>
+                </div>
+              </div>
 
-            <Button
-              disabled={loading}
-              width="full"
-              type="submit"
-              className="relative py-2.5 disabled:opacity-60"
-            >
-              {loading ? (
-                <span className="">
-                  Signing Up
-                  <BtnLoader classes={`!absolute !top-2 !right-4`} />
-                </span>
-              ) : (
-                "Sign Up"
-              )}
-            </Button>
-            {/* <div className="border-t border-[#E8ECEF] my 2" /> */}
-            <span className="mx-auto block font-bold">OR</span>
-            {/* <div className="border-t border-[#E8ECEF] my 2" /> */}
-            <Button
-              type="button"
-              onClick={handleGoogleSignUp}
-              className="mx-auto flex items-center gap-2 border border-[#e0e0e0] bg-white py-2.5 font-medium text-black transition-all duration-200 hover:bg-white/70"
-            >
-              <Image
-                src={"/icons/gg.png"}
-                width={20}
-                height={20}
-                alt="Google Sign in"
-              />
-              Sign Up With Google
-            </Button>
-          </form>
+              <Button
+                disabled={loading}
+                width="full"
+                type="submit"
+                className="relative py-2.5 disabled:opacity-60"
+              >
+                {loading ? (
+                  <span className="">
+                    Signing Up
+                    <BtnLoader classes={`!absolute !top-2 !right-4`} />
+                  </span>
+                ) : (
+                  "Sign Up"
+                )}
+              </Button>
+              {/* <div className="border-t border-[#E8ECEF] my 2" /> */}
+              <span className="mx-auto block font-bold">OR</span>
+              {/* <div className="border-t border-[#E8ECEF] my 2" /> */}
+              <Button
+                type="button"
+                onClick={handleGoogleSignUp}
+                className="mx-auto flex items-center gap-2 border border-[#e0e0e0] bg-white py-2.5 font-medium text-black transition-all duration-200 hover:bg-white/70"
+              >
+                <Image
+                  src={"/icons/gg.png"}
+                  width={20}
+                  height={20}
+                  alt="Google Sign in"
+                />
+                Sign Up With Google
+              </Button>
+            </form>
           ) : (
             <form
               onSubmit={handleSubmitCode}

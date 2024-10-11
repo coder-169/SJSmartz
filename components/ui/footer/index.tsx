@@ -15,7 +15,7 @@ const Footer = () => {
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-0">
           <div className="flex flex-col items-center gap-4 lg:flex-row lg:gap-0">
             <h3 className="font-poppins text-2xl font-medium text-white lg:border-r lg:border-[#6C7275] lg:pr-8">
-              SJ Smartz<span className="text-[#6C7275]">.</span>
+              Sj Smartz<span className="text-[#6C7275]">.</span>
             </h3>
             <span className="h-[1px] w-8 rounded-full bg-[#6C7275] lg:hidden"></span>
             <Text size="sm" color="white/900" className="lg:pl-8">
@@ -69,7 +69,7 @@ const Footer = () => {
               color="white/800"
               className="text-center lg:order-1 lg:text-left"
             >
-              Copyright © 2024 SJSmartz.com. All rights reserved
+              Copyright © 2024 Sj Smartz All rights reserved
             </Text>
           </div>
         </div>

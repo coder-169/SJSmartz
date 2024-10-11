@@ -82,7 +82,9 @@ export default function Page() {
                   height={50}
                   alt="Logo"
                 />
+
               </Link>
+              <span>Sj Smartz</span>
               <h1 className="font-poppins text-[40px] font-medium text-[#121212]">
                 Sign In
               </h1>
