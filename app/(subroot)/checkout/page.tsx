@@ -7,19 +7,15 @@ import SectionLayout from "@/layouts/sectionLayout";
 
 // ui
 import { DiscountIcon } from "@/ui/assets/svg";
-import PaymentMethod from "@/app/(subroot)/checkout/checkoutPaymentMethod";
+// import PaymentMethod from "@/app/(subroot)/checkout/checkoutPaymentMethod";
 import CheckoutOrders from "@/app/(subroot)/checkout/checkoutOrders";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  DialogTitle,
-  Select,
 } from "@headlessui/react";
-
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import Button from "@/components/ui/button";
 import Input from "@/components/form/input";
 import BtnLoader from "@/components/BtnLoader";
