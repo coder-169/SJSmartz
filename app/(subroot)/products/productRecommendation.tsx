@@ -5,6 +5,7 @@ import * as ProductCard from "@/ui/card/productCard";
 
 // data
 import products from "@/data/product.json";
+import { Product } from "@/types/product";
 
 const ProductRecommendation = () => {
   return (
@@ -14,7 +15,7 @@ const ProductRecommendation = () => {
       </h2>
 
       <div className="flex flex-nowrap gap-4 overflow-x-scroll pb-10 scrollbar scrollbar-track-[#E8ECEF] scrollbar-thumb-[#343839] scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar-h-2 lg:pb-12">
-        {products.map((product) => (
+        {products.map((product: any) => (
           <ProductCard.Root
             key={product.id}
             data={product}

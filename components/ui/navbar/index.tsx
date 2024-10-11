@@ -42,7 +42,7 @@ const Navbar: React.FC<NavbarProps> = () => {
 
     return () => window.removeEventListener("scroll", handleOnScroll);
   }, []);
-  const { cartItems } = useGlobalContext();
+  const { cartItems } = useGlobalContext() as any;
   const { data: session, status } = useSession();
   return (
     <>

@@ -63,6 +63,9 @@ const handler = NextAuth({
     async session({ session }) {
       await dbConnect();
 
+      if (!session.user) {
+        throw new Error("User session is undefined");
+      }
       let existingUser = await User.findOne({
         $or: [{ email: session.user.email }, { name: session.user.name }],
       });
@@ -75,7 +78,7 @@ const handler = NextAuth({
     },
     async signIn({ user, profile, account }) {
       if (!profile) return true;
-      const { email_verified, given_name, family_name } = profile;
+      const { email_verified, given_name, family_name } = profile as any;
       if (!email_verified) throw new Error("Sorry, your email is not verified");
       const { name, email, image } = user;
       await dbConnect();
@@ -89,7 +92,7 @@ const handler = NextAuth({
           profileImage: image,
           isVerified: true,
           role: "user",
-          provider: account.provider,
+          provider: account?.provider || "sign up",
         });
         const htmlContent = `
         <div style="max-width: 600px; margin: auto; width: 100%;">
@@ -113,7 +116,11 @@ Your account has been created successfully using Google authentication.     </p>
             </div>
         </div>
         `;
-        await sendMail(email, "Account Registration Successful", htmlContent);
+        if (email) {
+          await sendMail(email, "Account Registration Successful", htmlContent);
+        } else {
+          throw new Error("Email is undefined");
+        }
       }
       return true;
     },

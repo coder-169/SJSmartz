@@ -1,16 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import dbConnect from "@/app/utils/db";
-import User from "@/app/model/User";
-import { generateCode, sendMail } from "@/app/utils/funcs";
-export async function POST(req, res) {
+import dbConnect from "@/lib/db";
+import User from "@/models/User";
+import { generateCode, sendMail } from "@/lib/server_action";
+export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
     const user = await User.findOne({
-      $or: [
-        { email: { $regex: body.email, $options: "i" } },
-      ],
+      $or: [{ email: { $regex: body.email, $options: "i" } }],
     });
     if (!user)
       return NextResponse.json({
@@ -58,7 +56,7 @@ Here is your verification code. Please verify your account within 10 minutes.   
         message: "Mail Sent",
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message });
   }
 }

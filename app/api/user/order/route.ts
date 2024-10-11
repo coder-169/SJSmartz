@@ -2,9 +2,9 @@ import dbConnect from "@/lib/db";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-function formatDeliveryDate(days) {
+function formatDeliveryDate(days: number) {
   const now = new Date(); // Get current date and time
   const dt = new Date(now.getTime() + days * 24 * 60 * 60 * 1000); // Calculate future date
   const deliveryDate = dt.toLocaleString("en-US", {
@@ -12,7 +12,7 @@ function formatDeliveryDate(days) {
     month: "long",
     day: "numeric",
   });
-  const options = {
+  const options: Intl.DateTimeFormatOptions = {
     weekday: "long", // Display full weekday name
     year: "numeric",
     month: "long",
@@ -24,7 +24,7 @@ function formatDeliveryDate(days) {
   const createdAt = new Date(now.getTime()).toLocaleString("en-US", options);
   return { createdAt, deliveryDate };
 }
-export async function POST(req) {
+export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();

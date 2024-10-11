@@ -1,9 +1,9 @@
-import User from "@/app/model/User";
-import dbConnect from "@/app/utils/db";
-import { sendMail } from "@/app/utils/funcs";
-import { NextResponse } from "next/server";
+import dbConnect from "@/lib/db";
+import { sendMail } from "@/lib/server_action";
+import User from "@/models/User";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req, res) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     await dbConnect();
@@ -14,11 +14,16 @@ export async function POST(req, res) {
         message: "All fields are required",
       });
     }
-    const user = await User.findOne({ $or: [{ email: { $regex:email, $options: "i" }  }, { name: { $regex: name, $options: "i" }  }] });
+    const user = await User.findOne({
+      $or: [
+        { email: { $regex: email, $options: "i" } },
+        { name: { $regex: name, $options: "i" } },
+      ],
+    });
     if (!user) {
       return NextResponse.json({ success: false, message: "User not found" });
     }
- 
+
     if (!user.subscribed) {
       return NextResponse.json({
         success: false,
@@ -27,9 +32,9 @@ export async function POST(req, res) {
     }
     if (user.credits === -50) {
       const resp = await sendMail(
-        process.env.EMAIL,
-        'Crypto Inquiry',
-        `Name: ${name} \nEmail: ${email}\nSubject: ${subject} \nMessage: ${message}`
+        process.env.EMAIL!,
+        "Crypto Inquiry",
+        `Name: ${name} \nEmail: ${email}\nSubject: ${subject} \nMessage: ${message}`,
       );
       if (!resp.success) {
         return NextResponse.json({ message: resp.message, success: false });
@@ -42,18 +47,21 @@ export async function POST(req, res) {
       }
     } else {
       if (user.credits <= 0) {
-        return NextResponse.json({ success: false, message: "you don't have enough credits please subscribe to continue" });
+        return NextResponse.json({
+          success: false,
+          message: "you don't have enough credits please subscribe to continue",
+        });
       } else {
         const resp = await sendMail(
-          process.env.EMAIL,
-          'Crypto Inquiry',
-          `Name: ${name} \nEmail: ${email}\nSubject: ${subject} \nMessage: ${message}`
+          process.env.EMAIL!,
+          "Crypto Inquiry",
+          `Name: ${name} \nEmail: ${email}\nSubject: ${subject} \nMessage: ${message}`,
         );
         if (!resp.success) {
           return NextResponse.json({ message: resp.message, success: false });
         } else {
           user.credits -= 1;
-          await user.save()
+          await user.save();
           return NextResponse.json({
             success: true,
             message:
@@ -62,7 +70,7 @@ export async function POST(req, res) {
         }
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({
       success: false,
       message: error.message,

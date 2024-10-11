@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import dbConnect from "@/app/utils/db";
-import User from "@/app/model/User";
-import { generateCode, sendMail } from "@/app/utils/funcs";
-export async function POST(req, res) {
+import dbConnect from "@/lib/db";
+import { generateCode, sendMail } from "@/lib/server_action";
+import User from "@/models/User";
+
+export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
@@ -13,7 +14,7 @@ export async function POST(req, res) {
         { success: false, message: "Email is required" },
         {
           status: 400,
-        }
+        },
       );
 
     if (typeof email !== "string" || !email) {
@@ -28,7 +29,7 @@ export async function POST(req, res) {
         { success: false, message: `Oops! we couldn't find your account` },
         {
           status: 404,
-        }
+        },
       );
     }
     const code = await generateCode();
@@ -59,7 +60,7 @@ export async function POST(req, res) {
         </div>
     </div>
     `;
-    
+
     const hashedCode = await bcrypt.hash(code, 10);
     // const expireTime = new Date().getTime() + 1000;
     const expireTime = new Date().getTime() + 10 * 60 * 1000;
@@ -76,15 +77,15 @@ export async function POST(req, res) {
         },
         {
           status: 200,
-        }
+        },
       );
     }
-  } catch (error) {
+  } catch (error :any) {
     return NextResponse.json(
       { success: false, message: error.message },
       {
         status: 500,
-      }
+      },
     );
   }
 

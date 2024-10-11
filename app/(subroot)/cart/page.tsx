@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const { loadCart } = useGlobalContext();
+  const { loadCart } = useGlobalContext() as any;
   const [step, setStep] = useState(1);
   const router = useRouter();
   useEffect(() => {

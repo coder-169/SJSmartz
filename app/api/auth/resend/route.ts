@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import User from "@/models/User";
 import dbConnect from "@/lib/db";
 import { generateCode, sendMail } from "@/lib/server_action";
 
-export async function POST(req, res) {
+export async function POST(req:NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
@@ -62,15 +62,13 @@ Here is your verification code. Please verify your account within 10 minutes.   
       throw new Error(resp.message);
     } else {
       return NextResponse.json(
-        { success: true, message: "code resent" },
+        { success: true, message: "code resent", hashedCode, expireTime },
         {
           status: 200,
-          hashedCode,
-          expireTime,
         }
       );
     }
-  } catch (error) {
+  } catch (error:any) {
     return NextResponse.json(
       { success: false, message: error.message },
       {

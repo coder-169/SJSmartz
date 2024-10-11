@@ -8,7 +8,7 @@ import DeliveryOption from "@/app/(subroot)/checkout/deliveryOption";
 import { useGlobalContext } from "@/hooks/AppContext";
 
 const CheckoutOrders = () => {
-  const { cartItems } = useGlobalContext();
+  const { cartItems } = useGlobalContext() as any;
   return (
     <div className="space-y-6 rounded-md border border-[#6C7275] p-6">
       <p className="font-poppins text-lg font-semibold text-[#141718]">
@@ -16,15 +16,22 @@ const CheckoutOrders = () => {
       </p>
 
       <div>
-        {cartItems?.map((item:object) => (
-          <OrderItem key={item.id} data={item} />
-        ))}
+        {cartItems?.map((item: any) => <OrderItem key={item.id} data={item} />)}
       </div>
     </div>
   );
 };
 
-const OrderItem = ({ data }: { data: (typeof orders)[0] }) => {
+type Order = {
+  id: string;
+  image: { src: string; alt: string };
+  title: string;
+  qty: number;
+  price: number;
+  color: string;
+};
+
+const OrderItem = ({ data }: { data: Order }) => {
   return (
     <div className="flex flex-col gap-4 border-b border-[#E8ECEF] py-3 first:pt-0 last:border-b-0 last:pb-0">
       <div className="flex items-center gap-4">

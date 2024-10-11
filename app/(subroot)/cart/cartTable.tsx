@@ -41,8 +41,9 @@ const carts = [
   },
 ];
 
+
 const CartTable = () => {
-  const { cartItems } = useGlobalContext();
+  const { cartItems } = useGlobalContext() as any;
   
   return (
     <table className="h-fit w-full">
@@ -64,7 +65,7 @@ const CartTable = () => {
       </thead>
 
       <tbody>
-        {cartItems?.map((cart) => (
+        {cartItems?.map((cart:any) => (
           <tr
             key={cart.id}
             className="border-b border-[#E8ECEF] last:border-b-0"

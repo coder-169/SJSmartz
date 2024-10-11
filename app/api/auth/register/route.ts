@@ -76,7 +76,7 @@ Here is your verification code. Please verify your account within 10 minutes.   
         message: "account registered successfully",
       });
     }
-  } catch (error) {
+  } catch (error:any) {
     return NextResponse.json({ success: false, message: error.message });
   }
 }

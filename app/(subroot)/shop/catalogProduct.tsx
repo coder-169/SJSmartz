@@ -11,9 +11,10 @@ import { useProductDetail } from "@/stores/zustand";
 import { cn } from "@/lib/utils";
 import { useGlobalContext } from "@/hooks/AppContext";
 import Link from "next/link";
+import { Product } from "@/types/product";
 
-const CatalogProduct = ({ products }) => {
-  const { addToCart } = useGlobalContext();
+const CatalogProduct = ({ products }: { products: Product[] }) => {
+  const { addToCart } = useGlobalContext() as any;
   const showDetail = useProductDetail((state) => state.showDetail);
   return (
     <div className="space-y-8 py-20 pt-8 lg:space-y-20">
@@ -25,7 +26,7 @@ const CatalogProduct = ({ products }) => {
             : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
         )}
       >
-        {products.map((product) => (
+        {products.map((product: any) => (
           <ProductCard.Root
             key={product.id}
             data={product}

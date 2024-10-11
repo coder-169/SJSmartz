@@ -55,13 +55,13 @@ export default function CatalogSlider() {
   });
 
   const [products, setProducts] = useState([]);
-  
+
   const getProducts = async () => {
     await fetch("/api/user/product")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data.products);
-        console.log(data)
+        console.log(data);
       });
   };
   useEffect(() => {
@@ -87,8 +87,7 @@ export default function CatalogSlider() {
         </>
       )}
       <div ref={slideRef} className="keen-slider">
-        {products.map((product) => (
-
+        {products.map((product: any) => (
           <div key={product.id} className="keen-slider__slide">
             <ProductCard.Root data={product}>
               <ProductCard.Thumbnail>

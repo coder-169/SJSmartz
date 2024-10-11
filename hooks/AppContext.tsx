@@ -3,23 +3,30 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const AppContext = createContext();
+const AppContext = createContext({
+  cartItems: [],
+  addToCart: (product: object) => {},
+  loadCart: () => {},
+  incrementQty: (productId: string) => {},
+  decrementQty: (productId: string) => {},
+  removeFromCart: (productId: string) => {},
+});
 
 export const AppContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [cartItems, setCartItems] = useState();
+  const [cartItems, setCartItems] = useState([]);
   const addToCart = (product: object) => {
     let items = localStorage.getItem("sjsmartz-cart-items")
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
-    const { title, color, image, qty, discount, price } = product;
+    const { title, color, image, qty, discount, price } = product as any;
     console.log(title + color);
     if (items.includes(title + color)) {
       console.log("found");
-      items.map((item) => {
+      items.map((item: any) => {
         if (item.id === title + color) item.qty++;
       });
     } else {
@@ -41,7 +48,7 @@ export const AppContextProvider = ({
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
     console.log(items, "Increaming");
-    items.map((item: object) => {
+    items.map((item: any) => {
       if (item.id === productId) item.qty++;
     });
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(items));
@@ -51,7 +58,7 @@ export const AppContextProvider = ({
     let items = localStorage.getItem("sjsmartz-cart-items")
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
-    const newItems = items.filter((item: object) => item.id !== productId);
+    const newItems = items.filter((item: any) => item.id !== productId);
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(newItems));
     setCartItems(newItems);
   };
@@ -60,7 +67,7 @@ export const AppContextProvider = ({
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
     console.log(items, "Dcreaming");
-    items.map((item: object) => {
+    items.map((item: any) => {
       if (item.id === productId && item.qty > 1) item.qty--;
     });
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(items));

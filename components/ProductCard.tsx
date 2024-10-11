@@ -1,4 +1,5 @@
 import { useGlobalContext } from "@/hooks/AppContext";
+import { Product } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -10,8 +11,8 @@ function shortenTitle(title: string, maxWords = 4) {
   return words.slice(0, maxWords).join(" "); // Take the first maxWords words and join them
 }
 
-const ProductCard = ({ product }) => {
-  const { addToCart } = useGlobalContext();
+const ProductCard = ({ product }: { product: Product }) => {
+  const { addToCart } = useGlobalContext() as any;
   return (
     product && (
       <div key={product.id} className="rounded-lg p-2 shadow-xl">
@@ -19,7 +20,7 @@ const ProductCard = ({ product }) => {
           <Image
             width={200}
             height={200}
-            src={product?.image.src}
+          src={product?.image.src}
             alt={product?.image.alt}
             className="h-full w-full object-contain object-center lg:h-full lg:w-full"
           />

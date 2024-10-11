@@ -21,10 +21,11 @@ import {
 // data
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
+import { Product } from "@/types/product";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
-  const [loading,setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const getProducts = async () => {
     await fetch("/api/user/product")
       .then((res) => res.json())
@@ -32,7 +33,7 @@ export default function Home() {
         setProducts(data.products);
         console.log(data);
       });
-      setLoading(false)
+    setLoading(false);
   };
   useEffect(() => {
     getProducts();
@@ -147,7 +148,7 @@ export default function Home() {
           </Heading>
 
           <div className="grid grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-4 lg:gap-y-8 xl:grid-cols-5">
-            {products.map((product) => (
+            {products.map((product: Product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

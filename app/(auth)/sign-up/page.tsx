@@ -91,7 +91,7 @@ export default function Page() {
       if (data.success) {
         toast.success("Account verified");
       } else toast.error("incorrect code or expired!");
-    } catch (error) {
+    } catch (error:any) {
       toast.error(error.message);
     }
     setLoading(false);
@@ -119,7 +119,7 @@ export default function Page() {
       } else {
         toast.error(data.message);
       }
-    } catch (error) {
+    } catch (error:any) {
       toast.error(error.message);
     }
     setResendLoading(false);

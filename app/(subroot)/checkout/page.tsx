@@ -56,7 +56,7 @@ export default function Page() {
         toast.error(data.message);
       }
       setLoading(false);
-    } catch (error) {}
+    } catch (error:any) {}
   };
   const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });

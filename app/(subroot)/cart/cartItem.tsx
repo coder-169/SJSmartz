@@ -59,7 +59,11 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
     setCheck((prevCheck) => !prevCheck);
   };
 
-  const { incrementQty, decrementQty, removeFromCart } = useGlobalContext();
+  const { incrementQty, decrementQty, removeFromCart } = useGlobalContext() as {
+    incrementQty: (title: string) => void;
+    decrementQty: (title: string) => void;
+    removeFromCart: (title: string) => void;
+  };
 
   return (
     <>
@@ -170,8 +174,8 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
         <div className="flex justify-center">
           <CartQuantity
             quantity={quantity}
-            onMinusQuantity={decrementQty}
-            onAddQuantity={incrementQty}
+            onMinusQuantity={() => decrementQty(product.title)}
+            onAddQuantity={() => incrementQty(product.title)}
             disabled={!check}
             aria-disabled={!check}
           />

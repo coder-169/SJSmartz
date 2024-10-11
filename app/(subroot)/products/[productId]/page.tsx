@@ -59,7 +59,7 @@ export default async function Page({
               </div>
 
               <h1 className="font-poppins text-[40px] font-medium text-[#141718]">
-                {product.name}
+                {product.title}
               </h1>
 
               <p className="font-inter text-base font-normal text-[#6C7275]">
@@ -178,14 +178,13 @@ export default async function Page({
               <div className="grid grid-cols-[100px_1fr] font-inter text-xs lg:grid-cols-[140px_1fr] lg:text-sm">
                 <span className="text-[#6C7275]">CATEGORY</span>
                 <span className="text-[#141718]">
-                  {product.categories.map((category) => (
+                  {
                     <span
-                      key={category}
                       className="after:ml-0.5 after:mr-1 after:content-[','] last:after:mx-0 last:after:content-['']"
                     >
-                      {category}
+                      {product.category}
                     </span>
-                  ))}
+                  }
                 </span>
               </div>
             </div>
