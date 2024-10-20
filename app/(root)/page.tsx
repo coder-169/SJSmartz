@@ -22,19 +22,33 @@ import {
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/types/product";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../global/store";
+import { loadProducts } from "../global/Reducers/ProductReducer";
 
 export default function Home() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [products, setProducts] = useState([]);
+  // const [loading, setLoading] = useState(true);
   const getProducts = async () => {
     await fetch("/api/user/product")
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data.products);
-        console.log(data);
+        // setProducts(data.products);
+        dispatch(
+          loadProducts({
+            noOfProducts: data.products.length,
+            products: data.products,
+          }),
+        );
+        // console.log(data);
       });
-    setLoading(false);
+    // setLoading(false);
   };
+  const { list: products, loading } = useSelector(
+    (state: RootState) => state.products,
+  );
+  const dispatch = useDispatch();
+  console.log(products, loading);
   useEffect(() => {
     getProducts();
   }, []);
@@ -148,8 +162,8 @@ export default function Home() {
           </Heading>
 
           <div className="grid grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-4 lg:gap-y-8 xl:grid-cols-5">
-            {products.map((product: Product) => (
-              <ProductCard key={product.id} product={product} />
+            {products.map((product: any, index: number) => (
+              <ProductCard key={index} product={product} />
             ))}
           </div>
         </div>

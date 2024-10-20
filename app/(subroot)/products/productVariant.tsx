@@ -16,17 +16,17 @@ const ProductVariant = ({ variants }: { variants: Product["variants"] }) => {
 
       <div className="space-y-4">
         <p className="font-inter text-xl font-normal capitalize text-[#141718]">
-          {selectedVariant.name}
+          {selectedVariant.color}
         </p>
 
         <div className="flex-no-wrap flex gap-4 overflow-x-auto">
           {variants.map((variant) => (
             <div
-              key={variant.name}
+              key={variant.color}
               onClick={() => setSelectedVariant(variant)}
               className={cn(
                 "h-[70px] w-[70px] flex-none cursor-pointer overflow-hidden border p-1",
-                selectedVariant.image.src === variant.image.src
+                selectedVariant.image === variant.image
                   ? "border-[#141718]"
                   : "border-transparent",
               )}
@@ -34,8 +34,8 @@ const ProductVariant = ({ variants }: { variants: Product["variants"] }) => {
               <Image
                 width={231}
                 height={308}
-                src={`/images/${variant.image.src}`}
-                alt={variant.image.alt}
+                src={`/images/${variant.image}`}
+                alt={variant.color}
                 className="h-full w-full object-center"
               />
             </div>

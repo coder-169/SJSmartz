@@ -4,6 +4,7 @@
 import CartItem from "@/app/(subroot)/cart/cartItem";
 import { useGlobalContext } from "@/hooks/AppContext";
 import { useCartProductsStore } from "@/stores/zustand";
+import { useEffect } from "react";
 
 const carts = [
   {
@@ -41,10 +42,9 @@ const carts = [
   },
 ];
 
-
 const CartTable = () => {
   const { cartItems } = useGlobalContext() as any;
-  
+  useEffect(() => {}, [cartItems]);
   return (
     <table className="h-fit w-full">
       <thead className="border-b border-[#141718]">
@@ -65,7 +65,7 @@ const CartTable = () => {
       </thead>
 
       <tbody>
-        {cartItems?.map((cart:any) => (
+        {cartItems?.map((cart: any) => (
           <tr
             key={cart.id}
             className="border-b border-[#E8ECEF] last:border-b-0"

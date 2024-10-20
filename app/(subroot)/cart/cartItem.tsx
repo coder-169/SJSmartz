@@ -28,10 +28,7 @@ import { useGlobalContext } from "@/hooks/AppContext";
 export type CartItemProps = {
   product: {
     title: string;
-    image: {
-      src: string;
-      alt: string;
-    };
+    image:string;
     color: string;
     qty: number;
     price: number;
@@ -40,6 +37,7 @@ export type CartItemProps = {
 };
 
 const CartItem: React.FC<CartItemProps> = ({ product }) => {
+  console.log(product)
   const [quantity, setQuantity] = useState<number>(product.qty);
   const [check, setCheck] = useState<boolean>(true);
   const basePrice = formatCurrency(product.price);
@@ -90,10 +88,10 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
           <div className="flex gap-4 sm:items-center">
             <div className="h-[120px] min-w-[100px]">
               <Image
-                src={product.image.src}
-                alt={product.image.alt}
-                width={150}
-                height={150}
+                width={500}
+                height={500}
+                src={product.image}
+                alt={product.title}
                 className="h-3/4 w-3/4 object-contain"
               />
             </div>
@@ -138,7 +136,7 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
 
               <div className="flex items-center justify-between sm:hidden">
                 <CartQuantity
-                  quantity={quantity}
+                  quantity={product.qty}
                   onMinusQuantity={handleMinusQuantity}
                   onAddQuantity={handleAddQuantity}
                   disabled={!check}
@@ -173,7 +171,7 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
       >
         <div className="flex justify-center">
           <CartQuantity
-            quantity={quantity}
+            quantity={product.qty}
             onMinusQuantity={() => decrementQty(product.title)}
             onAddQuantity={() => incrementQty(product.title)}
             disabled={!check}
@@ -198,7 +196,7 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
         )}
       >
         <p className="text-center font-inter text-base font-semibold text-[#141718]">
-          {totalPrice}
+          {formatCurrency(product.qty * product.price)}
         </p>
       </td>
       <td
@@ -219,7 +217,7 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
               Add to wishlist
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => removeFromCart(product.title + product.color)}
+              onClick={() => removeFromCart(product.title)}
               className="gap-2 font-inter text-xs font-normal text-[#141718] focus:bg-[#E8ECEF]"
             >
               <Trash stroke="#141718" className="h-4 w-4" />

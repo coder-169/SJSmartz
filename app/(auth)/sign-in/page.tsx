@@ -29,7 +29,7 @@ export default function Page() {
         if (res.error) {
           toast.error(res.error);
         } else {
-          toast.success("Registered Successfully");
+          toast.success("Login Successfully");
         }
       })
       .catch((err) => {

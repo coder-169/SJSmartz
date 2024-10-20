@@ -32,7 +32,22 @@ export default async function Page({
 }: {
   params: { productId: string };
 }) {
-  const product: Product = await getProductById(params.productId);
+  const product: Product = {
+    _id: "67138db40af0cde5767cd4c0",
+    title: "P47 wireless headphones",
+    slug: "p47-wireless-headphones",
+    category: "Headphones",
+    images: [
+      "https://res.cloudinary.com/dk7lbaz1v/image/upload/v1729334708/image_qhz9cz.jpg",
+    ],
+    price: 500,
+    rating: 0,
+    noOfReviews: 0,
+    description:
+      "Hello World is the best description ever I have seen in my development career",
+    variants: [],
+  };
+  // const product: Product = {await getProductById(params.productId)};
 
   return (
     <SectionLayout>
@@ -179,9 +194,7 @@ export default async function Page({
                 <span className="text-[#6C7275]">CATEGORY</span>
                 <span className="text-[#141718]">
                   {
-                    <span
-                      className="after:ml-0.5 after:mr-1 after:content-[','] last:after:mx-0 last:after:content-['']"
-                    >
+                    <span className="after:ml-0.5 after:mr-1 after:content-[','] last:after:mx-0 last:after:content-['']">
                       {product.category}
                     </span>
                   }
@@ -232,7 +245,7 @@ export default async function Page({
           </div>
         </div>
 
-        <ProductTab tabs={product.tabs} />
+        {/* <ProductTab tabs={product.tabs} /> */}
         <ProductRecommendation />
       </div>
     </SectionLayout>

@@ -61,7 +61,6 @@ const Navbar: React.FC<NavbarProps> = () => {
             </button>
             <Link href={"/"}>
               <Logo />
-              <span>Sj Smartz.com</span>
             </Link>
             
           </div>

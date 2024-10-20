@@ -36,12 +36,14 @@ const handler = NextAuth({
         if (!credentials || !credentials.username || !credentials.password) {
           throw new Error("Missing credentials");
         }
+        console.log(credentials);
         const user = await User.findOne({
           $or: [
             { email: { $regex: credentials.username, $options: "i" } },
             { username: { $regex: credentials.username, $options: "i" } },
           ],
         });
+        // console.log(user)
         if (!user) {
           throw new Error("Invalid credentials");
         }
@@ -58,6 +60,7 @@ const handler = NextAuth({
   secret: process.env.SECRET,
   session: {
     strategy: "jwt",
+    maxAge: 30 * 7 * 60 * 60,
   },
   callbacks: {
     async session({ session }) {

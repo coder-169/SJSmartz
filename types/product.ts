@@ -1,21 +1,43 @@
+import { DefaultSession, DefaultUser } from "next-auth";
+
+declare module "next-auth" {
+  interface Session {
+    user?: {
+      _id?: string;
+      addresses: [
+        {
+          postal_code: string;
+          address_line: string;
+          city: string;
+          state: string;
+        },
+      ];
+    } & DefaultSession["user"];
+  }
+
+  interface User extends DefaultUser {
+    _id?: string;
+  }
+}
+
 export type Product = {
-  id: string;
+  _id: string;
   title: string;
   category: string;
   description: string;
-  price: number;
+  noOfReviews: number;
   rating: number;
   variants: {
-    name: string;
-    image: {
-      src: string;
-      alt: string;
-    };
+    color: string;
+    stock: number;
+    image: number;
+    price: number;
+    discount: number;
+    _id: string;
   }[];
-  image: { src: string; alt: string };
   images: string[];
-  slug:string;
-  tabs: ProductTabs;
+  slug: string;
+  price:number;
 };
 
 export type ProductTabs = {

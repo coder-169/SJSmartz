@@ -42,11 +42,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  addresses: [
-    {
-      type: Object,
-    },
-  ],
+  
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);

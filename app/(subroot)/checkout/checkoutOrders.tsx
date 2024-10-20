@@ -24,7 +24,7 @@ const CheckoutOrders = () => {
 
 type Order = {
   id: string;
-  image: { src: string; alt: string };
+  image:string ;
   title: string;
   qty: number;
   price: number;
@@ -37,8 +37,8 @@ const OrderItem = ({ data }: { data: Order }) => {
       <div className="flex items-center gap-4">
         <div className="h-[80px] min-w-[80px] bg-[#F3F5F7] md:h-[80px] md:min-w-[80px]">
           <Image
-            src={data.image.src}
-            alt={data.image.alt}
+            src={data.image}
+            alt={data.title}
             width={200}
             height={250}
             className="h-full w-full object-cover"

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 // package
 import { ChevronLeft } from "lucide-react";
@@ -14,7 +15,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const { loadCart } = useGlobalContext() as any;
+  const { loadCart, cartItems } = useGlobalContext() as any;
   const [step, setStep] = useState(1);
   const router = useRouter();
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function Page() {
 
       <div className="space-y-6 pb-20 lg:space-y-10">
         <h1 className="text-center font-poppins text-[40px] font-medium text-[#141718]">
-          Cart
+        Cart
         </h1>
         <div className="flex items-center justify-center gap-4 align-baseline">
           <p
@@ -73,19 +74,24 @@ export default function Page() {
           </p>
         </div>
       </div>
+      {cartItems.length > 0 ? (
+        <div className="grid gap-y-6 lg:grid-cols-[2fr_1fr] lg:gap-x-8 xl:gap-x-16">
+          {/* Cart Table */}
+          <CartTable />
 
-      <div className="grid gap-y-6 lg:grid-cols-[2fr_1fr] lg:gap-x-8 xl:gap-x-16">
-        {/* Cart Table */}
-        <CartTable />
+          <div className="space-y-6">
+            {/* Cart Coupon */}
+            {/* <CartCoupon /> */}
 
-        <div className="space-y-6">
-          {/* Cart Coupon */}
-          <CartCoupon />
-
-          {/* Cart Summary */}
-          <CartSummary />
+            {/* Cart Summary */}
+            <CartSummary />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex items-center justify-center">
+          No Items in cart
+        </div>
+      )}
     </SectionLayout>
   );
 }

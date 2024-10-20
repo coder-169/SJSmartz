@@ -5,10 +5,19 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    await dbConnect()
+    await dbConnect();
     const productId = headers().get("productId");
     if (!productId) {
-      const products = await Product.find({});
+      const products = await Product.aggregate([
+        {
+        $lookup: {
+            from: "variants", // The name of the variant collection
+            localField: "_id", // Field from Product
+            foreignField: "productId", // Field from Variant
+            as: "variants", // Name of the array in the result
+          },
+        },
+      ]);
       if (products)
         return NextResponse.json(
           { success: true, message: "Products Found", products },
