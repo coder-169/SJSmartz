@@ -69,11 +69,24 @@ const handler = NextAuth({
       if (!session.user) {
         throw new Error("User session is undefined");
       }
-      let existingUser = await User.findOne({
-        $or: [{ email: session.user.email }, { name: session.user.name }],
-      });
+      const existingUser = await User.aggregate([
+        {
+          $match: {
+            $or: [{ email: session.user.email }, { name: session.user.name }],
+          }, // Match the product by slug
+        },
+        {
+          $lookup: {
+            from: "addresses", // The name of the variant collection
+            localField: "_id", // Field from Product
+            foreignField: "userId", // Field from Variant
+            as: "addresses", // Name of the array in the result
+          },
+        },
+      ]);
+      console.log(existingUser)
       if (existingUser) {
-        session.user = existingUser;
+        session.user = existingUser[0];
       } else {
         throw new Error("User not found");
       }

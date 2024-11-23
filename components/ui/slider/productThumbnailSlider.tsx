@@ -71,9 +71,9 @@ const ProductThumbnailSlider: React.FC<ProductThumbnailSLiderProps> = ({
           className="keen-slider__slide flex max-h-[70px] min-h-[70px] min-w-[70px] max-w-[70px] cursor-pointer items-center justify-center border border-transparent p-1"
         >
           <Image
-            width={231}
-            height={308}
-            src={`/images/${product}`}
+            width={500}
+            height={500}
+            src={product}
             alt="sumplekuping"
             className="h-full w-full object-cover"
           />

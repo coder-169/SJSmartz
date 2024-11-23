@@ -6,8 +6,18 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const coupon = await Coupon.findOne({ couponCode: body.coupon });
+    if (!coupon)
+      return NextResponse.json({
+        success: false,
+        message: "Coupon cannot be Applied",
+        coupon,
+      });
     if (coupon.status && coupon.uses > 0) {
-      return NextResponse.json({ success: true, message: "Coupon Applied",coupon });
+      return NextResponse.json({
+        success: true,
+        message: "Coupon Applied",
+        coupon,
+      });
     }
     return NextResponse.json({
       success: false,

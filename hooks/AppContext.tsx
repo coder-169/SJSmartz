@@ -27,12 +27,14 @@ export const AppContextProvider = ({
 
     for (let index = 0; index < items.length; index++) {
       if (items[index]._id === _id) {
+        if (items[index].qty >= 5)
+          return toast.error("You can only order 5 items at a time");
         items[index].qty++;
         return toast.success("Quantity Updated");
       }
     }
 
-    items.push({ id: title, title, color, image, qty, discount, price, _id });
+    items.push({ title, color, image, qty, discount, price, _id });
 
     toast.success("Item added to cart");
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(items));
@@ -49,7 +51,8 @@ export const AppContextProvider = ({
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
     items.map((item: any) => {
-      if (item.id === productId) item.qty++;
+      if (item.qty >= 5) return;
+      if (item._id === productId) item.qty++;
     });
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(items));
     setCartItems(items);
@@ -58,7 +61,7 @@ export const AppContextProvider = ({
     let items = localStorage.getItem("sjsmartz-cart-items")
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
-    const newItems = items.filter((item: any) => item.id !== productId);
+    const newItems = items.filter((item: any) => item._id !== productId);
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(newItems));
     setCartItems(newItems);
   };
@@ -67,7 +70,7 @@ export const AppContextProvider = ({
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
     items.map((item: any) => {
-      if (item.id === productId && item.qty > 1) item.qty--;
+      if (item._id === productId && item.qty > 1) item.qty--;
     });
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(items));
     setCartItems(items);

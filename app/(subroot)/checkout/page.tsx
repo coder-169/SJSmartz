@@ -1,6 +1,6 @@
 "use client";
 // package
-import { ChevronLeft, Loader2, MapPin, Option } from "lucide-react";
+import { ChevronLeft, Loader2, MapPin, Option, PlusCircle } from "lucide-react";
 
 // layouts
 import SectionLayout from "@/layouts/sectionLayout";
@@ -27,6 +27,7 @@ export default function Page() {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [addLoading, setAddLoading] = useState(false);
   const [values, setValues] = useState({
     address_line: "",
     city: "",
@@ -75,7 +76,8 @@ export default function Page() {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const createAddress = async (e: FormEvent<HTMLFormElement>) => {
-    setLoading(true);
+    e.preventDefault()
+    setAddLoading(true);
     try {
       const resp = await fetch("/api/user/profile/address", {
         method: "post",
@@ -88,12 +90,12 @@ export default function Page() {
         toast.error(data.message);
       }
       setOpen(false);
-      setLoading(false);
+      setAddLoading(false);
     } catch (error) {}
     console.log(values);
   };
   const updateAddress = async () => {
-    setLoading(true);
+    setAddLoading(true);
     try {
       const resp = await fetch("/api/user/profile/address", {
         method: "PUT",
@@ -106,7 +108,7 @@ export default function Page() {
         toast.error(data.message);
       }
       setOpen(false);
-      setLoading(false);
+      setAddLoading(false);
     } catch (error) {}
     console.log(values);
     // session = await getSession();
@@ -289,11 +291,19 @@ export default function Page() {
                     })}
                   </div>
                 ) : (
-                  <p className="font-inter text-sm font-normal text-[#6C7275]">
-                    No Addresses
-                  </p>
+                  <div className="flex justify-between items-center">
+                    <p className="font-inter text-sm font-normal text-[#6C7275]">
+                      No Addresses
+                    </p>
+                    <button
+                      onClick={() => setOpen(true)}
+                      className="py-2 rounded-md bg-[#141718] px-2 font-inter text-xs font-normal text-white"
+                    >
+                      <PlusCircle size={18}/>
+                    </button>
+                  </div>
                 )}
-                {(session?.user?.addresses?.length)! <= 0 && (
+                {session?.user?.addresses?.length! <= 0 && (
                   <button
                     onClick={() => setOpen(true)}
                     className="h-10 rounded-md bg-[#141718] px-6 font-inter text-sm font-normal text-white"
@@ -418,7 +428,7 @@ export default function Page() {
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <DialogPanel
               transition
-              className="relative transform overflow-hidden rounded-lg bg-white px-32 py-32 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
+              className="relative transform overflow-hidden rounded-lg bg-white px-6 py-8 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
             >
               <form
                 onSubmit={createAddress}
@@ -483,12 +493,12 @@ export default function Page() {
 
                 {!editAddress ? (
                   <Button
-                    disabled={loading}
+                    disabled={addLoading}
                     width="full"
                     type="submit"
                     className="relative mx-auto mt-12 block w-1/2 py-2.5 disabled:opacity-60"
                   >
-                    {loading ? (
+                    {addLoading ? (
                       <span className="">
                         Adding
                         <BtnLoader classes={`!absolute !top-2 !right-4`} />
@@ -499,13 +509,13 @@ export default function Page() {
                   </Button>
                 ) : (
                   <Button
-                    disabled={loading}
+                    disabled={addLoading}
                     width="full"
                     type="button"
                     onClick={() => updateAddress()}
                     className="relative mx-auto mt-12 block w-1/2 py-2.5 disabled:opacity-60"
                   >
-                    {loading ? (
+                    {addLoading ? (
                       <span className="">
                         Updating
                         <BtnLoader classes={`!absolute !top-2 !right-4`} />

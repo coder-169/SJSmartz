@@ -1,13 +1,20 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Product } from "@/types/product";
+import { Product, Variant } from "@/types/product";
 import Image from "next/image";
 import { useState } from "react";
 
-const ProductVariant = ({ variants }: { variants: Product["variants"] }) => {
-  const [selectedVariant, setSelectedVariant] = useState(variants[0]);
-
+const ProductVariant = ({
+  variants,
+  selected,
+  setSelected,
+}: {
+  variants: Product["variants"];
+  selected: Variant;
+  setSelected: React.Dispatch<React.SetStateAction<Variant>>;
+}) => {
+  // console.log(variants,selectedVariant)
   return (
     <div className="space-y-2">
       <p className="font-inter text-base font-semibold text-[#6C7275]">
@@ -16,27 +23,27 @@ const ProductVariant = ({ variants }: { variants: Product["variants"] }) => {
 
       <div className="space-y-4">
         <p className="font-inter text-xl font-normal capitalize text-[#141718]">
-          {selectedVariant.color}
+          {selected?.color}
         </p>
 
         <div className="flex-no-wrap flex gap-4 overflow-x-auto">
-          {variants.map((variant) => (
+          {variants?.map((variant) => (
             <div
               key={variant.color}
-              onClick={() => setSelectedVariant(variant)}
+              onClick={() => setSelected(variant)}
               className={cn(
-                "h-[70px] w-[70px] flex-none cursor-pointer overflow-hidden border p-1",
-                selectedVariant.image === variant.image
-                  ? "border-[#141718]"
+                "h-[70px] w-[70px] flex-none cursor-pointer overflow-hidden border p-1 rounded-lg",
+                selected.image === variant.image
+                  ? "border-[#707070]"
                   : "border-transparent",
               )}
             >
               <Image
                 width={231}
                 height={308}
-                src={`/images/${variant.image}`}
+                src={variant.image}
                 alt={variant.color}
-                className="h-full w-full object-center"
+                className="h-full w-full object-center rounded-lg"
               />
             </div>
           ))}

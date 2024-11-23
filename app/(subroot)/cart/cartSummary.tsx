@@ -88,7 +88,9 @@ const CartSummary = () => {
               Total
             </p>
             <p className="font-poppins text-lg font-semibold text-[#141718]">
-              {formatCurrency(total)}
+              {subTotal > 4000
+                ? formatCurrency(subTotal)
+                : formatCurrency(total)}
             </p>
           </div>
         </div>

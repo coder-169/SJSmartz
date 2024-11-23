@@ -38,7 +38,6 @@ interface RootProps
     ProductDataProps {}
 
 const Root: React.FC<RootProps> = ({ data, className, children, ...props }) => {
-  console.log(data)
   return (
     <ProductCardProvider data={data}>
       <div className={cn("grid grid-cols-1 gap-3", className)} {...props}>

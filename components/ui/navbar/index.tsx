@@ -79,7 +79,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                 <UserIcon className="hidden lg:block" />
               </Link>
             ) : (
-              <Link href={"/user/dashboard"}>
+              <Link href={"/profile"}>
                 <UserIcon className="hidden lg:block" />
               </Link>
             )}

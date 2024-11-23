@@ -140,7 +140,7 @@ export default function Page() {
             <Button width="full" type="submit" className="py-2.5">
               Sign In
             </Button>
-            <span className="mx-auto block font-bold">OR</span>
+            <span className="mx-auto block ">OR</span>
             {/* <div className="border-t border-[#E8ECEF] my 2" /> */}
             <Button
               type="button"
@@ -149,7 +149,7 @@ export default function Page() {
                   callbackUrl: "/user/dashboard",
                 })
               }
-              className="mx-auto flex items-center gap-2 border border-[#e0e0e0] bg-white py-2.5 font-medium text-black transition-all duration-200 hover:bg-white/70"
+              className="mx-auto flex items-center gap-2 bg-white py-2.5 font-medium text-black transition-all duration-200 hover:bg-white/70"
             >
               <Image
                 src={"/icons/gg.png"}
@@ -157,7 +157,6 @@ export default function Page() {
                 height={20}
                 alt="Google Sign in"
               />
-              Sign Up With Google
             </Button>
           </form>
         </div>

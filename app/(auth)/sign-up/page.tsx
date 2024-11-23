@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { Loader, Loader2 } from "lucide-react";
 import BtnLoader from "@/components/BtnLoader";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [values, setValues] = useState({
@@ -29,6 +30,7 @@ export default function Page() {
   const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
+  const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false);
   const [code, setCode] = useState("");
   const [signUp, setSignUp] = useState<boolean>(false);
@@ -90,6 +92,7 @@ export default function Page() {
       const data = await res.json();
       if (data.success) {
         toast.success("Account verified");
+      router.push('/')
       } else toast.error("incorrect code or expired!");
     } catch (error: any) {
       toast.error(error.message);

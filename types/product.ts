@@ -4,12 +4,21 @@ declare module "next-auth" {
   interface Session {
     user?: {
       _id?: string;
+      first_name: string;
+      last_name: string;
+      email: string;
+      phone: string;
+      credits: number;
+      username: string;
+      isVerified: boolean;
       addresses: [
         {
           postal_code: string;
           address_line: string;
           city: string;
           state: string;
+          _id: string;
+          address_name: string;
         },
       ];
     } & DefaultSession["user"];
@@ -20,6 +29,36 @@ declare module "next-auth" {
   }
 }
 
+export type Order = {
+  _id: string;
+  userId: string;
+  title: string;
+  category: string;
+  description: string;
+  noOfReviews: number;
+  totalPayment: number;
+  products: {
+    id: string;
+    title: string;
+    color: string;
+    image: string;
+    qty: number;
+    price: number;
+    discount: number;
+    _id: string;
+  }[];
+  address: {
+    address_line: string;
+    city: string;
+    postal_code: string;
+    state: string;
+  };
+  deliveryDate: string;
+  createdAt: string;
+  status: string;
+  paymentMethod: string;
+  payment: string;
+};
 export type Product = {
   _id: string;
   title: string;
@@ -30,14 +69,22 @@ export type Product = {
   variants: {
     color: string;
     stock: number;
-    image: number;
+    image: string;
     price: number;
     discount: number;
     _id: string;
   }[];
   images: string[];
   slug: string;
-  price:number;
+  price: number;
+};
+export type Variant = {
+  color: string;
+  stock: number;
+  image: string;
+  price: number;
+  discount: number;
+  _id: string;
 };
 
 export type ProductTabs = {

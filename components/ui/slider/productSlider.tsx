@@ -73,9 +73,9 @@ const ProductSlider = ({ images }: { images: string[] }) => {
             >
               <Image
                 quality={100}
-                width={231}
-                height={308}
-                src={`/images/${image}`}
+                width={1500}
+                height={1500}
+                src={image}
                 alt="sumplekuping"
                 className={cn(
                   "h-full w-full",

@@ -39,7 +39,7 @@ export default function PromoSection() {
                 isRootPage ? "text-[#FEFEFE]" : "text-[#343839]",
               )}
             >
-              Free shipping over 1500PKR — Limited time!
+              Free shipping over 4000PKR — Limited time!
               <Link href="/shop">
                 <span
                   className={cn(

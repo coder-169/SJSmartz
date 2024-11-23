@@ -19,13 +19,15 @@ const ProductCard = ({ product }: { product: Product }) => {
     product && (
       <div key={product._id} className="rounded-lg p-2 shadow-xl">
         <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md  group-hover:opacity-75">
-          <Image
-            width={200}
-            height={200}
-            src={product?.images[0]}
-            alt={product?.title}
-            className="h-full w-full object-contain object-center lg:h-full lg:w-full"
-          />
+          <Link href={`/products/${product.slug}`}>
+            <Image
+              width={200}
+              height={200}
+              src={product?.images[0]}
+              alt={product?.title}
+              className="h-full w-full object-contain object-center lg:h-full lg:w-full"
+            />
+          </Link>
         </div>
         <div>
           <h3 className="text-sm text-gray-700">

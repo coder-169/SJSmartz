@@ -28,7 +28,8 @@ import { useGlobalContext } from "@/hooks/AppContext";
 export type CartItemProps = {
   product: {
     title: string;
-    image:string;
+    _id: string;
+    image: string;
     color: string;
     qty: number;
     price: number;
@@ -37,7 +38,7 @@ export type CartItemProps = {
 };
 
 const CartItem: React.FC<CartItemProps> = ({ product }) => {
-  console.log(product)
+  console.log(product);
   const [quantity, setQuantity] = useState<number>(product.qty);
   const [check, setCheck] = useState<boolean>(true);
   const basePrice = formatCurrency(product.price);
@@ -172,8 +173,8 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
         <div className="flex justify-center">
           <CartQuantity
             quantity={product.qty}
-            onMinusQuantity={() => decrementQty(product.title)}
-            onAddQuantity={() => incrementQty(product.title)}
+            onMinusQuantity={() => decrementQty(product._id)}
+            onAddQuantity={() => incrementQty(product._id)}
             disabled={!check}
             aria-disabled={!check}
           />
@@ -217,7 +218,7 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
               Add to wishlist
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => removeFromCart(product.title)}
+              onClick={() => removeFromCart(product._id)}
               className="gap-2 font-inter text-xs font-normal text-[#141718] focus:bg-[#E8ECEF]"
             >
               <Trash stroke="#141718" className="h-4 w-4" />

@@ -18,6 +18,7 @@ export async function GET() {
           },
         },
       ]);
+      console.log(products)
       if (products)
         return NextResponse.json(
           { success: true, message: "Products Found", products },

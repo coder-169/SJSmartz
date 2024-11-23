@@ -5,7 +5,7 @@ import Product from "@/models/Product";
 import Variant from "@/models/Variant";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-
+import { ObjectId } from "mongodb";
 function formatDeliveryDate(days: number) {
   const now = new Date(); // Get current date and time
   const dt = new Date(now.getTime() + days * 24 * 60 * 60 * 1000); // Calculate future date
@@ -46,12 +46,12 @@ export async function POST(req: NextRequest) {
 
       await variant.save();
     }
-    console.log(body.coupon)
+    console.log(body.coupon);
     const coupon = await Coupon.findOne({ couponCode: body.coupon.value });
-    console.log(coupon)
+    console.log(coupon);
     if (coupon) {
       if (coupon.discount > 0 && coupon.uses > 0 && coupon.status) {
-        console.log('here')
+        console.log("here");
         body.totalPayment -= body.totalPayment * (coupon.discount / 100);
       }
     }
@@ -71,6 +71,49 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       message: "Error creating order",
+    });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, message: error.message });
+  }
+}
+export async function GET(req: NextRequest) {
+  try {
+    await dbConnect();
+    const userId = headers().get("userId");
+    if (!userId) {
+      return NextResponse.json({
+        success: false,
+        message: "Invalid Authorization!",
+      });
+    }
+
+     const orders = await Order.aggregate([
+      {
+        $match: { userId: new ObjectId(userId) }, // Match orders with the provided userId
+      },
+      {
+        $lookup: {
+          from: "users", // Name of the users collection
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user", // Flatten the `user` array from `$lookup`
+      },
+    ]);
+    console.log("orders:", orders);
+    if (orders.length > 0) {
+      return NextResponse.json({
+        success: true,
+        orders,
+        message: "Orders found successfully",
+      });
+    }
+    return NextResponse.json({
+      success: false,
+      message: "Orders not found",
     });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message });
