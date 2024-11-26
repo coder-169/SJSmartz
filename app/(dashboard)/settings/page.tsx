@@ -2,6 +2,7 @@
 import Button from "@/components/ui/button";
 import { ImageIcon, Loader2, Router, UserCircle2Icon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -39,7 +40,6 @@ const Page = () => {
   };
   const [loading, setLoading] = useState(false);
   const handleUpdate = async () => {
-    console.log(user, address);
     setLoading(true);
     try {
       const res = await fetch("/api/user/profile", {
@@ -92,8 +92,44 @@ const Page = () => {
       setPassLoading(false);
     }
   };
+  const [image, setImage] = useState<any>(null);
+  const updateProfile = async () => {
+    setLoading(true);
+    try {
+      const resp = await fetch(image);
+      const blob = await resp.blob();
+      // Convert blob to File object
+      const file = new File([blob], "image.jpeg", { type: blob.type });
+      const data = new FormData();
+      data.append("file", file);
+      data.append("upload_preset", "sj-smartz");
+      data.append("cloud_name", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!);
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!}/image/upload`,
+        {
+          method: "POST",
+          body: data,
+        },
+      );
+      const res = await response.json();
+      const result = await fetch("/api/user/profile", {
+        method: "PUT",
+        body: JSON.stringify({
+          user: { profileImage: res.secure_url },
+          user_id: session?.user?._id,
+        }),
+      });
+      const d = await result.json();
+      if (d.success) return toast.success("Profile Uploaded");
+      else return toast.error("Error uploading profile");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    if (status === "loading" || !session) return router.push("/sign-in");
+    if (status === "unauthenticated" && !session) return router.push("/sign-in");
     setUser({
       username: session?.user?.username || "",
       first_name: session?.user?.first_name || "",
@@ -148,16 +184,57 @@ const Page = () => {
                 Photo
               </label>
               <div className="mt-2 flex items-center gap-x-3">
-                <UserCircle2Icon
-                  aria-hidden="true"
-                  className="size-24 text-gray-300"
+                {image ? (
+                  <Image
+                    width={5000}
+                    height={5000}
+                    src={image}
+                    alt="profile"
+                    className="h-24 w-24 rounded-full"
+                  />
+                ) : session?.user?.profileImage ? (
+                  <Image
+                    width={5000}
+                    height={5000}
+                    src={session?.user?.profileImage}
+                    alt="profile"
+                    className="h-24 w-24 rounded-full"
+                  />
+                ) : (
+                  <UserCircle2Icon className="h-20 w-20 rounded-full" />
+                )}
+                {image ? (
+                  <button
+                    onClick={updateProfile}
+                    disabled={loading}
+                    className="cursor-pointer rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-70"
+                  >
+                    {loading ? (
+                      <span className="flex items-center gap-2">
+                        Uploading
+                        <Loader2 className="size-4 animate-spin" />
+                      </span>
+                    ) : (
+                      <span>Upload</span>
+                    )}
+                  </button>
+                ) : (
+                  <label
+                    htmlFor="photo"
+                    className="cursor-pointer rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  >
+                    Change
+                  </label>
+                )}
+                <input
+                  type="file"
+                  name="photo"
+                  id="photo"
+                  hidden
+                  onChange={(e: any) => {
+                    setImage(URL.createObjectURL(e.target.files[0]));
+                  }}
                 />
-                <button
-                  type="button"
-                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                  Change
-                </button>
               </div>
             </div>
           </div>

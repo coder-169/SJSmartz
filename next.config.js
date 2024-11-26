@@ -8,6 +8,12 @@ const nextConfig = {
         port: "",
         pathname: "/dk7lbaz1v/image/upload/**",
       },
+      {
+        protocol: "https",
+        hostname: "alpha.sjinovations.com",
+        port: "",
+        pathname: "/_next/image",
+      },
     ],
   },
 };

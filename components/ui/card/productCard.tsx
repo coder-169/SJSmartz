@@ -134,7 +134,7 @@ const Image: React.FC<ImageProps> = ({
   ...props
 }) => {
   const { image } = useProductCardContext();
-
+  console.log(image)
   return (
     <NextImage
       src={image.src}

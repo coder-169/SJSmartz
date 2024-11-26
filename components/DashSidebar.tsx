@@ -17,11 +17,11 @@ const links = [
     title: "Profile",
     icon: <UserIcon size={20} />,
   },
-  {
-    href: "/wishlist",
-    title: "Wishlist",
-    icon: <Heart size={20} />,
-  },
+  // {
+  //   href: "/wishlist",
+  //   title: "Wishlist",
+  //   icon: <Heart size={20} />,
+  // },
   {
     href: "/orders",
     title: "Orders",
@@ -38,13 +38,15 @@ const DashSidebar = () => {
   return (
     <div className="sticky left-0 top-0 h-screen w-1/5 space-y-6 rounded-md p-6 shadow-2xl">
       <nav className="w-full text-center">
-        <Image
-          className="mx-auto w-max"
-          width={100}
-          height={100}
-          src="/images/sj-black.png"
-          alt="Logo"
-        />
+        <Link href="/">
+          <Image
+            className="mx-auto w-max"
+            width={100}
+            height={100}
+            src="/images/sj-black.png"
+            alt="Logo"
+          />
+        </Link>
       </nav>
       <ul className="space-y-2">
         {links.map((link) => {

@@ -16,7 +16,7 @@ import ProductSlider from "@/ui/slider/productSlider";
 import ProductTab from "@/app/(subroot)/products/productTab";
 import ProductVariant from "@/app/(subroot)/products/productVariant";
 import ProductRecommendation from "@/app/(subroot)/products/productRecommendation";
-import { Product } from "@/types/product";
+import { Product, Variant } from "@/types/product";
 import Offer from "@/components/Offer";
 import { useEffect, useState } from "react";
 import { CiDeliveryTruck } from "react-icons/ci";
@@ -40,7 +40,8 @@ function formatDeliveryDate(r1: number, r2: number) {
 export default function Page({ params }: { params: { slug: string } }) {
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<Product | null>(null);
-  const [selectedVariant, setSelectedVariant] = useState(product?.variants[0]);
+  const [selectedVariant, setSelectedVariant] = useState<Variant>(product?.variants[0] as Variant);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const { incrementQty, decrementQty, removeFromCart } = useGlobalContext() as {
     incrementQty: (title: string) => void;
     decrementQty: (title: string) => void;
@@ -56,10 +57,11 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       if (res.status === 404) return notFound();
       const data = await res.json();
-      console.log(data);
-      setProduct(data);
-      setSelectedVariant(data.variants[0]);
+      
       if (!data.success) throw new Error(data.message);
+      setProduct(data.product);
+      setSelectedVariant(data.product.variants[0]);
+      setRelatedProducts(data.relatedProducts);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -161,7 +163,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   />
                 </div>
 
-                <Button
+                {/* <Button
                   variant="ghost"
                   width="full"
                   className="flex h-full items-center justify-center gap-2 rounded border border-[#141718]"
@@ -173,7 +175,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   <span className="font-inter text-sm font-medium text-[#141718] lg:text-base">
                     Wishlist
                   </span>
-                </Button>
+                </Button> */}
               </div>
 
               <Button
@@ -242,7 +244,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     />
                   </button>
                 </div>
-                <Button
+                {/* <Button
                   variant="ghost"
                   width="full"
                   className="flex h-10 items-center justify-center gap-2 rounded border border-[#141718]"
@@ -251,7 +253,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   <span className="font-inter text-sm font-medium text-[#141718]">
                     Wishlist
                   </span>
-                </Button>
+                </Button> */}
                 <Button
                   onClick={() =>
                     addToCart({
@@ -300,7 +302,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         </div>
 
         {/* <ProductTab tabs={product.tabs} /> */}
-        <ProductRecommendation />
+        {/* <ProductRecommendation products={relatedProducts}/> */}
       </div>
     </SectionLayout>
   ) : (

@@ -92,7 +92,6 @@ export default function Page() {
       setOpen(false);
       setAddLoading(false);
     } catch (error) {}
-    console.log(values);
   };
   const updateAddress = async () => {
     setAddLoading(true);
@@ -110,7 +109,6 @@ export default function Page() {
       setOpen(false);
       setAddLoading(false);
     } catch (error) {}
-    console.log(values);
     // session = await getSession();
   };
   const [editAddress, setEditAddress] = useState<boolean>(false);
@@ -153,7 +151,6 @@ export default function Page() {
     setCoupon({ value: "", discount: 0 });
     calculateSubtotal();
   };
-  console.log(session);
   const [subTotal, setSubtotal] = useState(0);
   const { cartItems: cart } = useGlobalContext() as any;
   const [total, setTotal] = useState(0);

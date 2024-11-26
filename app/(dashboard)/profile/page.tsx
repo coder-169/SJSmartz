@@ -56,7 +56,7 @@ const Page = () => {
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <Image
-              src={session?.user?.image || ""}
+              src={session?.user?.profileImage || ""}
               width={200}
               height={200}
               className="rounded-full"

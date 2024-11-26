@@ -35,7 +35,6 @@ export default function Page() {
       .catch((err) => {
         console.log(err);
       });
-    console.log(username, password);
   };
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");

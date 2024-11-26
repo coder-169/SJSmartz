@@ -5,6 +5,7 @@ import { Order } from "@/types/product";
 import { Loader } from "lucide-react";
 import { set } from "mongoose";
 import { getSession, useSession } from "next-auth/react";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 const btns = [
@@ -31,7 +32,6 @@ const Orders = () => {
         }),
       });
       const data = await res.json();
-      console.log(data);
       if (data.success) {
         setOrders(data.orders);
         setFiltered(data.orders);
@@ -44,6 +44,9 @@ const Orders = () => {
   };
   const handleFilter = (filter: string) => {
     setFilter(filter);
+    if (filter === "All") {
+      return setOrders(orders);
+    }
     const newOrders = orders.filter(
       (order: Order) => order.status.toLowerCase() === filter.toLowerCase(),
     );
@@ -73,85 +76,99 @@ const Orders = () => {
           );
         })}
       </ul>
-      <div className="mt-8 rounded-xl border border-black/20 bg-white p-4">
-        <div className="grid w-full grid-cols-6">
-          <div className="col-span-1">
-            <h3 className="text-lg font-semibold text-gray-500">ID</h3>
-          </div>
-          <div className="col-span-1">
-            <h3 className="text-lg font-semibold text-gray-500">Customer</h3>
-          </div>
-          <div className="col-span-1">
-            <h3 className="text-lg font-semibold text-gray-500">Contact</h3>
-          </div>
-          <div className="col-span-1">
-            <h3 className="text-lg font-semibold text-gray-500">Payment</h3>
-          </div>
-          <div className="col-span-1">
-            <h3 className="text-lg font-semibold text-gray-500">Status</h3>
-          </div>
-          <div className="col-span-1">
-            <h3 className="text-lg font-semibold text-gray-500">Amount</h3>
-          </div>
+      {filtered.length === 0 ? (
+        <div className="flex h-[50vh] items-center justify-center">
+          <h1 className="text-xl font-semibold text-gray-500">
+            No orders found
+          </h1>
         </div>
-        {filtered.map((order: Order) => {
-          return (
-            <div
-              key={order._id}
-              className="my-4 grid w-full grid-cols-6 text-sm"
-            >
-              <div className="col-span-1">{order._id.slice(0, 5)}...</div>
-              <div className="col-span-1">Customer</div>
-              <div className="col-span-1">Contact</div>
-              <div className="col-span-1">
-                {order.payment.toLowerCase() === "pending" ? (
-                  <span className="rounded-lg bg-yellow-100 px-2 py-1 text-xs font-medium uppercase text-[#FFC107]">
-                    Pending
-                  </span>
-                ) : order.payment.toLowerCase() === "paid" ? (
-                  <span className="rounded-lg bg-green-100 px-2 py-1 text-xs font-medium uppercase text-[#28A745]">
-                    Paid
-                  </span>
-                ) : (
-                  <span className="rounded-lg bg-red-100 px-2 py-1 text-xs font-medium uppercase text-[#DC3545]">
-                    Unpaid
-                  </span>
-                )}
-              </div>
-              <div className="col-span-1">
-                {order.status.toLowerCase() === "pending" ? (
-                  <span className="rounded-lg bg-yellow-100 px-2 py-1 text-xs font-medium uppercase text-[#FFC107]">
-                    Pending
-                  </span>
-                ) : order.status.toLowerCase() === "processing" ? (
-                  <span className="rounded-lg bg-orange-100 px-2 py-1 text-xs font-medium uppercase text-[#FD7E14]">
-                    Processing
-                  </span>
-                ) : order.status.toLowerCase() === "shipped" ? (
-                  <span className="rounded-lg bg-blue-100 px-2 py-1 text-xs font-medium uppercase text-[#007BFF]">
-                    Shipped
-                  </span>
-                ) : order.status.toLowerCase() === "completed" ? (
-                  <span className="rounded-lg bg-green-100 px-2 py-1 text-xs font-medium uppercase text-[#28A745]">
-                    Completed
-                  </span>
-                ) : order.status.toLowerCase() === "canceled" ? (
-                  <span className="rounded-lg bg-red-100 px-2 py-1 text-xs font-medium uppercase text-[#DC3545]">
-                    Canceled
-                  </span>
-                ) : (
-                  <span className="rounded-lg bg-purple-100 px-2 py-1 text-xs font-medium uppercase text-[#6F42C1]">
-                    Returned
-                  </span>
-                )}
-              </div>
-              <div className="col-span-1">
-                {formatCurrency(order.totalPayment)}
-              </div>
+      ) : (
+        <div className="mt-8 rounded-xl border border-black/20 bg-white p-4">
+          <div className="grid w-full grid-cols-6">
+            <div className="col-span-1">
+              <h3 className="text-md font-semibold text-gray-500">ID</h3>
             </div>
-          );
-        })}
-      </div>
+            <div className="col-span-1">
+              <h3 className="text-md font-semibold text-gray-500">Items</h3>
+            </div>
+
+            <div className="col-span-1">
+              <h3 className="text-md font-semibold text-gray-500">Payment</h3>
+            </div>
+            <div className="col-span-1">
+              <h3 className="text-md font-semibold text-gray-500">Status</h3>
+            </div>
+            <div className="col-span-1">
+              <h3 className="text-md font-semibold text-gray-500">Amount</h3>
+            </div>
+            <div className="col-span-1">
+              <h3 className="text-md font-semibold text-gray-500">
+                Payment Method
+              </h3>
+            </div>
+          </div>
+          {filtered.map((order: Order) => {
+            return (
+              <div
+                key={order._id}
+                className="my-4 grid w-full grid-cols-6 text-sm"
+              >
+                <div className="col-span-1"><Link className="text-blue-800 hover:text-blue-600 transition-all duration-200" href={`/user/orders/${order._id}`}>{order._id.slice(0, 10)}...</Link></div>
+                <div className="col-span-1">{order.products.length}</div>
+
+                <div className="col-span-1">
+                  {order.payment.toLowerCase() === "pending" ? (
+                    <span className="rounded-lg bg-yellow-100 px-2 py-1 text-xs font-medium uppercase text-[#FFC107]">
+                      Pending
+                    </span>
+                  ) : order.payment.toLowerCase() === "paid" ? (
+                    <span className="rounded-lg bg-green-100 px-2 py-1 text-xs font-medium uppercase text-[#28A745]">
+                      Paid
+                    </span>
+                  ) : (
+                    <span className="rounded-lg bg-red-100 px-2 py-1 text-xs font-medium uppercase text-[#DC3545]">
+                      Unpaid
+                    </span>
+                  )}
+                </div>
+                <div className="col-span-1">
+                  {order.status.toLowerCase() === "pending" ? (
+                    <span className="rounded-lg bg-yellow-100 px-2 py-1 text-xs font-medium uppercase text-[#FFC107]">
+                      Pending
+                    </span>
+                  ) : order.status.toLowerCase() === "processing" ? (
+                    <span className="rounded-lg bg-orange-100 px-2 py-1 text-xs font-medium uppercase text-[#FD7E14]">
+                      Processing
+                    </span>
+                  ) : order.status.toLowerCase() === "shipped" ? (
+                    <span className="rounded-lg bg-blue-100 px-2 py-1 text-xs font-medium uppercase text-[#007BFF]">
+                      Shipped
+                    </span>
+                  ) : order.status.toLowerCase() === "completed" ? (
+                    <span className="rounded-lg bg-green-100 px-2 py-1 text-xs font-medium uppercase text-[#28A745]">
+                      Completed
+                    </span>
+                  ) : order.status.toLowerCase() === "canceled" ? (
+                    <span className="rounded-lg bg-red-100 px-2 py-1 text-xs font-medium uppercase text-[#DC3545]">
+                      Canceled
+                    </span>
+                  ) : (
+                    <span className="rounded-lg bg-purple-100 px-2 py-1 text-xs font-medium uppercase text-[#6F42C1]">
+                      Returned
+                    </span>
+                  )}
+                </div>
+                <div className="col-span-1">
+                  {formatCurrency(order.totalPayment)}
+                </div>
+                <div className="col-span-1 text-center">
+                  {order.paymentMethod}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

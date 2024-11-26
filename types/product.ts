@@ -10,6 +10,7 @@ declare module "next-auth" {
       phone: string;
       credits: number;
       username: string;
+      profileImage: string;
       isVerified: boolean;
       addresses: [
         {
