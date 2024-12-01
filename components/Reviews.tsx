@@ -42,7 +42,7 @@ const reviews = [
 ];
 
 // Reusable star rating component
-const StarRating = ({ rating }) => (
+const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex">
     {[...Array(5)].map((_, i) => (
       <svg
@@ -72,7 +72,9 @@ const ReviewSection = ({ rev, rating }: { rev?: Review[]; rating: number }) => {
             <h3 className="flex gap-1 text-8xl font-bold ">
               {rating}/<span className="">5</span>
             </h3>
-            <span className="text-gray-400 text-sm ">({reviews.length}) Reviews</span>
+            <span className="text-sm text-gray-400 ">
+              ({reviews.length}) Reviews
+            </span>
           </div>
           {/* <div className="ml-4 w-2/3 space-y-4">
             <div className="flex items-center gap-2">

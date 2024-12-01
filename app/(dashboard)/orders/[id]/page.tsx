@@ -17,7 +17,10 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [loading, setLoading] = useState(true);
   const getOrder = async () => {
     const resp = await fetch("/api/user/order", {
-      headers: { userId: session?.user?._id, orderId: params.id },
+      headers: new Headers({
+        userId: session?.user?._id || "",
+        orderId: params.id,
+      }),
     });
     const data = await resp.json();
 
@@ -34,13 +37,16 @@ const Page = ({ params }: { params: { id: string } }) => {
     const resp = await fetch("/api/user/order", {
       method: "PUT",
       body: JSON.stringify({ status: "Canceled" }),
-      headers: { userId: session?.user?._id, orderId: params.id },
+      headers: new Headers({
+        userId: session?.user?._id || "",
+        orderId: params.id,
+      }),
     });
     const data = await resp.json();
     console.log(data);
     if (data.success) {
       setOrder(data.order);
-      toast.success('Order Canceled Successfully')
+      toast.success("Order Canceled Successfully");
     } else {
       toast.error(data.message);
     }
@@ -115,7 +121,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       {order?.status.toLowerCase() === "canceled" && (
         <button
           disabled={true}
-          className="m-4 mx-auto mt-8 block w-1/4  rounded-xl bg-blue-950 p-4 text-center text-sm opacity-70 cursor-not-allowed font-semibold text-white transition-all duration-300 hover:bg-blue-900"
+          className="m-4 mx-auto mt-8 block w-1/4  cursor-not-allowed rounded-xl bg-blue-950 p-4 text-center text-sm font-semibold text-white opacity-70 transition-all duration-300 hover:bg-blue-900"
         >
           Canceled
         </button>
