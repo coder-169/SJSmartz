@@ -71,6 +71,12 @@
   font-weight: 400; /* Regular */
   font-style: normal;
 }
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/static/Montserrat-Medium.ttf") format("truetype");
+  font-weight: 500; /* Regular */
+  font-style: normal;
+}
 
 @font-face {
   font-family: "Montserrat";

@@ -3,6 +3,7 @@ const BASE = "";
 import crypto from "crypto";
 import axios from "axios";
 import { generateCheckoutUrl, random_string } from "@/lib/server_action";
+import Order from "@/models/Order";
 
 // sec = 8scr5jcSELffqS3BZMz4FOtxALJG339nGYpjmk4yvWtZ5lnz1EyXC1JcpcohVCRL
 const getProductNames = (prods: [{ title: string }]) => {
@@ -56,6 +57,30 @@ export async function POST(req: NextRequest) {
         checkoutUrl: response.data.checkoutUrl,
       });
     }
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      {
+        status: 400,
+      },
+    );
+  }
+}
+export async function PUT(req: NextRequest) {
+  try {
+    const body = JSON.parse((await req.json()).data);
+    const order = await Order.findById(body.orderId);
+    order.paymentScreenshot = body.url;
+    await order.save();
+    if (!order)
+      return NextResponse.json({
+        success: false,
+        message: "Order not Found!",
+      });
+    return NextResponse.json({
+      success: true,
+      order,
+    });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },

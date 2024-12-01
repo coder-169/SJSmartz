@@ -21,7 +21,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     product && (
       <div key={product._id} className="overflow-hidden rounded-lg p-2">
         <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md  group-hover:opacity-75">
-          <Link href={`/products/${product.slug}`}>
+          {/* <Link href={`/products/${product.slug}`}> */}
             <Image
               width={200}
               height={200}
@@ -29,7 +29,7 @@ const ProductCard = ({ product }: { product: Product }) => {
               alt={product?.title}
               className="h-full w-full object-contain object-center lg:h-full lg:w-full"
             />
-          </Link>
+          {/* </Link> */}
         </div>
         <div className="mt-3">
           <div className="flex items-center justify-between">

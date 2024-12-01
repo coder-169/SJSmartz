@@ -113,7 +113,14 @@ const Orders = () => {
                 key={order._id}
                 className="my-4 grid w-full grid-cols-6 text-sm"
               >
-                <div className="col-span-1"><Link className="text-blue-800 hover:text-blue-600 transition-all duration-200" href={`/user/orders/${order._id}`}>{order._id.slice(0, 10)}...</Link></div>
+                <div className="col-span-1">
+                  <Link
+                    className="text-blue-800 transition-all duration-200 hover:text-blue-600"
+                    href={`/orders/${order._id}`}
+                  >
+                    {order._id.slice(0, 10)}...
+                  </Link>
+                </div>
                 <div className="col-span-1">{order.products.length}</div>
 
                 <div className="col-span-1">

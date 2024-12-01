@@ -6,6 +6,7 @@ import Variant from "@/models/Variant";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
+import { ordersReducer } from "@/states/Reducers/OrderReducer";
 function formatDeliveryDate(days: number) {
   const now = new Date(); // Get current date and time
   const dt = new Date(now.getTime() + days * 24 * 60 * 60 * 1000); // Calculate future date
@@ -54,7 +55,7 @@ export async function POST(req: NextRequest) {
         body.totalPayment -= body.totalPayment * (coupon.discount / 100);
       }
     }
-    
+
     // return NextResponse.json({});
     const order = await Order.create({
       ...body,
@@ -79,14 +80,38 @@ export async function GET(req: NextRequest) {
   try {
     await dbConnect();
     const userId = headers().get("userId");
+    const orderId = headers().get("orderId");
     if (!userId) {
       return NextResponse.json({
         success: false,
         message: "Invalid Authorization!",
       });
     }
+    if (orderId) {
+      const order = await Order.aggregate([
+        {
+          $match: { _id: new ObjectId(orderId) }, // Match orders with the provided userId
+        },
+        {
+          $lookup: {
+            from: "users", // Name of the users collection
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $unwind: "$user", // Flatten the `user` array from `$lookup`
+        },
+      ]);
+      return NextResponse.json({
+        success: true,
+        order: order[0],
+        message: "Order found successfully",
+      });
+    }
 
-     const orders = await Order.aggregate([
+    const orders = await Order.aggregate([
       {
         $match: { userId: new ObjectId(userId) }, // Match orders with the provided userId
       },
@@ -113,6 +138,56 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: false,
       message: "Orders not found",
+    });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, message: error.message });
+  }
+}
+export async function PUT(req: NextRequest) {
+  try {
+    await dbConnect();
+    const body = await req.json();
+    const userId = headers().get("userId");
+    const orderId = headers().get("orderId");
+    if (!userId) {
+      return NextResponse.json({
+        success: false,
+        message: "Invalid Authorization!",
+      });
+    }
+    if (!orderId) {
+      return NextResponse.json({
+        success: true,
+        message: "Invalid Order Id",
+      });
+    }
+    await Order.findByIdAndUpdate(orderId, body);
+    const order = await Order.aggregate([
+      {
+        $match: { userId: new ObjectId(userId) }, // Match orders with the provided userId
+      },
+      {
+        $lookup: {
+          from: "users", // Name of the users collection
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user", // Flatten the `user` array from `$lookup`
+      },
+    ]);
+
+    if (!order)
+      return NextResponse.json({
+        success: false,
+        message: "Order not found",
+      });
+    return NextResponse.json({
+      success: true,
+      order: order[0],
+      message: "Order updated successfully!",
     });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message });

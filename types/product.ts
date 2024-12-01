@@ -54,6 +54,12 @@ export type Order = {
     postal_code: string;
     state: string;
   };
+  user: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+  };
   deliveryDate: string;
   createdAt: string;
   status: string;

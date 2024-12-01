@@ -26,6 +26,7 @@ import CatalogToggle from "@/app/(subroot)/shop/catalogToggle";
 import CatalogProduct from "@/app/(subroot)/shop/catalogProduct";
 import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
+import ProductCard from "@/components/ProductCard";
 
 const categories = [
   {
@@ -317,7 +318,12 @@ export default function Page() {
             <CatalogToggle />
           </div>
         </div>
-        {loading ? <Loader /> : <CatalogProduct products={products} />}
+        {/* {loading ? <Loader /> : <CatalogProduct products={products} />} */}
+        <div className="flex flex-wrap">
+          {products.map((product,idx) => {
+            return <ProductCard key={idx} product={product} />;
+          })}
+        </div>
       </div>
     </SectionLayout>
   );

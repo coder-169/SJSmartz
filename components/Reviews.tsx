@@ -68,13 +68,13 @@ const ReviewSection = ({ rev, rating }: { rev?: Review[]; rating: number }) => {
       <h2 className="mb-4 text-2xl font-bold">Reviews</h2>
       <section>
         <div className="mx-auto flex w-3/4 items-center justify-center gap-8 py-12">
-          <div className="">
-            <h3 className="flex gap-1 text-4xl font-bold text-gray-600">
-              {rating}/<span className="text-gray-400">5</span>
+          <div className="text-yellow-500">
+            <h3 className="flex gap-1 text-8xl font-bold ">
+              {rating}/<span className="">5</span>
             </h3>
-            <span>{reviews.length} Ratings</span>
+            <span className="text-gray-400 text-sm ">({reviews.length}) Reviews</span>
           </div>
-          <div className="ml-4 w-2/3 space-y-4">
+          {/* <div className="ml-4 w-2/3 space-y-4">
             <div className="flex items-center gap-2">
               <span className="text-gray-600 text-xs">50</span>
               <StarRating rating={5} />
@@ -100,7 +100,7 @@ const ReviewSection = ({ rev, rating }: { rev?: Review[]; rating: number }) => {
               <StarRating rating={1} />
               <div className="relative h-2 w-1/4 rounded-sm bg-gray-200 before:absolute before:left-0 before:top-0 before:h-full before:w-[37%] before:rounded-sm  before:bg-yellow-500"></div>
             </div>
-          </div>
+          </div> */}
         </div>
         <ul className="space-y-4">
           {reviews.map((review) => (
