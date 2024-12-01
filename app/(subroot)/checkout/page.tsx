@@ -7,7 +7,7 @@ import SectionLayout from "@/layouts/sectionLayout";
 
 // ui
 import { DiscountIcon } from "@/ui/assets/svg";
-// import PaymentMethod from "@/app/(subroot)/checkout/checkoutPaymentMethod";
+import PaymentMethod from "@/app/(subroot)/checkout/checkoutPaymentMethod";
 import CheckoutOrders from "@/app/(subroot)/checkout/checkoutOrders";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -20,10 +20,11 @@ import { getSession, useSession } from "next-auth/react";
 import axios from "axios";
 import { useGlobalContext } from "@/hooks/AppContext";
 import Link from "next/link";
+// import PaymentMethod from "@/components/PaymentMethod";
 
 export default function Page() {
   const { status, data: session } = useSession();
-
+  const [selectedPayment, setSelectedPayment] = useState("binance");
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,6 +37,7 @@ export default function Page() {
   });
   const [orderId, setOrderId] = useState<string>("");
   const createOrder = async () => {
+    console.log(selectedPayment);
     try {
       setLoading(true);
       const json = JSON.stringify({
@@ -44,6 +46,7 @@ export default function Page() {
         address: session?.user?.addresses[0],
         totalPayment: getTotal(),
         userId: session?.user?._id,
+        paymentMethod: selectedPayment === 'binance' ? 'Binance Pay':'Bank Transfer',
         coupon,
       });
       const res = await fetch("/api/user/order", {
@@ -53,17 +56,19 @@ export default function Page() {
       const dt = await res.json();
       if (dt.success) {
         toast.success(dt.message);
-        toast.loading("Redirecting you to checkout");
-        const { data } = await axios.post("/api/user/order/payment", {
-          data: JSON.stringify({
-            orderId: dt.order._id,
-            fees: dt.order.totalPayment,
-            ...JSON.parse(json),
-          }),
-        });
         setOrderId(dt.order._id);
-        window.location.href = data.checkoutUrl;
         setOrderPlaced(true);
+        if (selectedPayment === "binance") {
+          toast.loading("Redirecting you to checkout");
+          const { data } = await axios.post("/api/user/order/payment", {
+            data: JSON.stringify({
+              orderId: dt.order._id,
+              fees: dt.order.totalPayment,
+              ...JSON.parse(json),
+            }),
+          });
+          window.location.href = data.checkoutUrl;
+        }
       } else {
         toast.error(dt.message);
       }
@@ -76,7 +81,7 @@ export default function Page() {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const createAddress = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     setAddLoading(true);
     try {
       const resp = await fetch("/api/user/profile/address", {
@@ -236,6 +241,29 @@ export default function Page() {
             <br />#{orderId}
           </h3>
           <h3 className="mb-4 text-center text-xl font-bold">Total {total}</h3>
+          <div className="my-8 space-y-4 rounded-md border border-[#6C7275] p-6">
+            <div className="flex gap-2">
+              <h3 className="w-1/3 font-bold">Bank</h3>
+              <span>Meezan</span>
+            </div>
+            <div className="flex gap-2">
+              <h3 className="w-1/3 font-bold">Account Title</h3>
+              <span> Sajid Ali</span>
+            </div>
+            <div className="flex gap-2">
+              <h3 className="w-1/3 font-bold">IBAN</h3>
+              <span> 432432</span>
+            </div>
+            <div className="flex gap-2">
+              <h3 className="w-1/3 font-bold">Account Number </h3>
+              <span>43243253</span>
+            </div>
+
+            <p className="mt-4 text-center text-sm">
+              Transfer {formatCurrency(total)} and upload Screenshot to your
+              order
+            </p>
+          </div>
           <div className="space-y-6">
             <CheckoutOrders />
           </div>
@@ -288,15 +316,15 @@ export default function Page() {
                     })}
                   </div>
                 ) : (
-                  <div className="flex justify-between items-center">
+                  <div className="flex items-center justify-between">
                     <p className="font-inter text-sm font-normal text-[#6C7275]">
                       No Addresses
                     </p>
                     <button
                       onClick={() => setOpen(true)}
-                      className="py-2 rounded-md bg-[#141718] px-2 font-inter text-xs font-normal text-white"
+                      className="rounded-md bg-[#141718] px-2 py-2 font-inter text-xs font-normal text-white"
                     >
-                      <PlusCircle size={18}/>
+                      <PlusCircle size={18} />
                     </button>
                   </div>
                 )}
@@ -310,10 +338,11 @@ export default function Page() {
                 )}
               </div>
             </div>
-
             <CheckoutOrders />
-
-            {/* <PaymentMethod /> */}
+            <PaymentMethod
+              selectedPayment={selectedPayment}
+              setSelectedPayment={setSelectedPayment}
+            />
           </div>
 
           <div className="h-fit space-y-6">

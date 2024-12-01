@@ -6,16 +6,17 @@ import { MoneyIcon } from "@/ui/assets/svg";
 import { cn } from "@/lib/utils";
 
 const payments = [
-  { name: "cart-credit", value: "Pay by Card Credit" },
-  { name: "paypal", value: "Paypal" },
-  { name: "gopay", value: "Gopay" },
+  { name: "binance", value: "Pay With Crypto" },
+  { name: "bank", value: "Bank Transfer" },
 ];
 
-const CheckoutPaymentMethod = () => {
-  const [selectedPayment, setSelectedPayment] = useState<string>(
-    payments[0].name,
-  );
-
+const CheckoutPaymentMethod = ({
+  selectedPayment,
+  setSelectedPayment,
+}: {
+  selectedPayment: string;
+  setSelectedPayment: (arg: string) => void;
+}) => {
   const handleSelectedPayment = (name: string) => {
     setSelectedPayment(name);
   };

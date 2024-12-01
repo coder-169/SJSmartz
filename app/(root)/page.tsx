@@ -25,6 +25,7 @@ import { Product } from "@/types/product";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../global/store";
 import { loadProducts } from "../global/Reducers/ProductReducer";
+import { Coins } from "lucide-react";
 
 export default function Home() {
   // const [products, setProducts] = useState([]);
@@ -87,7 +88,7 @@ export default function Home() {
 
               <div className="relative flex h-full flex-col justify-end gap-2">
                 <Heading as="h3" intent="collection-card">
-                  Headband
+                  Headphones
                 </Heading>
                 <Link href="/shop" className="w-fit">
                   <span className="flex w-fit items-center gap-1 border-b border-[#121212]">
@@ -170,7 +171,7 @@ export default function Home() {
       </SectionLayout>
       {/* Promotion section */}
       <div className="grid overflow-hidden md:grid-cols-2 lg:h-full lg:max-h-[500px] lg:place-items-center">
-        <div className="w-full justify-end bg-gray-400 md:flex">
+        {/* <div className="w-full justify-end bg-gray-400 md:flex">
           <Image
             src="/images/promotion-card.png"
             width={1250}
@@ -178,7 +179,7 @@ export default function Home() {
             alt="promotion-card"
             className="h-auto w-full object-cover lg:w-[460px]"
           />
-        </div>
+        </div> */}
 
         {/* <div className="order-1 w-full bg-[#ffdd99] md:order-2">
           <div className="w-full max-w-[720px] space-y-6 p-8">
@@ -278,12 +279,12 @@ export default function Home() {
                 Free Shipping
               </Text>
               <Text size="sm" color="gray">
-                Order above $200
+                Order above 4000PKR
               </Text>
             </div>
           </div>
           <div className="space-y-4 rounded-3xl bg-[#F3F5F7] px-4 py-8 lg:px-8 lg:py-12">
-            <MoneyIcon className="h-12 w-12" />
+            <Coins className="h-12 w-12" />
             <div className="space-y-1 md:space-y-2">
               <Text
                 size="sm"
@@ -292,10 +293,10 @@ export default function Home() {
                 color="black/800"
                 className="lg:text-xl"
               >
-                Money-back
+                Cash-back
               </Text>
               <Text size="sm" color="gray">
-                30 days guarantee
+                cash in form of coins{" "}
               </Text>
             </div>
           </div>
@@ -312,7 +313,7 @@ export default function Home() {
                 Secure Payments
               </Text>
               <Text size="sm" color="gray">
-                Secured by Striped
+                Crypto and Bank Transfer
               </Text>
             </div>
           </div>

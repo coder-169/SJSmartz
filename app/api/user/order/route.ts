@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
 
       await variant.save();
     }
-    console.log(body.coupon);
     const coupon = await Coupon.findOne({ couponCode: body.coupon.value });
     console.log(coupon);
     if (coupon) {
@@ -55,7 +54,7 @@ export async function POST(req: NextRequest) {
         body.totalPayment -= body.totalPayment * (coupon.discount / 100);
       }
     }
-
+    
     // return NextResponse.json({});
     const order = await Order.create({
       ...body,

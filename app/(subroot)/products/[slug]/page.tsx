@@ -23,6 +23,7 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { CiMoneyBill } from "react-icons/ci";
 import { useGlobalContext } from "@/hooks/AppContext";
 import toast from "react-hot-toast";
+import ReviewSection from "@/components/Reviews";
 
 function formatDeliveryDate(r1: number, r2: number) {
   const now = new Date(); // Get current date and time
@@ -303,6 +304,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
         {/* <ProductTab tabs={product.tabs} /> */}
         {/* <ProductRecommendation products={relatedProducts}/> */}
+        <ReviewSection rating={product.rating}/>
       </div>
     </SectionLayout>
   ) : (

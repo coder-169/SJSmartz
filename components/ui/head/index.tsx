@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 type HeadingVariantsProps = VariantProps<typeof headingVariants>;
 
-const headingVariants = cva("font-poppins font-medium text-[#121212]", {
+const headingVariants = cva(" font-bold text-[#121212]", {
   variants: {
     intent: {
       "hero-section": "text-[40px] md:text-6xl xl:text-7xl",

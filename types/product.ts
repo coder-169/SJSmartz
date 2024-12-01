@@ -60,6 +60,15 @@ export type Order = {
   paymentMethod: string;
   payment: string;
 };
+
+export type Review = {
+  _id: string;
+  user: string;
+  date: string;
+  avatar: string;
+  images:string[];
+  
+};
 export type Product = {
   _id: string;
   title: string;

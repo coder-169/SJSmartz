@@ -1,6 +1,5 @@
 // package
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 // lib
 import { cn } from "@/lib/utils";
@@ -10,17 +9,6 @@ import AppContextProvider from "@/hooks/AppContext";
 import AuthProvider from "@/hooks/AuthContext";
 import { Providers } from "./global/provider";
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-poppins",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
-});
 
 export const metadata: Metadata = {
   title: "Sj Smartz - Electronics Store",
