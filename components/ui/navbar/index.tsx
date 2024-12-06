@@ -25,8 +25,10 @@ import Link from "next/link";
 import Input from "@/components/form/input";
 import { useGlobalContext } from "@/hooks/AppContext";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { FaBagShopping } from "react-icons/fa6";
 
-interface NavbarProps {}
+interface NavbarProps { }
 
 const Navbar: React.FC<NavbarProps> = () => {
   const isRootPage = useRootContext();
@@ -54,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = () => {
           scroll && "bg-white shadow transition-colors duration-200 ease-in",
         )}
       >
-        <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-8 py-4 lg:justify-normal">
+        <nav className="mx-auto flex w-full items-center justify-between px-8 py-4 lg:justify-normal">
           <div className="flex items-center gap-1 lg:basis-1/4">
             <button className="lg:hidden" onClick={() => setOpen(true)}>
               <HamburgerMenu className="w-6" />
@@ -62,7 +64,7 @@ const Navbar: React.FC<NavbarProps> = () => {
             <Link href={"/"}>
               <Logo />
             </Link>
-            
+
           </div>
 
           <div className="hidden basis-2/4 lg:block">
@@ -80,17 +82,22 @@ const Navbar: React.FC<NavbarProps> = () => {
               </Link>
             ) : (
               <Link href={"/profile"}>
-                <UserIcon className="hidden lg:block" />
+                {
+                  session?.user?.profileImage ?
+                    <Image width={24} height={24} src={session?.user?.profileImage || ''} alt={session?.user?.username} className="rounded-full hidden lg:block" />
+                    :
+                    <UserIcon className="hidden lg:block" />
+                }
               </Link>
             )}
 
-            <Link href={"/cart"} className="relative">
-              <CartIcon className="w-6" />
-              {cartItems?.length && (
-                <span className="absolute -left-1 -top-2 text-black">
-                  {cartItems.length}
-                </span>
-              )}
+            <Link href={"/cart"} className="relative hidden md:block">
+
+              {cartItems?.length > 0 ?
+                <FaBagShopping className="w-8 text-xl" />
+                :
+                <CartIcon className="w-6" />
+              }
             </Link>
           </div>
 

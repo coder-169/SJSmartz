@@ -30,31 +30,18 @@ const cartSelectMenus: CartSelectItemProps["data"][] = [
 ];
 
 const CartSummary = () => {
+
   const [cartSelect, setCartSelect] = useState<string>(cartSelectMenus[0].name);
-  const [subTotal, setSubtotal] = useState(0);
-  const { cartItems: cart } = useGlobalContext() as any;
-  const [total, setTotal] = useState(0);
-  const calculateSubtotal = () => {
-    const cartItems = localStorage.getItem("sjsmartz-cart-items")
-      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-      : [];
-    let val = 0;
-    let val2 = 0;
-    for (let i = 0; i < cartItems.length; i++) {
-      const item = cartItems[i];
-      val += item.price * item.qty;
-      val2 += item.price * item.qty + item.qty * 200;
-    }
-    console.log(val, val2);
-    setSubtotal(val);
-    setTotal(val2);
-  };
+
+  const { cartItems: cart, checkCartSelectedItems, calculateSubtotal, subTotal, total } = useGlobalContext() as any;
+
   const handleCartSelect = (value: string) => {
     setCartSelect(value);
   };
+
   useEffect(() => {
     calculateSubtotal();
-  }, [cart]);
+  }, [cart, subTotal, total]);
   return (
     <div className="h-fit w-full space-y-4 rounded-md border border-[#6C7275] p-4 lg:p-6">
       <p className="font-poppins text-lg font-semibold text-[#141718]">
@@ -94,13 +81,20 @@ const CartSummary = () => {
             </p>
           </div>
         </div>
-
-        <Link
-          href={"/checkout"}
-          className="w-full rounded-lg bg-[#141718] px-6 py-2.5 font-inter text-lg font-medium text-white"
-        >
-          Checkout
-        </Link>
+        {total > 0 ?
+          <Link
+            href={"/checkout"}
+            className={`w-full block text-center rounded-lg bg-[#141718] px-6 py-2.5 font-inter text-lg font-medium text-white`}
+          >
+            Checkout
+          </Link> :
+          <button
+            disabled={true}
+            className={`opacity-70 cursor-not-allowed w-full rounded-lg bg-[#141718] px-6 py-2.5 font-inter text-lg font-medium text-white`}
+          >
+            Checkout
+          </button>
+        }
       </div>
       {/*       </div> */}
     </div>

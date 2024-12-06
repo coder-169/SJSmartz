@@ -55,12 +55,17 @@ const Footer = () => {
 
           <div className="flex flex-col gap-7 lg:order-1 lg:flex-row">
             <div className="flex justify-center gap-7 lg:order-2">
-              <Text size="xs" weight={600} family="poppins" color="white/900">
-                Privacy Policy
-              </Text>
-              <Text size="xs" weight={600} family="poppins" color="white/900">
-                Term of Use
-              </Text>
+              <Link href='/privacy-policy'>
+                <Text size="xs" weight={600} family="poppins" color="white/900">
+
+                  Privacy Policy
+                </Text>
+              </Link>
+              <Link href="/terms-of-service">
+                <Text size="xs" weight={600} family="poppins" color="white/900">
+                  Term of Use
+                </Text>
+              </Link>
             </div>
 
             <Text

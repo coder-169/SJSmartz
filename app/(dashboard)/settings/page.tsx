@@ -18,7 +18,7 @@ const Page = () => {
   });
   const [address, setAddress] = useState({
     city: "",
-    postal_code: "",
+    area: "",
     state: "",
     address_line: "",
     address_name: "",
@@ -138,7 +138,7 @@ const Page = () => {
     });
     setAddress({
       city: session?.user?.addresses[0].city || "",
-      postal_code: session?.user?.addresses[0]?.postal_code || "",
+      area: session?.user?.addresses[0]?.area || "",
       state: session?.user?.addresses[0].state || "",
       address_line: session?.user?.addresses[0].address_line || "",
       address_name: session?.user?.addresses[0].address_name || "",
@@ -371,17 +371,17 @@ const Page = () => {
 
             <div className="sm:col-span-2">
               <label
-                htmlFor="postal_code"
+                htmlFor="area"
                 className="block text-sm/6 font-medium text-gray-900"
               >
                 ZIP / Postal code
               </label>
               <div className="mt-2">
                 <input
-                  id="postal_code"
-                  name="postal_code"
+                  id="area"
+                  name="area"
                   type="text"
-                  value={address.postal_code}
+                  value={address.area}
                   onChange={addressHandler}
                   autoComplete="postal-code"
                   className="w-full rounded-md border border-[#6C7275] px-4 py-2 font-inter font-normal text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"

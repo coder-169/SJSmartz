@@ -29,24 +29,38 @@ export default function Page() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [addLoading, setAddLoading] = useState(false);
+  const [recName, setRecName] = useState('')
+  const [recContact, setRecContact] = useState('')
   const [values, setValues] = useState({
     address_line: "",
     city: "",
     state: "",
-    postal_code: "",
+    area: "",
   });
   const [orderId, setOrderId] = useState<string>("");
   const createOrder = async () => {
     console.log(selectedPayment);
     try {
       setLoading(true);
+      const cartItems = localStorage.getItem("sjsmartz-cart-items")
+        ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+        : [];
+      const products = []
+      for (let i = 0; i < cartItems.length; i++) {
+        const element = cartItems[i];
+        if (element.check) {
+          products.push(element)
+        }
+      }
+
       const json = JSON.stringify({
-        ...values,
-        products: JSON.parse(localStorage.getItem("sjsmartz-cart-items")!),
-        address: session?.user?.addresses[0],
+        products,
+        address: values,
+        fullName: recName,
+        contact: recContact,
         totalPayment: getTotal(),
         userId: session?.user?._id,
-        paymentMethod: selectedPayment === 'binance' ? 'Binance Pay':'Bank Transfer',
+        paymentMethod: selectedPayment === 'binance' ? 'Binance Pay' : 'Bank Transfer',
         coupon,
       });
       const res = await fetch("/api/user/order", {
@@ -54,6 +68,7 @@ export default function Page() {
         body: json,
       });
       const dt = await res.json();
+      console.log(dt)
       if (dt.success) {
         toast.success(dt.message);
         setOrderId(dt.order._id);
@@ -77,7 +92,7 @@ export default function Page() {
       toast.error(error.message);
     }
   };
-  const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleValueChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const createAddress = async (e: FormEvent<HTMLFormElement>) => {
@@ -96,7 +111,7 @@ export default function Page() {
       }
       setOpen(false);
       setAddLoading(false);
-    } catch (error) {}
+    } catch (error) { }
   };
   const updateAddress = async () => {
     setAddLoading(true);
@@ -113,7 +128,7 @@ export default function Page() {
       }
       setOpen(false);
       setAddLoading(false);
-    } catch (error) {}
+    } catch (error) { }
     // session = await getSession();
   };
   const [editAddress, setEditAddress] = useState<boolean>(false);
@@ -126,10 +141,56 @@ export default function Page() {
   const [couponApplied, setCouponApplied] = useState<boolean>(false);
   const [applyingCoupon, setApplyingCoupon] = useState<boolean>(false);
   const clientSideDiscount = (coupon: any) => {
-    const discount = (coupon.discount / 100) * total;
-    setTotal((prev) => prev - discount);
+
     setCoupon({ value: coupon.couponCode, discount: coupon.discount });
   };
+  const getTotal = () => {
+    const items = localStorage.getItem("sjsmartz-cart-items")
+      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+      : [];
+    let val = 0;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.check) {
+        val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
+      }
+    }
+
+    if (getSubTotal() > 4000) {
+      const discount = (coupon.discount / 100) * subTotal;
+      return subTotal - discount;
+    } else {
+      const discount = (coupon.discount / 100) * total;
+      return val - discount;
+    }
+    // return 1;
+  }
+  const getSubTotal = () => {
+    const items = localStorage.getItem("sjsmartz-cart-items")
+      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+      : [];
+    let val = 0;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.check) {
+        val += Math.round((item.price - (item.price * item.discount / 100)) * item.qty);
+      }
+    }
+    return val
+  }
+  const calculateShipping = () => {
+    const items = localStorage.getItem("sjsmartz-cart-items")
+      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+      : [];
+    let val = 0;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.check) {
+        val += item.qty * 200;
+      }
+    }
+    return val
+  }
   const applyCoupon = async () => {
     if (coupon.value === "") return toast.error("Please enter code!");
     setApplyingCoupon(true);
@@ -175,21 +236,30 @@ export default function Page() {
     setTotal(val + val2);
     setShipping(val2);
   };
-  const getTotal = () => {
-    const cartItems = localStorage.getItem("sjsmartz-cart-items")
-      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-      : [];
-    let val = 0;
-    for (let i = 0; i < cartItems.length; i++) {
-      const item = cartItems[i];
-      val += item.price * item.qty + item.qty * 200;
-    }
-    return val;
-  };
+  // const getTotal = () => {
+  //   const cartItems = localStorage.getItem("sjsmartz-cart-items")
+  //     ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+  //     : [];
+  //   let val = 0;
+  //   let val2 = 0;
+  //   for (let i = 0; i < cartItems.length; i++) {
+  //     const item = cartItems[i];
+  //     if (item.check) {
+  //       val += item.price * item.qty + item.qty * 200;
+  //       val2 += item.price * item.qty;
+  //     }
+
+  //   }
+  //   console.log(val2)
+  //   if (val2 > 4000) {
+  //     return val2
+  //   }
+  //   return val;
+  // };
   useEffect(() => {
-    calculateSubtotal();
+    // calculateSubtotal();
   }, [cart]);
-  useEffect(() => {}, [session, editAddress]);
+  useEffect(() => { }, [session, editAddress]);
   return (
     <SectionLayout className="relative px-8 py-20">
       <div className="absolute left-8 top-4 inline-flex items-center gap-1 align-baseline lg:hidden">
@@ -240,27 +310,27 @@ export default function Page() {
             Thanks! Your Ordered Placed Successfully
             <br />#{orderId}
           </h3>
-          <h3 className="mb-4 text-center text-xl font-bold">Total {total}</h3>
+          <h3 className="mb-4 text-center text-xl font-bold">Total {formatCurrency(getTotal())}</h3>
           <div className="my-8 space-y-4 rounded-md border border-[#6C7275] p-6">
             <div className="flex gap-2">
               <h3 className="w-1/3 font-bold">Bank</h3>
-              <span>Meezan</span>
+              <span>Meezan Bank Limited</span>
             </div>
             <div className="flex gap-2">
               <h3 className="w-1/3 font-bold">Account Title</h3>
-              <span> Sajid Ali</span>
+              <span>Sajid Ali</span>
             </div>
             <div className="flex gap-2">
               <h3 className="w-1/3 font-bold">IBAN</h3>
-              <span> 432432</span>
+              <span>PK70MEZN0000300107944717</span>
             </div>
             <div className="flex gap-2">
               <h3 className="w-1/3 font-bold">Account Number </h3>
-              <span>43243253</span>
+              <span>00300107944717</span>
             </div>
 
             <p className="mt-4 text-center text-sm">
-              Transfer {formatCurrency(total)} and upload Screenshot to your
+              Transfer {formatCurrency(getTotal())} and upload Screenshot to your
               order
             </p>
           </div>
@@ -271,10 +341,10 @@ export default function Page() {
       ) : (
         <div className="grid gap-y-6 lg:grid-cols-[2fr_1fr] lg:gap-x-8 xl:gap-x-16">
           <div className="space-y-6">
-            <div className="space-y-6 rounded-md border border-[#6C7275] p-6">
-              <p className="font-poppins text-lg font-semibold text-[#141718]">
+            {/* <div className="space-y-6 rounded-md border border-[#6C7275] p-6">
+              <h4 className="font-poppins text-lg font-semibold text-[#141718]">
                 Shipping Address
-              </p>
+              </h4>
 
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
@@ -301,7 +371,7 @@ export default function Page() {
                                   ", " +
                                   address.state +
                                   ", " +
-                                  address.postal_code}
+                                  address.area}
                               </>
                             )}
                           </p>
@@ -337,15 +407,84 @@ export default function Page() {
                   </button>
                 )}
               </div>
+            </div> */}
+            <div>
+              <h4 className="font-poppins mb-2 text-lg font-semibold text-[#141718]">
+                Receiver Info
+              </h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-1">
+
+                  <input
+                    className="h-10 w-full rounded-md  font-medium border border-[#6C7275] px-4  text-sm  text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
+                    value={recName}
+                    onChange={(e) =>
+                      setRecName(e.target.value)
+                    }
+                    placeholder="Full Name"
+                  />
+                </div>
+                <div className="col-span-1">
+
+                  <input
+                    className="h-10 w-full rounded-md  font-medium border border-[#6C7275] px-4  text-sm  text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
+                    value={recContact}
+                    onChange={(e) =>
+                      setRecContact(e.target.value)
+                    }
+                    placeholder="Phone"
+                  />
+                </div>
+                <div className="col-span-1">
+                  <input
+                    className="h-10 w-full rounded-md  font-medium border border-[#6C7275] px-4  text-sm  text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
+                    value={values.address_line}
+                    onChange={handleValueChange}
+                    placeholder="Address Line"
+                    name='address_line'
+                  />
+                </div>
+                <div className="col-span-1">
+
+                  <input
+                    className="h-10 font-medium w-full rounded-md border border-[#6C7275] px-4  text-sm  text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
+                    value={values.city}
+                    name='city'
+                    onChange={handleValueChange}
+                    placeholder="City"
+                  />
+                </div>
+                <div className="col-span-1">
+                  <select
+                    onChange={(e) => handleValueChange(e)} name='state' value={values.state} className="h-10 w-full rounded-md  font-medium border border-[#6C7275] px-4  text-sm  text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]">
+                    <option value={''} >Select</option>
+                    <option value={'Sindh'} >Sindh</option>
+                    <option value={'Punjab'} >Punjab</option>
+                    <option value={'Balochistan'} >Balochistan</option>
+                    <option value={'Gilgit Baltistan'} >Gilgit-Baltistan</option>
+                    <option value={'Khyber Pakhtunkhwa'} >Khyber Pakhtunkhwa</option>
+                  </select>
+
+                </div>
+                <div className="col-span-1">
+                  <input
+                    className="h-10 w-full rounded-md  font-medium border border-[#6C7275] px-4  text-sm  text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
+                    value={values.area}
+                    onChange={handleValueChange}
+                    placeholder="Area"
+                    name='area'
+                  />
+                </div>
+              </div>
             </div>
             <CheckoutOrders />
+          </div>
+
+          <div className="h-fit space-y-6">
             <PaymentMethod
               selectedPayment={selectedPayment}
               setSelectedPayment={setSelectedPayment}
             />
-          </div>
-
-          <div className="h-fit space-y-6">
             <div className="space-y-6 rounded-md border border-[#6C7275] p-6">
               <p className="font-poppins text-lg font-semibold text-[#141718]">
                 Order Summary
@@ -354,7 +493,7 @@ export default function Page() {
               {!couponApplied && (
                 <div className="flex gap-3">
                   <input
-                    className="h-10 w-full rounded-md border border-[#6C7275] px-4 font-inter text-sm font-normal text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
+                    className="h-10 w-full rounded-md  font-medium border border-[#6C7275] px-4  text-sm  text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
                     value={coupon.value}
                     onChange={(e) =>
                       setCoupon({ ...coupon, value: e.target.value })
@@ -402,7 +541,8 @@ export default function Page() {
                     Shipping
                   </p>
                   <p className="font-inter text-sm font-semibold text-[#141718]">
-                    {shipping || 0}
+                    {getSubTotal() < 4000 ? calculateShipping() || 0 : 'Free Shipping'}
+
                   </p>
                 </div>
                 <div className="flex items-center justify-between py-3">
@@ -410,7 +550,7 @@ export default function Page() {
                     Subtotal
                   </p>
                   <p className="font-inter text-sm font-semibold text-[#141718]">
-                    {formatCurrency(subTotal)}
+                    {formatCurrency(getSubTotal())}
                   </p>
                 </div>
                 <div className="flex items-center justify-between py-3">
@@ -419,9 +559,11 @@ export default function Page() {
                   </p>
                   <p className="font-poppins text-lg font-semibold text-[#141718]">
                     <span className="pr-2 text-sm text-[#212425] line-through opacity-80">
-                      {couponApplied && getTotal()}
+                      {couponApplied ? formatCurrency(getTotal()) : ""}
                     </span>
-                    {formatCurrency(total)}
+                    <span>
+                      {formatCurrency(getTotal())}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -507,9 +649,9 @@ export default function Page() {
                         intent="secondary"
                         type="text"
                         placeholder="Postal/Zip Code"
-                        name="postal_code"
+                        name="area"
                         autoComplete="off"
-                        value={values.postal_code}
+                        value={values.area}
                         onChange={handleValueChange}
                         className="w-full rounded-md border border-[#6C7275] px-4 py-2 font-inter font-normal text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
                       />

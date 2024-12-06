@@ -17,6 +17,8 @@ import {
 
 // lib
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import { FaUser } from "react-icons/fa6";
 
 const links = [
   {
@@ -48,14 +50,16 @@ export default function NavMobile({
   onClick: () => void;
   open: boolean;
 }) {
+  const session = useSession();
+
   return (
     <div
       className={cn(
-        "absolute left-0 top-0 z-10 grid min-h-[100dvh] w-full grid-cols-[11fr_1fr] transition-transform duration-100 ease-in md:grid-cols-[10fr_2fr] lg:hidden",
+        "absolute left-0 top-0 z-10 grid min-h-[100dvh] w-full grid-cols-[6fr_6fr] transition-transform duration-100 ease-in md:grid-cols-[4fr_8fr] lg:hidden",
         open ? "transform-none touch-none" : "-translate-x-full",
       )}
     >
-      <div className="flex h-full flex-col justify-between bg-white p-6">
+      <div className="w-96 flex h-full flex-col justify-between bg-white p-6">
         {/* top section */}
         <div className="flex flex-col gap-4">
           {/* logo */}
@@ -134,12 +138,24 @@ export default function NavMobile({
           </ul>
 
           {/* login button */}
-          <Button width="full" fontSize="lg" className="py-2.5">
-            Sign In
-          </Button>
-
+          {session.status === 'unauthenticated' ?
+            <Button width="full" fontSize="lg" className="py-2.5">
+              Sign In
+            </Button>
+            :
+            <div className="flex justify-between">
+              <FaUser />
+              <div>
+                <h4 className="text-sm">Saad2129</h4>
+                <small>mrsaad2129@gmail.com</small>
+              </div>
+              <button className="">
+              
+              </button>
+            </div>
+          }
           {/* social media button */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 justify-center">
             <InstagramIcon className="w-6" />
             <FacebookIcon className="w-6" />
             <YoutubeIcon className="w-6" />

@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useGlobalContext } from "@/hooks/AppContext";
+import { FaTrash } from "react-icons/fa6";
 
 export type CartItemProps = {
   product: {
@@ -32,18 +33,18 @@ export type CartItemProps = {
     image: string;
     color: string;
     qty: number;
+    check: boolean;
     price: number;
     discount: number;
   };
 };
 
 const CartItem: React.FC<CartItemProps> = ({ product }) => {
-  console.log(product);
   const [quantity, setQuantity] = useState<number>(product.qty);
-  const [check, setCheck] = useState<boolean>(true);
+  const [check, setCheck] = useState<boolean>(product.check);
   const basePrice = formatCurrency(product.price);
   const totalPrice = formatCurrency(product.price * quantity);
-
+  const { calculateSubtotal } = useGlobalContext();
   const handleMinusQuantity = () => {
     if (quantity > 1) {
       setQuantity((prevQuantity) => prevQuantity - 1);
@@ -55,6 +56,20 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
   };
 
   const handleCheck = () => {
+    console.log(product)
+    const cartItems = localStorage.getItem("sjsmartz-cart-items")
+      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+      : [];
+    for (let i = 0; i < cartItems.length; i++) {
+      const e = cartItems[i];
+      if (e._id === product._id) {
+        e.check = !check
+        console.log(e.check)
+      }
+    }
+    localStorage.setItem("sjsmartz-cart-items", JSON.stringify(cartItems))
+    console.log(cartItems)
+    calculateSubtotal(cartItems)
     setCheck((prevCheck) => !prevCheck);
   };
 
@@ -111,7 +126,7 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
                   Color: {product.color}
                 </p>
 
-                <div className="sm:hidden">
+                {/* <div className="sm:hidden">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button className="h-4 w-4">
@@ -132,7 +147,10 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                </div>
+                </div> */}
+                <button className="sm:hidden" onClick={() => removeFromCart(product._id)}>
+                  <FaTrash className="h-full w-full" />
+                </button>
               </div>
 
               <div className="flex items-center justify-between sm:hidden">
@@ -206,7 +224,10 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
           check ? "opacity-100" : "opacity-50",
         )}
       >
-        <DropdownMenu>
+        <button onClick={() => removeFromCart(product._id)} className="h-5 w-5 disabled:cursor-not-allowed">
+          <FaTrash className="h-full w-full" />
+        </button>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger disabled={!check} asChild>
             <button className="h-5 w-5 disabled:cursor-not-allowed">
               <MoreHorizontal className="h-full w-full" />
@@ -225,7 +246,7 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
               Remove from cart
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </td>
     </>
   );

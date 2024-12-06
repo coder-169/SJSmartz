@@ -24,6 +24,7 @@ import { CiMoneyBill } from "react-icons/ci";
 import { useGlobalContext } from "@/hooks/AppContext";
 import toast from "react-hot-toast";
 import ReviewSection from "@/components/Reviews";
+import Rating from "@/components/Rating";
 
 function formatDeliveryDate(r1: number, r2: number) {
   const now = new Date(); // Get current date and time
@@ -37,6 +38,9 @@ function formatDeliveryDate(r1: number, r2: number) {
     month: "short",
   });
   return dr1 + " - " + dr2.split(" ").reverse().join(" ");
+}
+function capitalize(str: string) {
+  return str[0].toUpperCase() + str.slice(1)
 }
 export default function Page({ params }: { params: { slug: string } }) {
   const [loading, setLoading] = useState(true);
@@ -58,7 +62,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       if (res.status === 404) return notFound();
       const data = await res.json();
-      
+
       if (!data.success) throw new Error(data.message);
       setProduct(data.product);
       setSelectedVariant(data.product.variants[0]);
@@ -77,6 +81,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   };
   useEffect(() => {
     getProductById();
+    document.title = 'SJ Smartz ' + capitalize(params.slug.split('-').join(' ')) || "Product";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return product && !loading ? (
@@ -91,11 +96,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className="space-y-4 border-b border-[#E8ECEF] pb-6">
               <div className="flex items-center gap-2.5">
                 <div className="flex items-center gap-1">
-                  <StarIcon className="h-4 w-4" />
-                  <StarIcon className="h-4 w-4" />
-                  <StarIcon className="h-4 w-4" />
-                  <StarIcon className="h-4 w-4" />
-                  <StarIcon className="h-4 w-4" />
+                  <Rating rating={product.rating} />
                 </div>
 
                 <span className="font-inter text-xs font-normal text-[#141718]">
@@ -103,13 +104,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </span>
               </div>
 
-              <h1 className="font-poppins text-[40px] font-medium text-[#141718]">
+              <h1 className="font-poppins text-2xl font-medium text-[#141718]">
                 {product.title}
               </h1>
 
-              <p className="font-inter text-base font-normal text-[#6C7275]">
-                {product.description}
-              </p>
 
               <p className="font-poppins text-[28px] font-medium text-[#141718]">
                 <span className="align-middle">
@@ -120,8 +118,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                     selectedVariant.discount > 0 &&
                     formatCurrency(
                       selectedVariant.price -
-                        (selectedVariant.price * selectedVariant.discount) /
-                          100,
+                      (selectedVariant.price * selectedVariant.discount) /
+                      100,
                     )}
                 </span>
               </p>
@@ -193,6 +191,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                 <span className="text-[#6C7275]">SKU</span>
                 <span className="text-[#141718]">1117</span>
               </div> */}
+              <p className="font-inter text-base font-normal text-[#6C7275]">
+                {product.description}
+              </p>
+
               <div className="grid grid-cols-[100px_1fr] font-inter text-xs lg:grid-cols-[140px_1fr] lg:text-sm">
                 <span className="text-[#6C7275]">CATEGORY</span>
                 <span className="text-[#141718]">
@@ -304,7 +306,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
         {/* <ProductTab tabs={product.tabs} /> */}
         {/* <ProductRecommendation products={relatedProducts}/> */}
-        <ReviewSection rating={product.rating}/>
+        <ReviewSection rating={product.rating} reviews={product.reviews} />
       </div>
     </SectionLayout>
   ) : (

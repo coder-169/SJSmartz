@@ -29,14 +29,14 @@ export default function Page() {
   }, []);
   return (
     <SectionLayout className="relative px-8 py-20">
-      <div className="absolute left-8 top-4 inline-flex items-center gap-1 align-baseline lg:hidden">
+      {/* <div className="absolute left-8 top-4 inline-flex items-center gap-1 align-baseline lg:hidden">
         <ChevronLeft stroke="#605F5F" className="h-3 w-3" />
         <p className="font-inter text-sm font-medium text-[#605F5F]">back</p>
-      </div>
+      </div> */}
 
       <div className="space-y-6 pb-20 lg:space-y-10">
         <h1 className="text-center font-poppins text-[40px] font-medium text-[#141718]">
-        Cart
+          Cart
         </h1>
         <div className="flex items-center justify-center gap-4 align-baseline">
           <p
@@ -78,7 +78,6 @@ export default function Page() {
         <div className="grid gap-y-6 lg:grid-cols-[2fr_1fr] lg:gap-x-8 xl:gap-x-16">
           {/* Cart Table */}
           <CartTable />
-
           <div className="space-y-6">
             {/* Cart Coupon */}
             {/* <CartCoupon /> */}

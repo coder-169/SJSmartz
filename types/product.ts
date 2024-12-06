@@ -14,7 +14,7 @@ declare module "next-auth" {
       isVerified: boolean;
       addresses: [
         {
-          postal_code: string;
+          area: string;
           address_line: string;
           city: string;
           state: string;
@@ -51,7 +51,7 @@ export type Order = {
   address: {
     address_line: string;
     city: string;
-    postal_code: string;
+    area: string;
     state: string;
   };
   user: {
@@ -69,27 +69,26 @@ export type Order = {
 
 export type Review = {
   _id: string;
-  user: string;
-  date: string;
+  email: string;
+  name: string;
+  createdAt: string;
   avatar: string;
-  images:string[];
-  
+  images: string[];
+  rating: number;
+  comment: string;
 };
 export type Product = {
   _id: string;
   title: string;
   category: string;
+  subCategory: string;
   description: string;
   noOfReviews: number;
   rating: number;
-  variants: {
-    color: string;
-    stock: number;
-    image: string;
-    price: number;
-    discount: number;
-    _id: string;
-  }[];
+  discount: number;
+  createdAt: string;
+  variants: Variant[];
+  reviews: Review[];
   images: string[];
   slug: string;
   price: number;

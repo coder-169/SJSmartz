@@ -105,7 +105,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                 ", " +
                 order?.address.state +
                 ", " +
-                order?.address.postal_code || ""
+                order?.address.area || ""
             }
           />
         </div>

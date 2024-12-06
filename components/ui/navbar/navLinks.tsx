@@ -19,36 +19,36 @@ const links: NavLinkProps[] = [
     id: "shop",
     path: "/shop",
     name: "Shop",
-    subLinks: [
-      {
-        id: "all-categories",
-        path: "/shop",
-        name: "All Categories",
-      },
-      {
-        id: "earbuds",
-        path: "/shop?category=earbuds",
-        name: "Ear Buds",
+    // subLinks: [
+    //   {
+    //     id: "all-categories",
+    //     path: "/shop",
+    //     name: "All Categories",
+    //   },
+    //   {
+    //     id: "earbuds",
+    //     path: "/shop?category=earbuds",
+    //     name: "Ear Buds",
       
-      },
-      {
-        id: "headsets",
-        path: "/shop?category=headsets",
-        name: "Headsets (microphone)",
+    //   },
+    //   {
+    //     id: "headsets",
+    //     path: "/shop?category=headsets",
+    //     name: "Headsets (microphone)",
         
-      },
-      {
-        id: "headphones",
-        path: "/shop?category=headphones",
-        name: "Headphones",
+    //   },
+    //   {
+    //     id: "headphones",
+    //     path: "/shop?category=headphones",
+    //     name: "Headphones",
        
-      },
-    ],
+    //   },
+    // ],
   },
   {
-    id: "product",
-    path: "/product",
-    name: "Product",
+    id: "about",
+    path: "/about",
+    name: "About Us",
   },
   {
     id: "contact-us",

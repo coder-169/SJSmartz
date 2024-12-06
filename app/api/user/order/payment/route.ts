@@ -36,17 +36,14 @@ export async function POST(req: NextRequest) {
       merchantId: "480498369",
       merchantTradeNo: random_string(),
       tradeType: "WEB",
-      totalFee: "0.000005",
-      // totalFee: totalAmount,
+      // totalFee: "0.000005",
+      totalFee: totalAmount,
       currency: "USDT",
       // productType: body.orderId,
       productName: getProductNames(body.products),
       productDetail: `Payment for ${body.orderId}`,
       returnUrl: host + "/dashboard",
-      webhookUrl:
-        process.env.NEXT_PUBLIC_ENVIRONMENT === "DEV"
-          ? `https://a8e2-103-129-140-224.ngrok-free.app/api/webhooks/binance?id=${body.orderId}`
-          : `https://sjsmartz.com/api/webhooks/binance?id=${body.orderId}`,
+      webhookUrl: `https://sjsmartz.com/api/webhooks/binance?id=${body.orderId}`,
     };
     const response = await generateCheckoutUrl(payload);
     if (response.error) {

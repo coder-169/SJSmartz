@@ -7,7 +7,12 @@ const ProductSchema = new mongoose.Schema({
   category: { type: String },
   subCategory: { type: String },
   images: [],
-  rating: { type: Number, default: 0 },
+  rating: {
+    type: Number,
+    default: 0,
+    min: 0, // Minimum rating value
+    max: 5, // Maximum rating value
+  },
   noOfReviews: { type: Number, default: 0 },
   brand: { type: String, default: "No Brand" },
   description: { type: String },

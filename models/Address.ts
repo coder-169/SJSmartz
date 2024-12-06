@@ -6,7 +6,7 @@ const AddressSchema = new mongoose.Schema({
   address_line: { type: String },
   city: { type: String },
   state: { type: String },
-  postal_code: { type: String },
+  area: { type: String },
 });
 
 export default mongoose.models.Address || mongoose.model("Address", AddressSchema);

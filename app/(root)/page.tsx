@@ -58,7 +58,10 @@ export default function Home() {
       {/* Hero section */}
       <SectionLayout
         bg=""
-        className="flex h-[110vh] flex-col items-center justify-between bg-[url('/images/hero-1.jpg')] bg-cover bg-no-repeat lg:grid lg:grid-cols-2 lg:pt-8"
+        className="flex h-[60vh] md:h-[110vh] flex-col items-start md:items-center justify-between 
+        bg-[url('/images/hero-2.jpg')]
+         md:bg-[url('/images/hero-3.jpg')]
+          lg:bg-[url('/images/hero-1.jpg')] bg-cover bg-center bg-no-repeat lg:grid lg:grid-cols-2 lg:pt-8"
       >
         <div className="hidden"></div>
       </SectionLayout>
@@ -78,11 +81,11 @@ export default function Home() {
             <div className="relative aspect-[0.8/1] min-h-[377px] w-full min-w-[311px] bg-[#F3F5F7] p-8 sm:row-span-2 sm:aspect-auto sm:h-full sm:min-w-0">
               <div className="absolute inset-0 flex h-full w-full items-center justify-center overflow-hidden">
                 <Image
-                  src="/images/sumplekuping-2.png"
-                  width={262}
-                  height={349}
+                  src="/images/head.png"
+                  width={5000}
+                  height={5000}
                   alt="background collection"
-                  className="aspect-[0.75/1] w-[80%] -translate-y-[10%] object-center md:w-[60%]"
+                  className="aspect-[0.75/1] w-[507px] h-[493px] -translate-y-[10%] object-center "
                 />
               </div>
 
@@ -92,7 +95,7 @@ export default function Home() {
                 </Heading>
                 <Link href="/shop" className="w-fit">
                   <span className="flex w-fit items-center gap-1 border-b border-[#121212]">
-                    Collection{" "}
+                    Show Now{" "}
                     <ArrowRightIcon stroke="#121212" className="h-4 w-4" />
                   </span>
                 </Link>
@@ -103,11 +106,11 @@ export default function Home() {
             <div className="relative aspect-[1/0.5] min-h-[180px] w-full min-w-[311px] bg-[#F3F5F7] p-8 sm:aspect-auto sm:h-full sm:min-w-0">
               <div className="absolute inset-0 flex h-full w-full items-center justify-center overflow-hidden">
                 <Image
-                  src="/images/sumplekuping-4.png"
+                  src="/images/pods.png"
                   width={262}
                   height={349}
                   alt="background collection"
-                  className="aspect-[0.75/1] w-[50%] translate-x-1/2 md:w-[40%]"
+                  className=" w-1/3 translate-x-1/2"
                 />
               </div>
 
@@ -117,7 +120,7 @@ export default function Home() {
                 </Heading>
                 <Link href="/shop" className="w-fit">
                   <span className="flex w-fit items-center gap-1 border-b border-[#121212]">
-                    Collection{" "}
+                    Show Now{" "}
                     <ArrowRightIcon stroke="#121212" className="h-4 w-4" />
                   </span>
                 </Link>
@@ -128,21 +131,21 @@ export default function Home() {
             <div className="relative aspect-[1/0.5] min-h-[180px] w-full min-w-[311px] bg-[#F3F5F7] p-8 sm:aspect-auto sm:h-full sm:min-w-0">
               <div className="absolute inset-0 flex h-full w-full items-center justify-center overflow-hidden">
                 <Image
-                  src="/images/sumplekuping-5.png"
-                  width={262}
-                  height={349}
+                  src="/images/sm.png"
+                  width={50000}
+                  height={50000}
                   alt="background collection"
-                  className="aspect-[0.75/1] w-[50%] translate-x-1/2 md:w-[40%]"
+                  className=" w-1/3 translate-x-1/2"
                 />
               </div>
 
               <div className="relative flex h-full flex-col justify-end gap-2">
                 <Heading as="h3" intent="collection-card">
-                  Accessories
+                  Smart Watches
                 </Heading>
                 <Link href="/shop" className="w-fit">
                   <span className="flex w-fit items-center gap-1 border-b border-[#121212]">
-                    Collection{" "}
+                    Shop Now{" "}
                     <ArrowRightIcon stroke="#121212" className="h-4 w-4" />
                   </span>
                 </Link>

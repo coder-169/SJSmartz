@@ -20,6 +20,14 @@ export async function GET(req: NextRequest) {
           as: "variants", // Name of the array in the result
         },
       },
+      {
+        $lookup: {
+          from: "reviews", // The name of the reviews collection
+          localField: "_id", // Field from Product
+          foreignField: "productId", // Field from Review
+          as: "reviews", // Name of the array in the result
+        },
+      },
     ]);
     console.log("pr", productData);
 
@@ -39,7 +47,11 @@ export async function GET(req: NextRequest) {
       .limit(5) // Limit the number of related products
       .select("_id title slug rating noOfReviews images"); // Select only necessary fields
     console.log("related", relatedProducts);
-    return NextResponse.json({ success: true, product: productData[0],relatedProducts });
+    return NextResponse.json({
+      success: true,
+      product: productData[0],
+      relatedProducts,
+    });
   } catch (error) {
     return NextResponse.json(error);
   }
