@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { ordersReducer } from "@/states/Reducers/OrderReducer";
+import { sendMail } from "@/lib/server_action";
 function formatDeliveryDate(days: number) {
   const now = new Date(); // Get current date and time
   const dt = new Date(now.getTime() + days * 24 * 60 * 60 * 1000); // Calculate future date
@@ -65,12 +66,36 @@ export async function POST(req: NextRequest) {
       createdAt: formatDeliveryDate(8).createdAt,
     });
     if (order)
+    {
+      const htmlContent = `
+      <div style="max-width: 600px; margin: auto; width: 100%;">
+          <a href="https://www.sjsmartz.com/images/sj-black.png" style="text-decoration: none;">
+              <img style="width: 35%; max-width: 300px; display: block; margin: 24px auto;" src="https://www.sjsmartz.com/images/sj-black.pngassets/logo-1.png" alt="Logo Wigroup">
+          </a>
+          <div style="background: #f9f9f9; color: rgb(85, 85, 85); line-height: 150%; font-family: 'Georgia', 'Times', 'Times New Roman', 'serif'; text-align: center; padding: 16px 12px;">
+              <p style="text-align: center; margin: 0px; line-height: 21px;">
+                  <span style="font-size: 24px;">Successful Registration</span>
+              </p>
+              <p style="text-align: center; font-size: 14px; margin: 0px; line-height: 21px;">
+  Your order has been placed Successfully &nbsp;<img data-emoji="🥳" style="width: 20px" class="an1" alt="🥳" aria-label="🥳" draggable="false" src="https://fonts.gstatic.com/s/e/notoemoji/15.0/1f973/72.png" loading="lazy">
+              </p>
+              <br/>
+              <p style="text-align: center; font-size: 14px; margin: 0px; line-height: 21px;">Thanks for Shopping With 🎧 Sj Smartz    </p>
+              <br/>
+              <p style="text-align: center; margin: 0px; line-height: 18px;">
+                  <span style="font-size: 14px;"><b><i>WIN Support Team</i></b></span>
+              </p>
+          </div>
+      </div>
+      `;
+      await sendMail(body.email, "Order Placed Successfully", htmlContent);
       return NextResponse.json({
         success: true,
         order,
         message: "Order created Successfully",
       });
-    return NextResponse.json({
+    }
+      return NextResponse.json({
       success: true,
       message: "Error creating order",
     });
