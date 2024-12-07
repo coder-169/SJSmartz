@@ -113,7 +113,7 @@ const ReviewSection = ({ reviews, rating }: { reviews?: Review[]; rating: number
               key={review._id}
               className="flex w-full items-start justify-between space-x-4 rounded-lg border bg-white p-4"
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 w-3/4">
                 {/* {(!review.avatar || review.avatar === '') ? <FaUser size={36} /> :
                   <Image
                     width={36}
@@ -130,7 +130,7 @@ const ReviewSection = ({ reviews, rating }: { reviews?: Review[]; rating: number
                   <p className="text-xs text-gray-500">{formattedDate(review.createdAt)}</p>
                 </div>
               </div>
-              {review.images.length > 0 && <div className="">
+              {review.images.length > 0 && <div className="1/4">
                 <ImagesGallery images={review.images} />
               </div>}
             </li>
