@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import User from "@/models/User";
 import dbConnect from "@/lib/db";
-import { generateCode,sendMail } from "@/lib/server_action";
+import { generateCode, sendMail } from "@/lib/server_action";
 
-export async function POST(req:NextRequest) {
+export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
@@ -14,6 +14,7 @@ export async function POST(req:NextRequest) {
         { username: { $regex: body.username, $options: "i" } },
       ],
     });
+    console.log(user);
     if (user)
       return NextResponse.json({
         message: "Try different Credentials",
@@ -59,11 +60,7 @@ Here is your verification code. Please verify your account within 10 minutes.   
         </div>
     </div>
     `;
-    const resp = await sendMail(
-      email,
-      "Successful Registration",
-      htmlContent
-    );
+    const resp = await sendMail(email, "Successful Registration", htmlContent);
     if (!resp.success) {
       return NextResponse.json({ message: resp.message, success: false });
     } else {
@@ -75,7 +72,7 @@ Here is your verification code. Please verify your account within 10 minutes.   
         message: "account registered successfully",
       });
     }
-  } catch (error:any) {
+  } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message });
   }
 }

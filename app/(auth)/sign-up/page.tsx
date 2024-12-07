@@ -98,7 +98,7 @@ export default function Page() {
       const data = await res.json();
       if (data.success) {
         toast.success("Account verified");
-        router.push('/')
+        router.push('/sign-in')
       } else toast.error("incorrect code or expired!");
     } catch (error: any) {
       toast.error(error.message);
@@ -157,7 +157,7 @@ export default function Page() {
             width={2000}
             height={2000}
             alt="auth"
-            className="w-full max-w-[420px] lg:h-[430px] lg:w-auto lg:max-w-none"
+            className="w-1/2 md:w-full max-w-[420px] lg:h-[430px] lg:w-auto lg:max-w-none"
           />
         </div>
 
@@ -185,7 +185,7 @@ export default function Page() {
               </div>
               <div className="space-y-6">
                 <div className="flex flex-col gap-4 md:flex-row">
-                  <div className="w-1/2 border-b border-[#E8ECEF] pb-2 transition-all duration-200 focus-within:border-[#141718]">
+                  <div className="w-full md:w-1/2 border-b border-[#E8ECEF] pb-2 transition-all duration-200 focus-within:border-[#141718]">
                     <Input
                       intent="secondary"
                       type="text"
@@ -195,7 +195,7 @@ export default function Page() {
                       onChange={handler}
                     />
                   </div>
-                  <div className="w-1/2 border-b border-[#E8ECEF] pb-2 transition-all duration-200 focus-within:border-[#141718]">
+                  <div className="w-full md:w-1/2 border-b border-[#E8ECEF] pb-2 transition-all duration-200 focus-within:border-[#141718]">
                     <Input
                       intent="secondary"
                       type="text"
