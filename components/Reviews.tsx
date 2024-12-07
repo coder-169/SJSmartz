@@ -4,6 +4,7 @@ import Product from "@/models/Product";
 import { Review } from "@/types/product";
 import Image from "next/image";
 import { formattedDate } from "@/lib/utils";
+import { FaUser } from "react-icons/fa6";
 
 // Dummy data for reviews
 // const reviews = [
@@ -113,13 +114,15 @@ const ReviewSection = ({ reviews, rating }: { reviews?: Review[]; rating: number
               className="flex w-full items-start justify-between space-x-4 rounded-lg border bg-white p-4"
             >
               <div className="flex items-center gap-4">
-                <Image
-                  width={36}
-                  height={36}
-                  src={review.avatar}
-                  alt={`${review.name} Review`}
-                  className="h-12 w-12 rounded-full object-cover"
-                />
+                {(!review.avatar || review.avatar === '') ? <FaUser size={36} /> :
+                  <Image
+                    width={36}
+                    height={36}
+                    src={review.avatar}
+                    alt={`${review.name} Review`}
+                    className="h-12 w-12 rounded-full object-cover"
+                  />
+                }
                 <div>
                   <StarRating rating={rating} />
                   <p className="mt-1 text-gray-600">{review.comment}</p>
