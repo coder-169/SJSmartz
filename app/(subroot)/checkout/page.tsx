@@ -33,6 +33,7 @@ export default function Page() {
   const [addLoading, setAddLoading] = useState(false);
   const [recName, setRecName] = useState('')
   const [recContact, setRecContact] = useState('')
+  const { cartItems } = useGlobalContext() as any;
   const [values, setValues] = useState({
     address_line: "",
     city: "",
@@ -41,9 +42,9 @@ export default function Page() {
   });
   const [order, setOrder] = useState({ _id: '', totalPayment: 3 });
   const getProds = () => {
-    const cartItems = localStorage.getItem("sjsmartz-cart-items")
-      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-      : [];
+    // const cartItems = localStorage.getItem("sjsmartz-cart-items")
+    //   ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+    //   : [];
     let val = 0;
     for (let i = 0; i < cartItems.length; i++) {
       const item = cartItems[i];
@@ -158,12 +159,12 @@ export default function Page() {
     setCoupon({ value: coupon.couponCode, discount: coupon.discount });
   };
   const getTotal = () => {
-    const items = localStorage.getItem("sjsmartz-cart-items")
-      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-      : [];
+    // const items = localStorage.getItem("sjsmartz-cart-items")
+    //   ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+    //   : [];
     let val = 0;
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+    for (let i = 0; i < cartItems.length; i++) {
+      const item = cartItems[i];
       if (item.check) {
         val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
       }
@@ -179,12 +180,12 @@ export default function Page() {
     // return 1;
   }
   const getSubTotal = () => {
-    const items = localStorage.getItem("sjsmartz-cart-items")
-      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-      : [];
+    // const items = localStorage.getItem("sjsmartz-cart-items")
+    //   ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+    //   : [];
     let val = 0;
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+    for (let i = 0; i < cartItems.length; i++) {
+      const item = cartItems[i];
       if (item.check) {
         val += Math.round((item.price - (item.price * item.discount / 100)) * item.qty);
       }
@@ -192,12 +193,12 @@ export default function Page() {
     return val
   }
   const calculateShipping = () => {
-    const items = localStorage.getItem("sjsmartz-cart-items")
-      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-      : [];
+    // const items = localStorage.getItem("sjsmartz-cart-items")
+    //   ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+    //   : [];
     let val = 0;
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+    for (let i = 0; i < cartItems.length; i++) {
+      const item = cartItems[i];
       if (item.check) {
         val += item.qty * 200;
       }
@@ -235,9 +236,9 @@ export default function Page() {
   const [total, setTotal] = useState(0);
   const [shipping, setShipping] = useState(0);
   const calculateSubtotal = () => {
-    const cartItems = localStorage.getItem("sjsmartz-cart-items")
-      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-      : [];
+    // const cartItems = localStorage.getItem("sjsmartz-cart-items")
+    //   ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+    //   : [];
     let val = 0;
     let val2 = 0;
     for (let i = 0; i < cartItems.length; i++) {
@@ -251,16 +252,7 @@ export default function Page() {
   };
 
   const router = useRouter()
-  useEffect(() => {
-    // calculateSubtotal();
-    if (
-      localStorage.getItem("sjsmartz-cart-items")! &&
-      JSON.parse(localStorage.getItem("sjsmartz-cart-items")!).length === 0
-    ) {
-      router.push("/");
-    }
-  }, [router]);
-  useEffect(() => { }, [session, editAddress]);
+
   if (status === "unauthenticated") return router.push("/");
   return (
     <SectionLayout className="relative px-8 py-20">
