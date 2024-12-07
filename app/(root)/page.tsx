@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../global/store";
 import { loadProducts } from "../global/Reducers/ProductReducer";
 import { Coins } from "lucide-react";
+import Loader from "@/components/Loader";
 
 export default function Home() {
   // const [products, setProducts] = useState([]);
@@ -50,7 +51,7 @@ export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     getProducts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
@@ -164,11 +165,13 @@ export default function Home() {
             Best Seller
           </Heading>
 
-          <div className="grid grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-4 lg:gap-y-8 xl:grid-cols-5">
+          {loading ? <div>
+            <Loader />
+          </div> : <div className="grid grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-4 lg:gap-y-8 xl:grid-cols-5">
             {products.map((product: any, index: number) => (
               <ProductCard key={index} product={product} />
             ))}
-          </div>
+          </div>}
         </div>
       </SectionLayout>
       {/* Promotion section */}
