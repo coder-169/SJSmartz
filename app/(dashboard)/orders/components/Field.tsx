@@ -40,8 +40,6 @@ const Field = ({
         }),
       });
       const d = await result.json();
-      console.log(d)
-      console.log(d)
       if (d.success)
         return toast.success("Image Uploaded! Order will be processed soon");
       else return toast.error("Error uploading profile");

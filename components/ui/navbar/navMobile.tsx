@@ -17,8 +17,11 @@ import {
 
 // lib
 import { cn } from "@/lib/utils";
-import { useSession } from "next-auth/react";
-import { FaUser } from "react-icons/fa6";
+import { signOut, useSession } from "next-auth/react";
+import { FaFacebook, FaInstagram, FaUser, FaWhatsapp } from "react-icons/fa6";
+import { useGlobalContext } from "@/hooks/AppContext";
+import { Loader } from "lucide-react";
+import Image from "next/image";
 
 const links = [
   {
@@ -32,9 +35,9 @@ const links = [
     name: "Shop",
   },
   {
-    id: "product",
-    path: "/product",
-    name: "Product",
+    id: "about",
+    path: "/about",
+    name: "About Us",
   },
   {
     id: "contact-us",
@@ -42,7 +45,7 @@ const links = [
     name: "Contact Us",
   },
 ];
-
+import { BiLogOutCircle } from "react-icons/bi";
 export default function NavMobile({
   onClick,
   open,
@@ -50,12 +53,13 @@ export default function NavMobile({
   onClick: () => void;
   open: boolean;
 }) {
-  const session = useSession();
+  const { data: session, status } = useSession();
 
+  const { cartItems } = useGlobalContext() as any;
   return (
     <div
       className={cn(
-        "absolute left-0 top-0 z-10 grid min-h-[100dvh] w-full grid-cols-[6fr_6fr] transition-transform duration-100 ease-in md:grid-cols-[4fr_8fr] lg:hidden",
+        "absolute left-0 top-0 z-10 grid min-h-[100dvh] w-full grid-cols-[6fr_6fr] transition-all duration-300 md:grid-cols-[4fr_8fr] lg:hidden",
         open ? "transform-none touch-none" : "-translate-x-full",
       )}
     >
@@ -65,23 +69,9 @@ export default function NavMobile({
           {/* logo */}
           <div className="flex items-center justify-between">
             <Logo />
-
             <button onClick={onClick}>
               <CloseIcon className="w-6" />
             </button>
-          </div>
-
-          {/* search input */}
-          <div className="flex h-12 items-center gap-2 rounded-md border border-[#6C7275] px-4">
-            <label htmlFor="search" className="cursor-pointer">
-              <SearchIcon />
-            </label>
-            <input
-              id="search"
-              name="search"
-              className="font-inter text-sm font-normal text-[#141718] outline-none placeholder:opacity-70"
-              placeholder="Search"
-            />
           </div>
           {/* navbar links */}
           <ul className="grid grid-cols-1">
@@ -116,11 +106,12 @@ export default function NavMobile({
 
                 <div className="flex items-center gap-1.5">
                   <CartIcon className="w-6" />
-                  <NotificationCount count={6} />
+
+                  <NotificationCount count={cartItems.length || 0} />
                 </div>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/cart"
                 className="flex items-center justify-between border-b border-[#E8ECEF] py-4"
@@ -134,31 +125,49 @@ export default function NavMobile({
                   <NotificationCount count={12} />
                 </div>
               </Link>
-            </li>
+            </li> */}
           </ul>
 
           {/* login button */}
-          {session.status === 'unauthenticated' ?
-            <Button width="full" fontSize="lg" className="py-2.5">
-              Sign In
-            </Button>
+          {status === 'loading' ?
+            <Loader size={20} className="animate-spin" />
             :
-            <div className="flex justify-between">
-              <FaUser />
-              <div>
-                <h4 className="text-sm">Saad2129</h4>
-                <small>mrsaad2129@gmail.com</small>
+            status === 'unauthenticated' ?
+              <Link href={'/sign-in'}>
+                <Button width="full" fontSize="lg" className="py-2.5">
+                  Sign In
+                </Button>
+              </Link>
+              :
+              <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  {session?.user?.profileImage ?
+                    <Image src={session.user.profileImage} className="rounded-full border border-black !w-10 !h-10" width={5000} height={5000} alt={session.user.username} /> :
+                    <FaUser />
+                  }
+                  <div>
+                    <h4 className="text-sm font-semibold">{session?.user?.username}</h4>
+                    <small className="text-sm font-medium opacity-70">{session?.user?.email}</small>
+                  </div>
+                </div>
+                <button onClick={() => signOut()}>
+                  <BiLogOutCircle size={24} />
+                </button>
               </div>
-              <button className="">
-              
-              </button>
-            </div>
           }
           {/* social media button */}
           <div className="flex items-center gap-6 justify-center">
-            <InstagramIcon className="w-6" />
-            <FacebookIcon className="w-6" />
-            <YoutubeIcon className="w-6" />
+            <Link href={'https://www.instagram.com/sajiddoongah/'}>
+              <FaInstagram
+                className="h-6 w-6"
+              />
+            </Link>
+            <Link href={'https://web.facebook.com/profile.php?id=61565837793883&sk=followers&notif_ids[0]=100075696775827&notif_ids[1]=100029224238315&notif_ids[2]=100070408065566&notif_ids[3]=100023305154001&notif_id=1733489273657322&notif_t=follow_profile&ref=notif'}>
+              <FaFacebook className="h-5 w-5" />
+            </Link>
+            <Link href='https://wa.me/923191112018'>
+              <FaWhatsapp className="h-6 w-6" />
+            </Link>
           </div>
         </div>
       </div>

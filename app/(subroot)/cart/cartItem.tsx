@@ -56,7 +56,6 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
   };
 
   const handleCheck = () => {
-    console.log(product)
     const cartItems = localStorage.getItem("sjsmartz-cart-items")
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
@@ -64,11 +63,9 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
       const e = cartItems[i];
       if (e._id === product._id) {
         e.check = !check
-        console.log(e.check)
       }
     }
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(cartItems))
-    console.log(cartItems)
     calculateSubtotal(cartItems)
     setCheck((prevCheck) => !prevCheck);
   };
@@ -117,7 +114,8 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
                   {product.title}
                 </p>
                 <p className="font-inter text-sm font-semibold text-[#141718] sm:hidden">
-                  {basePrice}
+                  {formatCurrency(Math.round(product.price - (product.discount / 100 * product.price)))}
+
                 </p>
               </div>
 
@@ -205,7 +203,8 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
         )}
       >
         <p className="text-center font-inter text-base font-normal text-[#141718]">
-          {basePrice}
+          {/* {basePrice} */}
+          {formatCurrency(Math.round(product.price - ((product.discount / 100) * product.price)))}
         </p>
       </td>
       <td
@@ -215,7 +214,8 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
         )}
       >
         <p className="text-center font-inter text-base font-semibold text-[#141718]">
-          {formatCurrency(product.qty * product.price)}
+          {/* {formatCurrency(product.qty * product.price)} */}
+          {formatCurrency(product.qty * Math.round(product.price - (product.discount / 100 * product.price)))}
         </p>
       </td>
       <td

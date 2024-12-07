@@ -3,11 +3,11 @@ import Product from "@/models/Product";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  console.log("I am here");
+
   try {
     await dbConnect();
     const slug = req.nextUrl.searchParams.get("slug");
-    console.log(slug);
+
     const productData = await Product.aggregate([
       {
         $match: { slug }, // Match the product by slug
@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
         },
       },
     ]);
-    console.log("pr", productData);
 
     if (!productData)
       return NextResponse.json(
@@ -45,8 +44,7 @@ export async function GET(req: NextRequest) {
       slug: { $ne: slug }, // Exclude the current product
     })
       .limit(5) // Limit the number of related products
-      .select("_id title slug rating noOfReviews images"); // Select only necessary fields
-    console.log("related", relatedProducts);
+      .select("_id title slug rating noOfReviews images"); 
     return NextResponse.json({
       success: true,
       product: productData[0],

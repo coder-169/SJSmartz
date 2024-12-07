@@ -27,7 +27,8 @@ import { useGlobalContext } from "@/hooks/AppContext";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FaBagShopping } from "react-icons/fa6";
-
+import { HiOutlineBars2 } from "react-icons/hi2";
+import { Loader } from "lucide-react";
 interface NavbarProps { }
 
 const Navbar: React.FC<NavbarProps> = () => {
@@ -59,9 +60,9 @@ const Navbar: React.FC<NavbarProps> = () => {
         <nav className="mx-auto flex w-full items-center justify-between px-8 py-4 lg:justify-normal">
           <div className="flex items-center gap-1 lg:basis-1/4">
             <button className="lg:hidden" onClick={() => setOpen(true)}>
-              <HamburgerMenu className="w-6" />
+              <HiOutlineBars2 size={30} />
             </button>
-            <Link href={"/"}>
+            <Link href={"/"} className="hidden lg:block">
               <Logo />
             </Link>
 
@@ -71,28 +72,22 @@ const Navbar: React.FC<NavbarProps> = () => {
             <NavLinks />
           </div>
 
-          <div className="flex items-center gap-1 lg:basis-1/4 lg:justify-end lg:gap-4">
+          <div className="hidden lg:flex items-center gap-1 lg:basis-1/4 lg:justify-end lg:gap-4">
             {/* <Input type="text" placeholder="Search" /> */}
-            <SearchIcon className="hidden lg:block" />
+            {/* <SearchIcon className="hidden lg:block" /> */}
             {status === "loading" ? (
-              "Loading"
+              <Loader size={20} className="animate-spin duration-200" />
             ) : status === "unauthenticated" ? (
               <Link href={"/sign-in"}>
                 <UserIcon className="hidden lg:block" />
               </Link>
             ) : (
               <Link href={"/profile"}>
-                {
-                  session?.user?.profileImage ?
-                    <Image width={24} height={24} src={session?.user?.profileImage || ''} alt={session?.user?.username} className="rounded-full hidden lg:block" />
-                    :
-                    <UserIcon className="hidden lg:block" />
-                }
+                {session?.user?.profileImage ? <Image width={24} height={24} src={session?.user?.profileImage || ''} alt={session?.user?.username} className="rounded-full hidden lg:block" /> : <UserIcon className="hidden lg:block" />}
               </Link>
             )}
 
-            <Link href={"/cart"} className="relative hidden md:block">
-
+            <Link href={"/cart"} className="relative">
               {cartItems?.length > 0 ?
                 <FaBagShopping className="w-8 text-xl" />
                 :

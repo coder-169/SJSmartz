@@ -5,13 +5,13 @@ import toast from "react-hot-toast";
 
 const AppContext = createContext({
   cartItems: [],
-  addToCart: (product: object) => { },
+  addToCart: (product: { qty: number }) => { },
   loadCart: () => { },
   incrementQty: (productId: string) => { },
   decrementQty: (productId: string) => { },
   removeFromCart: (productId: string) => { },
   checkCartSelectedItems: () => { },
-  calculateSubtotal: (items: { price: number, qty: number, check: boolean }[]) => { },
+  calculateSubtotal: (items: { price: number, qty: number, check: boolean, discount: number }[]) => { },
   subTotal: 0,
   total: 0,
 });
@@ -24,19 +24,17 @@ export const AppContextProvider = ({
   const [cartItems, setCartItems] = useState([]);
   const [subTotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
-  const calculateSubtotal = (items: { price: number, qty: number, check: boolean }[]) => {
+  const calculateSubtotal = (items: { price: number, qty: number, check: boolean, discount: number }[]) => {
     if (items) {
-      console.log('here')
       let val = 0;
       let val2 = 0;
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
         if (item.check) {
-          val += item.price * item.qty;
-          val2 += item.price * item.qty + item.qty * 200;
+          val += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty;
+          val2 += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty + item.qty * 200;
         }
       }
-      console.log(val, val2);
       setSubtotal(val);
       setTotal(val2);
     } else {
@@ -49,17 +47,16 @@ export const AppContextProvider = ({
         const item = cartItems[i];
         if (item.check) {
 
-          val += item.price * item.qty;
-          val2 += item.price * item.qty + item.qty * 200;
+          val += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty;
+          val2 += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty + item.qty * 200;
         }
       }
-      console.log(val, val2);
       setSubtotal(val);
       setTotal(val2);
     }
 
   };
-  const addToCart = (product: object) => {
+  const addToCart = (product: { qty: number }) => {
     let items = localStorage.getItem("sjsmartz-cart-items")
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
@@ -68,9 +65,12 @@ export const AppContextProvider = ({
 
     for (let index = 0; index < items.length; index++) {
       if (items[index]._id === _id) {
-        if (items[index].qty >= 5)
+        if (items[index].qty > 5)
           return toast.error("You can only order 5 items at a time");
-        items[index].qty++;
+        if (product.qty + items[index].qty > 5)
+          return toast.error("You can only order 5 items at a time");
+        items[index].qty += product.qty;
+        localStorage.setItem("sjsmartz-cart-items", JSON.stringify(items));
         return toast.success("Quantity Updated");
       }
     }
@@ -91,9 +91,7 @@ export const AppContextProvider = ({
     let items = localStorage.getItem("sjsmartz-cart-items")
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
-    console.log(items)
     const newItems = items.filter((item: { check: boolean }) => item.check)
-    console.log(newItems)
     return newItems
   };
   const incrementQty = (productId: string) => {

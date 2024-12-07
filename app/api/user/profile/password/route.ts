@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
-    console.log(body)
     const { newPassword, oldPassword, userId } = body;
     const user = await User.findById(userId);
     if (!user)

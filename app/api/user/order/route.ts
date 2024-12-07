@@ -33,29 +33,31 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     for (let i = 0; i < body.products.length; i++) {
       const element = body.products[i];
-      // console.log(element);
       const variant = await Variant.findById(element._id);
-      if (variant.price !== element.price)
+      const variantPrice = Math.round(
+        variant?.price - (variant?.price * variant.discount) / 10,
+      );
+      const elementPrice = Math.round(
+        element?.price - (element?.price * element.discount) / 10,
+      );
+      if (variantPrice !== elementPrice)
         return NextResponse.json({
           success: false,
           message: "Some error occurred please clear cart! and checkout again",
         });
       if (variant.stock > element.qty) {
         variant.stock -= element.qty;
-        console.log(variant.stock);
       }
 
       await variant.save();
     }
     const coupon = await Coupon.findOne({ couponCode: body.coupon.value });
-    console.log(coupon);
     if (coupon) {
       if (coupon.discount > 0 && coupon.uses > 0 && coupon.status) {
-        console.log("here");
         body.totalPayment -= body.totalPayment * (coupon.discount / 100);
+        body.totalPayment = Math.round(body.totalPayment)
       }
     }
-
     // return NextResponse.json({});
     const order = await Order.create({
       ...body,
@@ -127,7 +129,6 @@ export async function GET(req: NextRequest) {
         $unwind: "$user", // Flatten the `user` array from `$lookup`
       },
     ]);
-    console.log("orders:", orders);
     if (orders.length > 0) {
       return NextResponse.json({
         success: true,

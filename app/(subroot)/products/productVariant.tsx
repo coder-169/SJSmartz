@@ -14,7 +14,6 @@ const ProductVariant = ({
   selected: Variant;
   setSelected: React.Dispatch<React.SetStateAction<Variant>>;
 }) => {
-  // console.log(variants,selectedVariant)
   return (
     <div className="space-y-2">
       <p className="font-inter text-base font-semibold text-[#6C7275]">

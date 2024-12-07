@@ -59,9 +59,7 @@ export async function generateCheckoutUrl(payload: any) {
     },
     body: JSON.stringify(payload),
   });
-  console.log(response);
   const dt = await response.json();
-  console.log(dt);
   if (response.ok) {
     return { error: false, data: dt.data };
   } else {
@@ -83,7 +81,7 @@ export function validateSignature(headers: any, data: any) {
     .update(dataToSign)
     .digest("hex");
   const receivedSignature = headers["binancepay-signature"];
-  console.log(receivedSignature, signature);
+
   if (signature === receivedSignature) {
     console.log("Signature is valid!");
   } else {

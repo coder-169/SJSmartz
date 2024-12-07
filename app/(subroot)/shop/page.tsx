@@ -8,7 +8,7 @@ import SectionLayout from "@/layouts/sectionLayout";
 // ui
 import Text from "@/ui/text";
 import Heading from "@/ui/head";
-import { DropdownIcon } from "@/ui/assets/svg";
+import { DropdownIcon, SearchIcon } from "@/ui/assets/svg";
 
 // ui
 import {
@@ -108,7 +108,6 @@ export default function Page() {
   const [sort, setSort] = useState('All')
   const sorting = (sort: { text: string, value: string }) => {
     setSort(sort.text)
-    console.log(sort)
     if (sort.text === 'Price Low to High') {
       const sortedProducts = products.sort((a: Product, b: Product) => a.variants[0].price - b.variants[0].price)
       setProducts([...sortedProducts])
@@ -143,21 +142,19 @@ export default function Page() {
   }
   const priceFilter = (price: { text: string, value: string }) => {
     setPrice(price.text)
-    console.log(price)
     if (price.text === 'All') {
-      console.log('here')
       if (category === 'All') return setProducts(allProducts)
-      console.log(category)
+     
       const newProducts = allProducts.filter((product: Product) => (product.category.toLowerCase().includes(category.toLowerCase())))
-      console.log(newProducts)
+    
       return setProducts(newProducts)
     }
 
     // Split the price range
     const [minPrice, maxPrice] = price.value.split('-').map((p) => parseInt(p));
-    console.log('here', category)
+
     if (category !== 'All') {
-      console.log(minPrice, maxPrice)
+
       const newProds = allProducts.filter((product: Product) => (product.category.toLowerCase().includes(category.toLowerCase())))
       // Filter products based on their price and variant prices
       const filteredProducts = newProds.filter((product: Product) => {
@@ -167,11 +164,9 @@ export default function Page() {
         const isVariantInRange = product.variants.some(
           (variant) => variant.price >= minPrice && variant.price <= maxPrice
         );
-        console.log('in range' + isVariantInRange)
         // Include the product if it or any of its variants match the criteria
         return isVariantInRange;
       });
-      console.log(filteredProducts)
       // Update the filtered products
       setProducts(filteredProducts);
     }
@@ -188,8 +183,7 @@ export default function Page() {
 
         // Include the product if it or any of its variants match the criteria
         return isVariantInRange;
-      });
-      console.log(filteredProducts)
+      })
       // Update the filtered products
       setProducts(filteredProducts);
     }
@@ -198,13 +192,11 @@ export default function Page() {
   }
 
   const categoryFilter = (cat: { text: string, value: string }) => {
-    console.log(cat)
     setCategory(cat.text)
     if (cat.text === 'All') {
       if (price === 'All') return setProducts(allProducts)
       const cleanRange = price.replace(/Rs\./g, "").trim();
 
-      console.log(price)
       // Step 2: Split the range into two values
       const [minPrice, maxPrice] = cleanRange.split("-").map((val) => parseInt(val.trim(), 10));
       const newProds = allProducts.filter((product: Product) => {
@@ -218,13 +210,10 @@ export default function Page() {
         // Include the product if it or any of its variants match the criteria
         return isVariantInRange;
       });
-      console.log(newProds)
-      console.log(cat.value)
       return setProducts(newProds)
     }
 
     if (price !== 'All') {
-      console.log(price.slice(3))
       const cleanRange = price.replace(/Rs\./g, "").trim();
 
       // Step 2: Split the range into two values
@@ -242,8 +231,6 @@ export default function Page() {
         return isVariantInRange;
       });
 
-      console.log(cat.value)
-      console.log(newProds)
       const filterProds = newProds.filter((product: Product) => (product.category.toLowerCase() === cat.value.toLowerCase()))
       setProducts(filterProds)
     } else {
@@ -252,7 +239,21 @@ export default function Page() {
     }
 
   }
-
+  const [query, setQuery] = useState('')
+  const resetFilters = () => {
+    setQuery('')
+    setCategory('All')
+    setPrice('All')
+    setSort('All')
+    setProducts(allProducts)
+  }
+  const filterQuery = (e: { target: { value: string } }) => {
+    setQuery(e.target.value)
+    const filteredProducts = allProducts.filter((product: Product) => {
+      return product.title.toLowerCase().includes(e.target.value.toLowerCase())
+    })
+    setProducts(filteredProducts)
+  }
   const [loading, setLoading] = useState(true);
   const getProducts = async () => {
     setLoading(true)
@@ -261,11 +262,10 @@ export default function Page() {
       .then((data) => {
         setProducts(data.products);
         setAllProducts(data.products)
-        console.log(data);
       });
     setLoading(false);
   };
-  
+
   useEffect(() => {
     getProducts();
   }, []);
@@ -297,9 +297,9 @@ export default function Page() {
           </Text>
         </div>
 
-        <div className="grid gap-8 py-8 lg:grid-cols-[2fr_1fr_2fr] lg:items-end lg:gap-4">
+        <div className="grid gap-8 py-8 lg:grid-cols-[2fr_1fr_3fr] lg:items-end lg:gap-4">
           {/* filter select menu */}
-          <div className="flex  gap-6 lg:col-span-1 lg:items-center lg:gap-4">
+          <div className="flex gap-4 lg:col-span-1 lg:items-center lg:gap-4">
 
             <div className="w-full space-y-2">
               <Text size="sm" weight={600} color="gray" transform="uppercase">
@@ -307,7 +307,7 @@ export default function Page() {
               </Text>
               <Menu as="div" className="text-left w-full relative inline-block">
                 <div>
-                  <MenuButton className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white p-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  <MenuButton className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white p-3 text-sm font-semibold text-gray-900 shadow-sm border border-[#141718] hover:bg-gray-50">
                     {category}
                     <FaAngleDown aria-hidden="true" className="-mr-1 size-5 text-gray-400" />
                   </MenuButton>
@@ -315,7 +315,7 @@ export default function Page() {
 
                 <MenuItems
                   transition
-                  className="w-full absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  className="w-full absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in   border border-[#141718]"
                 >
                   <div className="py-1">
                     {categories.map(category => {
@@ -338,7 +338,7 @@ export default function Page() {
               </Text>
               <Menu as="div" className="text-left w-full relative inline-block">
                 <div>
-                  <MenuButton className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white p-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  <MenuButton className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white p-3 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50  border border-[#141718]" >
                     {price}
                     <FaAngleDown aria-hidden="true" className="-mr-1 size-5 text-gray-400" />
                   </MenuButton>
@@ -346,7 +346,7 @@ export default function Page() {
 
                 <MenuItems
                   transition
-                  className="w-full absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                  className="w-full absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg  transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
                   <div className="py-1">
                     {prices.map(price => {
@@ -365,12 +365,24 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between  py-2 lg:col-start-3 lg:justify-end lg:gap-8 lg:border-y-0 lg:py-0">
+          <div className="block md:space-y-0 space-y-4 md:flex gap-4 items-center justify-between  py-2 lg:col-start-3 lg:justify-end lg:gap-8 lg:border-y-0 lg:py-0">
             {/* sort by */}
-
-            <Menu as="div" className="text-left w-1/2 md:w-1/3 relative inline-block">
+            <div className="w-full md:w-2/3 flex h-12 items-center gap-2 rounded-md border border-[#141718] px-4">
+              <label htmlFor="search" className="cursor-pointer">
+                <SearchIcon />
+              </label>
+              <input
+                id="search"
+                name="search"
+                value={query}
+                onChange={filterQuery}
+                className="font-inter w-full text-sm font-normal text-[#141718] outline-none placeholder:opacity-70"
+                placeholder="Search"
+              />
+            </div>
+            <Menu as="div" className="text-left w-1/2 relative inline-block">
               <div>
-                <MenuButton className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white p-3 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 border-none">
+                <MenuButton className="inline-flex w-full justify-between gap-x-1.5 rounded-md bg-white p-3 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 border border-[#141718]">
                   {sort}
                   <FaAngleDown aria-hidden="true" className="-mr-1 size-5 text-gray-400" />
                 </MenuButton>
@@ -378,7 +390,7 @@ export default function Page() {
 
               <MenuItems
                 transition
-                className="w-full absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                className="w-full absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
                 <div className="py-1">
                   {sorts.map(sort => {
@@ -394,16 +406,17 @@ export default function Page() {
                 </div>
               </MenuItems>
             </Menu>
+            <button onClick={resetFilters} className="ml-4 text-sm font-bold text-black/80 hover:text-black/50 transition-all duration-200">Reset</button>
           </div>
         </div>
         {/* {loading ? <Loader /> : <CatalogProduct products={products} />} */}
-        {products.length > 0 ? <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 my-8 md:my-16 lg:my-24 justify-between">
+        {products.length > 0 ? <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 my-8 md:my-16 lg:my-24 justify-between gap-x-2 md:gap-x-4 md:gap-y-10 gap-y-6">
           {products.map((product, idx) => {
             return <ProductCard key={idx} product={product} />;
           })}
         </div> : <div className="h-[50vh] flex opacity-80 items-center flex-col justify-center">
           <h3 className="font-bold text-3xl mb-4 ">No Products </h3>
-          <FaSadCry className="size-28"/>
+          <FaSadCry className="size-28" />
         </div>}
       </div>}
     </SectionLayout >

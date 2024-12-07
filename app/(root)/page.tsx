@@ -41,7 +41,6 @@ export default function Home() {
             products: data.products,
           }),
         );
-        // console.log(data);
       });
     // setLoading(false);
   };
@@ -49,9 +48,9 @@ export default function Home() {
     (state: RootState) => state.products,
   );
   const dispatch = useDispatch();
-  console.log(products, loading);
   useEffect(() => {
     getProducts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

@@ -9,13 +9,13 @@ export async function POST(req:NextRequest) {
     const user = await User.findOne({
       email: { $regex: body.email, $options: "i" },
     });
-    user.password = hashedPassword;
     if (!user) {
       return NextResponse.json({
         success: false,
         message: "invalid request user not found",
       });
     }
+    user.password = hashedPassword;
     await user.save();
     return NextResponse.json({
       success: true,

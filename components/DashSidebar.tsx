@@ -7,10 +7,12 @@ import {
   Settings,
   UserIcon,
 } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { BiLogOutCircle } from "react-icons/bi";
 const links = [
   {
     href: "/profile",
@@ -54,14 +56,27 @@ const DashSidebar = () => {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className={`${path === link.href ? "bg-black/5" : ""} flex w-full items-center gap-2 p-2 hover:bg-black/5`}
+                className={`flex font-medium justify-between ${path === link.href ? "bg-black/5" : ""} w-full items-center gap-2  transition-all duration-300 p-3 rounded-xl hover:bg-black/5`}
               >
+                <span>
+                  {link.title}
+                </span>
                 {link.icon}
-                {link.title}
               </Link>
             </li>
           );
         })}
+        <li>
+          <button
+            onClick={() => signOut({ redirect: true, callbackUrl: '/sign-in' })}
+            className={`w-full font-medium items-center gap-2 transition-all duration-300 p-3 rounded-xl hover:bg-black/5 flex justify-between`}
+          >
+            <span>
+              Sign Out
+            </span>
+            <BiLogOutCircle size={24} />
+          </button>
+        </li>
       </ul>
     </div>
   );

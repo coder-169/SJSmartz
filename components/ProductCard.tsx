@@ -38,7 +38,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     product && (
       <div key={product._id} className="relative overflow-hidden rounded-lg p-2">
         {getMaxDiscount(product) > 0 &&
-          <span className="font-bold absolute left-2 top-2 text-green-500 bg-green-50 text-sm p-2">{getMaxDiscount(product)}% OFF</span>
+          <span className="font-bold absolute  md:left-2 md:top-2 top-1 left-1 text-green-500 bg-green-50 text-xs md:text-sm p-1 md:p-2">{getMaxDiscount(product)}% OFF</span>
         }
         <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md  group-hover:opacity-75">
           <Link href={`/products/${product.slug}`}>
@@ -51,18 +51,17 @@ const ProductCard = ({ product }: { product: Product }) => {
             />
           </Link>
         </div>
-        <div className="mt-3">
+        <div className="mt-1 md:mt-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm !font-semibold text-gray-700">
+            <h3 className="text-xs md:text-sm !font-semibold text-gray-700">
               <Link href={`/products/${product.slug}`}>
-
                 {shortenTitle(product.title, 3)}
               </Link>
             </h3>
           </div>
           <div className="mt-4 flex justify-between">
             <p className="mt-1 text-xs text-gray-500">{product.category}</p>
-            <p className="text-sm !font-semibold text-gray-900">
+            <p className="text-xs md:text-sm !font-semibold text-gray-900">
               Rs.{getMinimumPrice(product)}
             </p>
           </div>
@@ -84,7 +83,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                 qty: 1,
               })
             }
-            className="m-4 mx-auto mt-4 block w-full rounded-xl bg-blue-950 p-4 text-center text-sm font-semibold text-white"
+            className="mt-2 md:mt-4 mx-auto block w-full rounded-xl bg-blue-950 p-4 text-center text-xs md:text-sm font-semibold text-white"
           >
             Add To Cart
           </button>

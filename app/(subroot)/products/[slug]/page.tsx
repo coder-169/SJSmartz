@@ -111,17 +111,20 @@ export default function Page({ params }: { params: { slug: string } }) {
 
               <p className="font-poppins text-[28px] font-medium text-[#141718]">
                 <span className="align-middle">
-                  {selectedVariant && formatCurrency(selectedVariant.price)}
-                </span>
-                <span className="ml-3 align-middle text-xl text-[#6C7275] line-through decoration-2">
+
                   {selectedVariant &&
-                    selectedVariant.discount > 0 &&
+                    selectedVariant.discount > 0 ?
                     formatCurrency(
-                      selectedVariant.price -
-                      (selectedVariant.price * selectedVariant.discount) /
-                      100,
-                    )}
+                      Math.round(selectedVariant.price -
+                        (selectedVariant.price * selectedVariant.discount) /
+                        100)) : formatCurrency(selectedVariant.price)
+                  }
                 </span>
+                {selectedVariant && selectedVariant.discount > 0 ?
+                  <span className="ml-3 align-middle text-xl text-[#6C7275] line-through decoration-2">
+                    {selectedVariant.price}
+                  </span> : ""
+                }
               </p>
             </div>
 
@@ -146,7 +149,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               )}
             </div>
 
-            <div className="space-y-4 border-b border-[#E8ECEF] py-6 lg:hidden">
+            {/* <div className="space-y-4 border-b border-[#E8ECEF] py-6 lg:hidden">
               <div className="flex h-10 gap-2 lg:h-[52px]">
                 <div className="flex h-full w-1/2 items-center justify-between rounded bg-[#F5F5F5] px-2 md:w-3/5 lg:px-4">
                   <MinusIcon
@@ -162,7 +165,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   />
                 </div>
 
-                {/* <Button
+                <Button
                   variant="ghost"
                   width="full"
                   className="flex h-full items-center justify-center gap-2 rounded border border-[#141718]"
@@ -174,7 +177,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   <span className="font-inter text-sm font-medium text-[#141718] lg:text-base">
                     Wishlist
                   </span>
-                </Button> */}
+                </Button>
               </div>
 
               <Button
@@ -184,7 +187,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               >
                 Add to Cart
               </Button>
-            </div>
+            </div> */}
 
             <div className="space-y-2 pt-6">
               {/* <div className="grid grid-cols-[100px_1fr] font-inter text-xs lg:grid-cols-[140px_1fr] lg:text-sm">
@@ -217,10 +220,20 @@ export default function Page({ params }: { params: { slug: string } }) {
                   <p className="font-inter text-sm text-[#6C7275]">Subtotal</p>
                   <div className="space-y-1 text-right">
                     <p className="font-inter text-sm text-[#6C7275] line-through">
-                      {selectedVariant && formatCurrency(selectedVariant.price)}
+
+                      {selectedVariant &&
+                        selectedVariant.discount > 0 ? formatCurrency(qty * selectedVariant.price)
+                        : ""
+                      }
                     </p>
                     <p className="font-poppins text-xl font-semibold text-[#141718]">
-                      {selectedVariant && formatCurrency(selectedVariant.price)}
+                      {selectedVariant &&
+                        selectedVariant.discount > 0 ?
+                        formatCurrency(
+                          qty * Math.round(selectedVariant.price -
+                            (selectedVariant.price * selectedVariant.discount) /
+                            100)) : formatCurrency(qty * selectedVariant.price)
+                      }
                     </p>
                   </div>
                 </div>
@@ -312,7 +325,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   ) : (
     <SectionLayout>
       <div className="flex h-screen w-full items-center justify-center">
-        <Loader2 className="animate-spin duration-300 repeat-infinite" />
+        <Loader2 size={40} className="animate-spin duration-300 repeat-infinite" />
       </div>
     </SectionLayout>
   );

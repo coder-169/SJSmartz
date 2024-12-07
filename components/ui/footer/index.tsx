@@ -7,6 +7,7 @@ import SectionLayout from "@/layouts/sectionLayout";
 // ui
 import Text from "@/ui/text";
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/ui/assets/svg";
+import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa6";
 
 const Footer = () => {
   return (
@@ -23,34 +24,22 @@ const Footer = () => {
             </Text>
           </div>
 
-          <ul className="flex flex-col gap-8 lg:flex-row lg:gap-10">
-            <li className="text-center font-inter text-sm font-normal text-[#FEFEFE]">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="text-center font-inter text-sm font-normal text-[#FEFEFE]">
-              <Link href="/">Shop</Link>
-            </li>
-            <li className="text-center font-inter text-sm font-normal text-[#FEFEFE]">
-              <Link href="/">Product</Link>
-            </li>
-            <li className="text-center font-inter text-sm font-normal text-[#FEFEFE]">
-              <Link href="/">Blog</Link>
-            </li>
-            <li className="text-center font-inter text-sm font-normal text-[#FEFEFE]">
-              <Link href="/">Contact Us</Link>
-            </li>
-          </ul>
         </div>
 
         <div className="flex flex-col gap-8 border-t border-[#6C7275] py-6 lg:flex-row lg:justify-between lg:gap-0 lg:py-4">
           <div className="flex items-center justify-center gap-6 lg:order-2">
-            <InstagramIcon
-              fill="#FEFEFE"
-              stroke="#FEFEFE"
-              className="h-6 w-6"
-            />
-            <FacebookIcon stroke="#FEFEFE" className="h-6 w-6" />
-            <YoutubeIcon stroke="#FEFEFE" className="h-6 w-6" />
+            <Link href={'https://www.instagram.com/sajiddoongah/'}>
+              <FaInstagram
+
+                className="text-white h-6 w-6"
+              />
+            </Link>
+            <Link href={'https://web.facebook.com/profile.php?id=61565837793883&sk=followers&notif_ids[0]=100075696775827&notif_ids[1]=100029224238315&notif_ids[2]=100070408065566&notif_ids[3]=100023305154001&notif_id=1733489273657322&notif_t=follow_profile&ref=notif'}>
+              <FaFacebook className="text-white h-5 w-5" />
+            </Link>
+            <Link href='https://wa.me/923191112018'>
+              <FaWhatsapp className="text-white h-6 w-6" />
+            </Link>
           </div>
 
           <div className="flex flex-col gap-7 lg:order-1 lg:flex-row">

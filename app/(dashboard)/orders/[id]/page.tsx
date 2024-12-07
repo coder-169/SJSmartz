@@ -24,7 +24,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     });
     const data = await resp.json();
 
-    console.log(data);
     if (data.success) {
       setOrder(data.order);
     } else {
@@ -43,7 +42,6 @@ const Page = ({ params }: { params: { id: string } }) => {
       }),
     });
     const data = await resp.json();
-    console.log(data);
     if (data.success) {
       setOrder(data.order);
       toast.success("Order Canceled Successfully");

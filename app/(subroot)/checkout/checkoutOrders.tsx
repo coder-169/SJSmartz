@@ -16,7 +16,7 @@ const CheckoutOrders = () => {
       </p>
 
       <div>
-        {cartItems?.map((item: any) => { if (item.check) return <OrderItem key={item.id} data={item} /> })}
+        {cartItems?.map((item: any, idx: number) => { if (item.check) return <OrderItem key={idx} data={item} /> })}
       </div>
     </div>
   );

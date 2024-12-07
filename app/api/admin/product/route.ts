@@ -48,7 +48,6 @@ export async function GET() {
         { status: 404 },
       );
     } else {
-      console.log(productId);
       const product = await Product.findById(productId);
       if (product)
         return NextResponse.json(

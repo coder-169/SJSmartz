@@ -74,11 +74,15 @@ const CartSummary = () => {
             <p className="font-poppins text-lg font-semibold text-[#141718]">
               Total
             </p>
-            <p className="font-poppins text-lg font-semibold text-[#141718]">
-              {subTotal > 4000
-                ? formatCurrency(subTotal)
-                : formatCurrency(total)}
-            </p>
+            {subTotal > 4000 ?
+              <p className="font-poppins text-lg font-semibold text-[#141718]">
+                <small className=" text-[#6C7275] line-through decoration-2 pr-1">{total}</small>
+                <span>{formatCurrency(subTotal)}</span>
+              </p>
+              : <p className="font-poppins text-lg font-semibold text-[#141718]">
+                <span className=" decoration-2">{formatCurrency(total)}</span>
+              </p>
+            }
           </div>
         </div>
         {total > 0 ?

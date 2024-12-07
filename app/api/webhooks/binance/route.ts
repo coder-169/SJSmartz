@@ -34,7 +34,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     await dbConnect();
     const id = req.nextUrl.searchParams.get("id");
     const host = req.headers.get("host");
-    console.log(host)
     // validateSignature(req.headers, (await req.json()).data);
     // const url = "/";
     // if (url !== body.url) {

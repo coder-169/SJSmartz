@@ -14,12 +14,13 @@ import Input from "@/form/input";
 import { cn } from "@/lib/utils";
 import { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Loader, Loader2 } from "lucide-react";
 import BtnLoader from "@/components/BtnLoader";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
+
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -27,6 +28,7 @@ export default function Page() {
     last_name: "",
     password: "",
   });
+  const [check, setCheck] = useState<boolean>(false)
   const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -35,7 +37,9 @@ export default function Page() {
   const [code, setCode] = useState("");
   const [signUp, setSignUp] = useState<boolean>(false);
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    console.log(check)
+    e.preventDefault()
+
     if (
       !values.first_name ||
       !values.last_name ||
@@ -44,6 +48,8 @@ export default function Page() {
       !values.password
     )
       return toast.error("All fields are required");
+    if (!check)
+      return toast.error("Please agree to our terms and conditions")
     try {
       setLoading(true);
       const res = await fetch("/api/auth/register", {
@@ -92,7 +98,7 @@ export default function Page() {
       const data = await res.json();
       if (data.success) {
         toast.success("Account verified");
-      router.push('/')
+        router.push('/')
       } else toast.error("incorrect code or expired!");
     } catch (error: any) {
       toast.error(error.message);
@@ -132,6 +138,8 @@ export default function Page() {
       callbackUrl: "/user/dashboard",
     });
   };
+  const { status } = useSession()
+  if (status === "authenticated") return router.push("/");
   return (
     <div className="relative bg-[#F3F5F7] lg:min-h-screen">
       <div
@@ -168,7 +176,6 @@ export default function Page() {
                 <h1 className="mb-2 font-poppins text-[40px] font-medium text-[#121212]">
                   Sign Up
                 </h1>
-                <span>Sj Smartz</span>
                 <Text weight={400} color="gray">
                   Already have an account?{" "}
                   <span className="font-semibold text-[#38CB89] hover:underline">
@@ -231,6 +238,7 @@ export default function Page() {
                 </div>
                 <div className="flex items-center gap-3">
                   <input
+                    onChange={() => setCheck(!check)}
                     type="checkbox"
                     className="h-6 w-6 rounded-xl border border-[#6C7275] checked:text-red-300"
                   />
@@ -241,13 +249,13 @@ export default function Page() {
                     className="md:text-sm"
                   >
                     I agree with{" "}
-                    <span className="font-semibold text-[#141718]">
+                    <Link href={'/privacy-policy'} className="font-semibold text-[#141718]">
                       Privacy Policy
-                    </span>{" "}
+                    </Link>{" "}
                     and{" "}
-                    <span className="font-semibold text-[#141718]">
+                    <Link href='/terms-of-service' className="font-semibold text-[#141718]">
                       Terms of Use
-                    </span>
+                    </Link>
                   </Text>
                   <p></p>
                 </div>

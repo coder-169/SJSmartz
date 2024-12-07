@@ -8,12 +8,13 @@ import "./globals.css";
 import AppContextProvider from "@/hooks/AppContext";
 import AuthProvider from "@/hooks/AuthContext";
 import { Providers } from "./global/provider";
+import Script from "next/script";
 
 
 export const metadata: Metadata = {
   title: "Sj Smartz - Electronics Store",
   description:
-    "We are a Electronics Selling Store having variety of products in Electronics",
+    "Sj Smartz is an Electronics Gadgets Selling Store, Like Headphones, Earbuds, Airpods, Smart Watches, Wireless Chargers & Smart Gadgets having variety of products in Electronics",
 };
 
 export default function RootLayout({
@@ -30,6 +31,19 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
+      {/* <!-- Google tag (gtag.js) --> */}
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-E01FL4EJBC" />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+                window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-E01FL4EJBC');
+              `,
+        }}
+      ></script>
       <body>
         <Providers>
           <AppContextProvider>

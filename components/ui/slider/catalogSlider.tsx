@@ -61,7 +61,6 @@ export default function CatalogSlider() {
       .then((res) => res.json())
       .then((data) => {
         setProducts(data.products);
-        console.log(data);
       });
   };
   useEffect(() => {

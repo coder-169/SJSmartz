@@ -20,6 +20,8 @@ import { getSession, useSession } from "next-auth/react";
 import axios from "axios";
 import { useGlobalContext } from "@/hooks/AppContext";
 import Link from "next/link";
+import Address from "@/models/Address";
+import { useRouter } from "next/navigation";
 // import PaymentMethod from "@/components/PaymentMethod";
 
 export default function Page() {
@@ -37,28 +39,39 @@ export default function Page() {
     state: "",
     area: "",
   });
-  const [orderId, setOrderId] = useState<string>("");
+  const [order, setOrder] = useState({ _id: '', totalPayment: 3 });
+  const getProds = () => {
+    const cartItems = localStorage.getItem("sjsmartz-cart-items")
+      ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
+      : [];
+    let val = 0;
+    for (let i = 0; i < cartItems.length; i++) {
+      const item = cartItems[i];
+      if (item.check) {
+        val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
+      }
+    }
+    return { val, cartItems };
+  }
   const createOrder = async () => {
-    console.log(selectedPayment);
     try {
+      if (values.address_line === '' || values.city === '' || values.state === '' || values.area === '' || recName === '' || recContact === '')
+        return toast.error('Receiver Information is Required!')
       setLoading(true);
-      const cartItems = localStorage.getItem("sjsmartz-cart-items")
-        ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-        : [];
       const products = []
+      const { cartItems, val } = getProds()
       for (let i = 0; i < cartItems.length; i++) {
         const element = cartItems[i];
         if (element.check) {
           products.push(element)
         }
       }
-
       const json = JSON.stringify({
         products,
         address: values,
         fullName: recName,
         contact: recContact,
-        totalPayment: getTotal(),
+        totalPayment: val,
         userId: session?.user?._id,
         paymentMethod: selectedPayment === 'binance' ? 'Binance Pay' : 'Bank Transfer',
         coupon,
@@ -68,11 +81,11 @@ export default function Page() {
         body: json,
       });
       const dt = await res.json();
-      console.log(dt)
       if (dt.success) {
         toast.success(dt.message);
-        setOrderId(dt.order._id);
+        setOrder(dt.order);
         setOrderPlaced(true);
+        localStorage.removeItem('sjsmartz-cart-items')
         if (selectedPayment === "binance") {
           toast.loading("Redirecting you to checkout");
           const { data } = await axios.post("/api/user/order/payment", {
@@ -155,12 +168,12 @@ export default function Page() {
         val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
       }
     }
-
-    if (getSubTotal() > 4000) {
-      const discount = (coupon.discount / 100) * subTotal;
-      return subTotal - discount;
+    const subTt = getSubTotal()
+    if (subTt > 4000) {
+      const discount = (coupon.discount / 100) * subTt;
+      return subTt - discount;
     } else {
-      const discount = (coupon.discount / 100) * total;
+      const discount = Math.round((coupon.discount / 100) * val);
       return val - discount;
     }
     // return 1;
@@ -236,30 +249,19 @@ export default function Page() {
     setTotal(val + val2);
     setShipping(val2);
   };
-  // const getTotal = () => {
-  //   const cartItems = localStorage.getItem("sjsmartz-cart-items")
-  //     ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
-  //     : [];
-  //   let val = 0;
-  //   let val2 = 0;
-  //   for (let i = 0; i < cartItems.length; i++) {
-  //     const item = cartItems[i];
-  //     if (item.check) {
-  //       val += item.price * item.qty + item.qty * 200;
-  //       val2 += item.price * item.qty;
-  //     }
 
-  //   }
-  //   console.log(val2)
-  //   if (val2 > 4000) {
-  //     return val2
-  //   }
-  //   return val;
-  // };
+  const router = useRouter()
   useEffect(() => {
     // calculateSubtotal();
-  }, [cart]);
+    if (
+      localStorage.getItem("sjsmartz-cart-items")! &&
+      JSON.parse(localStorage.getItem("sjsmartz-cart-items")!).length === 0
+    ) {
+      router.push("/");
+    }
+  }, [router]);
   useEffect(() => { }, [session, editAddress]);
+  if (status === "unauthenticated") return router.push("/");
   return (
     <SectionLayout className="relative px-8 py-20">
       <div className="absolute left-8 top-4 inline-flex items-center gap-1 align-baseline lg:hidden">
@@ -308,9 +310,9 @@ export default function Page() {
         <div className="mx-auto w-4/5 md:w-3/5">
           <h3 className="mb-4 text-center text-2xl font-bold">
             Thanks! Your Ordered Placed Successfully
-            <br />#{orderId}
+            <br />#{order?._id}
           </h3>
-          <h3 className="mb-4 text-center text-xl font-bold">Total {formatCurrency(getTotal())}</h3>
+          <h3 className="mb-4 text-center text-xl font-bold">Total {formatCurrency(order?.totalPayment)}</h3>
           <div className="my-8 space-y-4 rounded-md border border-[#6C7275] p-6">
             <div className="flex gap-2">
               <h3 className="w-1/3 font-bold">Bank</h3>
@@ -330,7 +332,7 @@ export default function Page() {
             </div>
 
             <p className="mt-4 text-center text-sm">
-              Transfer {formatCurrency(getTotal())} and upload Screenshot to your
+              Transfer {formatCurrency(order?.totalPayment)} and upload Screenshot to your
               order
             </p>
           </div>
@@ -559,7 +561,8 @@ export default function Page() {
                   </p>
                   <p className="font-poppins text-lg font-semibold text-[#141718]">
                     <span className="pr-2 text-sm text-[#212425] line-through opacity-80">
-                      {couponApplied ? formatCurrency(getTotal()) : ""}
+                      {couponApplied ? formatCurrency(getSubTotal() + calculateShipping()) : ""}
+                      {!couponApplied && getSubTotal() > 4000 ? (getSubTotal() + calculateShipping()) : ""}
                     </span>
                     <span>
                       {formatCurrency(getTotal())}
@@ -575,10 +578,10 @@ export default function Page() {
               className="h-10 w-full rounded-md bg-[#141718] px-10 font-inter text-sm font-medium text-white disabled:opacity-70 lg:h-[50px] lg:text-base"
             >
               {loading ? (
-                <>
+                <span className="flex items-center gap-2">
                   Placing Order
-                  <BtnLoader />{" "}
-                </>
+                  <Loader2 size={20} />{" "}
+                </span>
               ) : (
                 "Place Order"
               )}

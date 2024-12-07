@@ -8,7 +8,6 @@ export async function POST(req:NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
-    console.log(body)
     const user = await User.findOne({
       $or: [
         { email: { $regex: body.email, $options: "i" } },

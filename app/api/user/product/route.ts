@@ -18,7 +18,6 @@ export async function GET() {
           },
         },
       ]);
-      console.log(products)
       if (products)
         return NextResponse.json(
           { success: true, message: "Products Found", products },
@@ -29,7 +28,6 @@ export async function GET() {
         { status: 404 },
       );
     } else {
-      console.log(productId);
       const product = await Product.findById(productId);
       if (product)
         return NextResponse.json(

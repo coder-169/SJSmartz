@@ -17,7 +17,6 @@ export async function PUT(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
-    console.log(body)
     await Address.findByIdAndUpdate(body._id, { ...body });
 
     return NextResponse.json({ success: true, message: "Address updated" });

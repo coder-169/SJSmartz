@@ -68,22 +68,21 @@ export default function Page() {
             onSubmit={handleLogin}
             className={cn([
               "w-full",
-              "flex flex-col gap-8 lg:justify-center",
+              "flex flex-col gap-4 lg:justify-center",
               "px-8 py-10 lg:px-[88px]",
               "sm:max-w-[480px] md:max-w-[520px] lg:max-w-[600px]",
             ])}
           >
-            <div className="space-y-6">
+            <div className="space-y-4">
               <Link href={"/"}>
                 <Image
                   src={"/images/sj-black.png"}
-                  width={50}
-                  height={50}
+                  width={80}
+                  height={80}
                   alt="Logo"
                 />
 
               </Link>
-              <span>Sj Smartz</span>
               <h1 className="font-poppins text-[40px] font-medium text-[#121212]">
                 Sign In
               </h1>
@@ -118,37 +117,39 @@ export default function Page() {
                 />
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-6 w-6 rounded-md border border-[#6C7275]"></div>
+                {/* <div className="flex items-center gap-3">
+                  <input type="checkbox" className="h-6 w-6 rounded-md border border-[#6C7275]"/>
                   <Text color="gray" size="xs" className="md:text-sm">
                     Remember me
                   </Text>
-                </div>
-
-                <Text
-                  weight={600}
-                  size="xs"
-                  color="black/800"
-                  className="md:text-sm"
-                >
-                  Forgot password?
-                </Text>
+                </div> */}
+                <Link href={'/forgot-pass'}>
+                  <Text
+                    weight={600}
+                    size="xs"
+                    color="black/800"
+                    className="md:text-sm"
+                  >
+                    Forgot password?
+                  </Text>
+                </Link>
               </div>
             </div>
 
             <Button width="full" type="submit" className="py-2.5">
               Sign In
             </Button>
-            <span className="mx-auto block ">OR</span>
+            <span className="mx-auto block font-bold">OR</span>
             {/* <div className="border-t border-[#E8ECEF] my 2" /> */}
             <Button
               type="button"
               onClick={() =>
                 signIn("google", {
-                  callbackUrl: "/user/dashboard",
+                  callbackUrl: "/dashboard",
+                  redirect: true,
                 })
               }
-              className="mx-auto flex items-center gap-2 bg-white py-2.5 font-medium text-black transition-all duration-200 hover:bg-white/70"
+              className="mx-auto flex items-center gap-2 border border-[#e0e0e0] bg-white py-2.5 font-medium text-black transition-all duration-200 hover:bg-white/70"
             >
               <Image
                 src={"/icons/gg.png"}
@@ -156,10 +157,11 @@ export default function Page() {
                 height={20}
                 alt="Google Sign in"
               />
+              Continue With Google
             </Button>
           </form>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }

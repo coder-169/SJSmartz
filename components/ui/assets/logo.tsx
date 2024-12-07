@@ -1,10 +1,8 @@
 import Text from "@/ui/text";
 import Image from "next/image";
 
-export default function Logo() {
+export default function Logo({ classes }: { classes?: string }) {
   return (
-    <Text family="poppins" weight={500} className="md:text-lg">
-      <Image src={"/images/sj-black.png"} width={50} height={60} alt="Sj Smartz" />{" "}
-    </Text>
+    <Image src={"/images/sj-black.png"} width={500} height={600} alt="Sj Smartz" className={`w-16 h-auto ${classes}`}/>
   );
 }

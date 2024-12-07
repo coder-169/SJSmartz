@@ -62,7 +62,6 @@ const StarRating = ({ rating }: { rating: number }) => (
 
 // Main Review Section Component
 const ReviewSection = ({ reviews, rating }: { reviews?: Review[]; rating: number }) => {
-  console.log(reviews,rating)
   return (
     <div className="space-y-12 bg-gray-50 px-4 py-12">
       {/* Style 1: Classic Card Style */}
