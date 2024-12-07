@@ -114,7 +114,7 @@ const ReviewSection = ({ reviews, rating }: { reviews?: Review[]; rating: number
               className="flex w-full items-start justify-between space-x-4 rounded-lg border bg-white p-4"
             >
               <div className="flex items-center gap-4">
-                {(!review.avatar || review.avatar === '') ? <FaUser size={36} /> :
+                {/* {(!review.avatar || review.avatar === '') ? <FaUser size={36} /> :
                   <Image
                     width={36}
                     height={36}
@@ -122,7 +122,7 @@ const ReviewSection = ({ reviews, rating }: { reviews?: Review[]; rating: number
                     alt={`${review.name} Review`}
                     className="h-12 w-12 rounded-full object-cover"
                   />
-                }
+                } */}
                 <div>
                   <StarRating rating={rating} />
                   <p className="mt-1 text-gray-600">{review.comment}</p>
