@@ -126,7 +126,7 @@ const ReviewSection = ({ reviews, rating }: { reviews?: Review[]; rating: number
                 <div>
                   <StarRating rating={rating} />
                   <p className="mt-1 text-gray-600">{review.comment}</p>
-                  <p className="mt-2 text-sm font-semibold">{review.name}</p>
+                  <p className="mt-2 text-sm font-semibold">{review.name[0]}***</p>
                   <p className="text-xs text-gray-500">{formattedDate(review.createdAt)}</p>
                 </div>
               </div>
