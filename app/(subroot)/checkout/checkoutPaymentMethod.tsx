@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 const payments = [
   { name: "binance", value: "Pay With Crypto" },
   { name: "bank", value: "Bank Transfer" },
+  { name: "cod", value: "Cash on Delivery" },
 ];
 
 const CheckoutPaymentMethod = ({
@@ -61,32 +62,6 @@ const CheckoutPaymentMethod = ({
             )}
           </div>
         ))}
-        <div
-          key={'lrem'}
-          className={cn(
-            "flex opacity-50 h-10 cursor-pointer items-center justify-between rounded-md border px-4 lg:h-[50px]",
-          "border-[#6C7275]",
-          )}
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-5 w-5 items-center justify-center rounded-full border border-[#141718]">
-              <div
-                className={cn(
-                  "h-2.5 w-2.5 rounded-full", "bg-white",
-                )}
-              ></div>
-            </div>
-
-            <p className="font-inter text-sm font-normal text-[#141718]">
-              Cash On Delivery
-            </p>
-            <small>will be available soon</small>
-          </div>
-
-          
-            {/* <MoneyIcon stroke="#141718" fill="#141718" className="h-6 w-6" /> */}
-        
-        </div>
       </div>
     </div>
   );

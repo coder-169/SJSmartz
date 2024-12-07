@@ -157,7 +157,7 @@ export default function NavMobile({
           }
           {/* social media button */}
           <div className="flex items-center gap-6 justify-center">
-            <Link href={'https://www.instagram.com/sajiddoongah/'}>
+            <Link href={'https://www.instagram.com/heaphones.sjsmartz/'}>
               <FaInstagram
                 className="h-6 w-6"
               />

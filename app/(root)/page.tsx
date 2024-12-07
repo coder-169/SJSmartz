@@ -39,7 +39,7 @@ export default function Home() {
         dispatch(
           loadProducts({
             noOfProducts: data.products.length,
-            products: data.products,
+            products: data.products.filter((product: { rating: number }) => product.rating > 4),
           }),
         );
       });

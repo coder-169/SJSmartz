@@ -28,7 +28,7 @@ const Footer = () => {
 
         <div className="flex flex-col gap-8 border-t border-[#6C7275] py-6 lg:flex-row lg:justify-between lg:gap-0 lg:py-4">
           <div className="flex items-center justify-center gap-6 lg:order-2">
-            <Link href={'https://www.instagram.com/sajiddoongah/'}>
+            <Link href={'https://www.instagram.com/heaphones.sjsmartz/'}>
               <FaInstagram
 
                 className="text-white h-6 w-6"

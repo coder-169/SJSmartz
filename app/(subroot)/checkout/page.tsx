@@ -305,7 +305,7 @@ export default function Page() {
             <br />#{order?._id}
           </h3>
           <h3 className="mb-4 text-center text-xl font-bold">Total {formatCurrency(order?.totalPayment)}</h3>
-          <div className="my-8 space-y-4 rounded-md border border-[#6C7275] p-6">
+          {selectedPayment === 'cod' ? "" : <div className="my-8 space-y-4 rounded-md border border-[#6C7275] p-6">
             <div className="flex gap-2">
               <h3 className="w-1/3 font-bold">Bank</h3>
               <span>Meezan Bank Limited</span>
@@ -327,7 +327,7 @@ export default function Page() {
               Transfer {formatCurrency(order?.totalPayment)} and upload Screenshot to your
               order
             </p>
-          </div>
+          </div>}
           <div className="space-y-6">
             <CheckoutOrders />
           </div>
