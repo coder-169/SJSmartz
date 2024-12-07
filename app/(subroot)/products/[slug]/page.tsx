@@ -57,7 +57,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const getProductById = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/products?slug=` + params.slug,
+        `/api/products?slug=` + params.slug,
       );
 
       if (res.status === 404) return notFound();
