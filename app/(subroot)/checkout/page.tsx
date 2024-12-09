@@ -62,6 +62,8 @@ export default function Page() {
   const createOrder = async () => {
     if(status === 'unauthenticated')
       return toast.error('Login to Checkout')
+    if(session?.user && session.user.isVerified === false)
+      return toast.error('Verify your email to checkout')
     try {
       if (values.address_line === '' || values.city === '' || values.state === '' || values.area === '' || recName === '' || recContact === '')
         return toast.error('Receiver Information is Required!')

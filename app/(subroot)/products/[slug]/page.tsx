@@ -304,7 +304,12 @@ export default function Page({ params }: { params: { slug: string } }) {
                     <CiDeliveryTruck className="h-6 w-6 font-bold" />
                     <div>
                       <p className="font-inter text-sm text-[#262626]">
-                        Standard Delivery
+                       <span className="mr-2"> Standard Delivery</span>
+                        {product.freeDelivery ?
+                          <small className="font-semibold">Free</small>
+                          :
+                          <small className="font-semibold">200</small>
+                        }
                       </p>
                       <small className=" text-xs text-[#716b6b]">
                         Guaranteed By {formatDeliveryDate(4, 7)}
@@ -319,7 +324,13 @@ export default function Page({ params }: { params: { slug: string } }) {
 
         {/* <ProductTab tabs={product.tabs} /> */}
         {/* <ProductRecommendation products={relatedProducts}/> */}
-        <ReviewSection rating={product.rating} reviews={product.reviews} />
+        {product.noOfReviews > 0 ?
+          <ReviewSection rating={product.rating} reviews={product.reviews} />
+          :
+          <div className="flex items-center justify-center h-[40vh] ">
+            <h3 className="text-2xl font-semibold"> No Reviews Yet</h3>
+          </div>
+        }
       </div>
     </SectionLayout>
   ) : (

@@ -37,8 +37,8 @@ const ProductCard = ({ product }: { product: Product }) => {
   return (
     product && (
       <div key={product._id} className="relative overflow-hidden rounded-lg p-2">
-        {Math.ceil(getMaxDiscount(product)) > 0 &&
-          <span className="font-bold absolute  md:left-2 md:top-2 top-1 left-1 text-green-500 bg-green-50 text-xs md:text-sm p-1 md:p-2">{getMaxDiscount(product)}% OFF</span>
+        {getMaxDiscount(product) > 0 &&
+          <span className="font-bold absolute  md:left-2 md:top-2 top-1 left-1 text-green-500 bg-green-50 text-xs md:text-sm p-1 md:p-2">{Math.ceil(getMaxDiscount(product))}% OFF</span>
         }
         <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md  group-hover:opacity-75">
           <Link href={`/products/${product.slug}`}>

@@ -85,7 +85,7 @@ export default function Home() {
                   width={5000}
                   height={5000}
                   alt="background collection"
-                  className="aspect-[0.75/1] w-[507px] h-[493px] -translate-y-[10%] object-center "
+                  className="w-2/3 md:w-3/4 pl-0 md:pl-16  object-center "
                 />
               </div>
 
@@ -110,7 +110,7 @@ export default function Home() {
                   width={262}
                   height={349}
                   alt="background collection"
-                  className=" w-1/3 translate-x-1/2"
+                  className="w-1/2 lg:w-1/3 translate-x-1/2"
                 />
               </div>
 
@@ -135,7 +135,7 @@ export default function Home() {
                   width={50000}
                   height={50000}
                   alt="background collection"
-                  className=" w-1/3 translate-x-1/2"
+                  className="w-1/2 lg:w-1/3 translate-x-1/2"
                 />
               </div>
 
