@@ -85,6 +85,7 @@ export type Product = {
   description: string;
   noOfReviews: number;
   rating: number;
+  freeDelivery:boolean;
   discount: number;
   createdAt: string;
   variants: Variant[];

@@ -49,12 +49,19 @@ export default function Page() {
     for (let i = 0; i < cartItems.length; i++) {
       const item = cartItems[i];
       if (item.check) {
-        val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
+        if (item.freeDelivery) {
+          val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty));
+
+        } else {
+          val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
+        }
       }
     }
     return { val, cartItems };
   }
   const createOrder = async () => {
+    if(status === 'unauthenticated')
+      return toast.error('Login to Checkout')
     try {
       if (values.address_line === '' || values.city === '' || values.state === '' || values.area === '' || recName === '' || recContact === '')
         return toast.error('Receiver Information is Required!')
@@ -166,7 +173,12 @@ export default function Page() {
     for (let i = 0; i < cartItems.length; i++) {
       const item = cartItems[i];
       if (item.check) {
-        val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
+        if (item.freeDelivery) {
+          val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty));
+
+        } else {
+          val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
+        }
       }
     }
     const subTt = getSubTotal()
@@ -187,7 +199,11 @@ export default function Page() {
     for (let i = 0; i < cartItems.length; i++) {
       const item = cartItems[i];
       if (item.check) {
-        val += Math.round((item.price - (item.price * item.discount / 100)) * item.qty);
+        if (item.freeDelivery) {
+          val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty));
+        } else {
+          val += Math.round(((item.price - (item.price * item.discount / 100)) * item.qty) + (item.qty * 200));
+        }
       }
     }
     return val
@@ -200,7 +216,9 @@ export default function Page() {
     for (let i = 0; i < cartItems.length; i++) {
       const item = cartItems[i];
       if (item.check) {
-        val += item.qty * 200;
+        if (!item.freeDelivery) {
+          val += item.qty * 200;
+        }
       }
     }
     return val
@@ -252,8 +270,7 @@ export default function Page() {
   };
 
   const router = useRouter()
-
-  if (status === "unauthenticated") return router.push("/");
+  
   return (
     <SectionLayout className="relative px-8 py-20">
       <div className="absolute left-8 top-4 inline-flex items-center gap-1 align-baseline lg:hidden">

@@ -11,7 +11,7 @@ const AppContext = createContext({
   decrementQty: (productId: string) => { },
   removeFromCart: (productId: string) => { },
   checkCartSelectedItems: () => { },
-  calculateSubtotal: (items: { price: number, qty: number, check: boolean, discount: number }[]) => { },
+  calculateSubtotal: (items: { price: number, qty: number, check: boolean, discount: number, freeDelivery: boolean }[]) => { },
   subTotal: 0,
   total: 0,
 });
@@ -24,7 +24,7 @@ export const AppContextProvider = ({
   const [cartItems, setCartItems] = useState([]);
   const [subTotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
-  const calculateSubtotal = (items: { price: number, qty: number, check: boolean, discount: number }[]) => {
+  const calculateSubtotal = (items: { price: number, qty: number, check: boolean, discount: number, freeDelivery: boolean }[]) => {
     if (items) {
       let val = 0;
       let val2 = 0;
@@ -32,7 +32,8 @@ export const AppContextProvider = ({
         const item = items[i];
         if (item.check) {
           val += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty;
-          val2 += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty + item.qty * 200;
+          if (!item.freeDelivery)
+            val2 += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty + item.qty * 200;
         }
       }
       setSubtotal(val);
@@ -46,9 +47,14 @@ export const AppContextProvider = ({
       for (let i = 0; i < cartItems.length; i++) {
         const item = cartItems[i];
         if (item.check) {
-
           val += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty;
-          val2 += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty + item.qty * 200;
+          if (item.freeDelivery) {
+            val2 += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty ;
+
+          } else {
+            val2 += Math.round(item.price - (item.discount / 100 * item.price)) * item.qty + item.qty * 200;
+
+          }
         }
       }
       setSubtotal(val);
@@ -60,9 +66,10 @@ export const AppContextProvider = ({
     let items = localStorage.getItem("sjsmartz-cart-items")
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
-    const { title, color, image, qty, discount, price, stock, _id } =
+    console.log(product)
+    const { title, color, image, qty, discount, price, stock, _id, freeDelivery } =
       product as any;
-
+    console.log(freeDelivery)
     for (let index = 0; index < items.length; index++) {
       if (items[index]._id === _id) {
         if (items[index].qty > 5)
@@ -75,7 +82,7 @@ export const AppContextProvider = ({
       }
     }
 
-    items.push({ title, color, image, qty, discount, price, _id, check: true });
+    items.push({ title, color, image, qty, discount, price, _id, check: true, freeDelivery });
 
     toast.success("Item added to cart");
     localStorage.setItem("sjsmartz-cart-items", JSON.stringify(items));

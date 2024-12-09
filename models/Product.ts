@@ -16,6 +16,7 @@ const ProductSchema = new mongoose.Schema({
   noOfReviews: { type: Number, default: 0 },
   brand: { type: String, default: "No Brand" },
   description: { type: String },
+  freeDelivery: { type: Boolean, default: false },
   condition: { type: String, default: "New" },
   model: { type: String, default: new Date().getFullYear() },
 });
