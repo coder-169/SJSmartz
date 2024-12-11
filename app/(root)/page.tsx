@@ -51,6 +51,7 @@ export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     getProducts();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -167,11 +168,13 @@ export default function Home() {
 
           {loading ? <div>
             <Loader />
-          </div> : <div className="grid grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-4 lg:gap-y-8 xl:grid-cols-5">
-            {products.map((product: any, index: number) => (
-              <ProductCard key={index} product={product} />
-            ))}
-          </div>}
+          </div> :
+            <div className="grid grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-4 lg:gap-y-8 xl:grid-cols-5">
+             
+              {products.map((product: any, index: number) => (
+                <ProductCard key={index} product={product} />
+              ))}
+            </div>}
         </div>
       </SectionLayout>
       {/* Promotion section */}

@@ -8,6 +8,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "./Rating";
 function shortenTitle(title: string, maxWords = 4) {
+  if(!title)
+    return;
   const words = title.split(" "); // Split the title into words
   if (words.length <= maxWords) {
     return title; // Return the title if it's already short
@@ -33,6 +35,7 @@ const getMaxDiscount = (product: Product): number => {
 
 
 const ProductCard = ({ product }: { product: Product }) => {
+  console.log(product)
   const { addToCart } = useGlobalContext() as any;
   return (
     product && (
