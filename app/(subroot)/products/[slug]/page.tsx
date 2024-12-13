@@ -304,7 +304,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     <CiDeliveryTruck className="h-6 w-6 font-bold" />
                     <div>
                       <p className="font-inter text-sm text-[#262626]">
-                       <span className="mr-2"> Standard Delivery</span>
+                        <span className="mr-2"> Standard Delivery</span>
                         {product.freeDelivery ?
                           <small className="font-semibold">Free</small>
                           :
