@@ -27,13 +27,14 @@ const ProductVariant = ({
 
         <div className="flex-no-wrap flex gap-4 overflow-x-auto">
           {variants?.map((variant) => (
-            <div
+            <button
               key={variant.color}
               onClick={() => setSelected(variant)}
+              disabled={variant.stock === 0}
               className={cn(
-                "h-[70px] w-[70px] flex-none cursor-pointer overflow-hidden border p-1 rounded-lg",
-                selected.image === variant.image
-                  ? "border-[#707070]"
+                "relative  disabled:opacity-70  flex-none cursor-pointer overflow-hidden border rounded-lg pt-2",
+                selected.color === variant.color
+                  ? "border-[#1e1f45]"
                   : "border-transparent",
               )}
             >
@@ -42,9 +43,12 @@ const ProductVariant = ({
                 height={308}
                 src={variant.image}
                 alt={variant.color}
-                className="h-full w-full object-center rounded-lg"
+                className="w-16 object-center rounded-lg p-1"
               />
-            </div>
+              {variant.stock === 0 ?
+                <span className="text-black/50 bg-[#707070] text-xs w-full rounded-tr-lg rounded-tl-lg p-0.5 absolute top-0 left-0">Sold</span>
+                : ''}
+            </button>
           ))}
         </div>
       </div>

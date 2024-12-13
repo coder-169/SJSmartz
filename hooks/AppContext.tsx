@@ -67,8 +67,11 @@ export const AppContextProvider = ({
       ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
       : [];
     console.log(product)
+
     const { title, color, image, qty, discount, price, stock, _id, freeDelivery } =
       product as any;
+      if(stock === 0)
+        return toast.error("Out of stock");
     console.log(freeDelivery)
     for (let index = 0; index < items.length; index++) {
       if (items[index]._id === _id) {
