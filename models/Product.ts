@@ -19,7 +19,8 @@ const ProductSchema = new mongoose.Schema({
   freeDelivery: { type: Boolean, default: false },
   condition: { type: String, default: "New" },
   model: { type: String, default: new Date().getFullYear() },
-});
+},
+{ timestamps: true });
 
 export default mongoose.models.Product ||
   mongoose.model("Product", ProductSchema);

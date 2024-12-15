@@ -44,7 +44,7 @@ export default function RootLayout({
               `,
         }}
       ></script>
-      <body>
+      <body className="relative">
         <Providers>
           <AppContextProvider>
             <AuthProvider>

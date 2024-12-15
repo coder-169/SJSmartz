@@ -48,6 +48,7 @@ export default function Home() {
   const { list: products, loading } = useSelector(
     (state: RootState) => state.products,
   );
+
   const dispatch = useDispatch();
   useEffect(() => {
     getProducts();
@@ -170,7 +171,7 @@ export default function Home() {
             <Loader />
           </div> :
             <div className="grid grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-4 lg:gap-y-8 xl:grid-cols-5">
-             
+
               {products.map((product: any, index: number) => (
                 <ProductCard key={index} product={product} />
               ))}

@@ -8,7 +8,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "./Rating";
 function shortenTitle(title: string, maxWords = 4) {
-  if(!title)
+  if (!title)
     return;
   const words = title.split(" "); // Split the title into words
   if (words.length <= maxWords) {
@@ -18,6 +18,8 @@ function shortenTitle(title: string, maxWords = 4) {
 }
 
 const getMinimumPrice = (product: Product): number => {
+  if (product.variants.length === 1)
+    return product.variants[0].price;
   // Collect product price and variant prices into one array
   const prices = [...product.variants.map((variant) => variant.price)];
 
@@ -26,6 +28,8 @@ const getMinimumPrice = (product: Product): number => {
 };
 
 const getMaxDiscount = (product: Product): number => {
+  if(product.variants.length === 1)
+    return product.variants[0].discount;
   // Collect discounts from product and variants
   const discounts = [product.discount, ...product.variants.map((variant) => variant.discount)];
 
@@ -64,9 +68,14 @@ const ProductCard = ({ product }: { product: Product }) => {
           </div>
           <div className="mt-4 flex justify-between">
             <p className="mt-1 text-xs text-gray-500">{product.category}</p>
-            <p className="text-xs md:text-sm !font-semibold text-gray-900">
-              Rs.{getMinimumPrice(product)}
-            </p>
+            {getMaxDiscount(product) > 0 ?
+              <p className="text-xs md:text-sm !font-semibold text-gray-900">
+                Rs.{Math.round(getMinimumPrice(product) - ((getMaxDiscount(product) / 100) * getMinimumPrice(product)))} <span className="text-gray-500 line-through">{getMinimumPrice(product)}</span>
+              </p>
+              : <p className="text-xs md:text-sm !font-semibold text-gray-900">
+                Rs.{getMinimumPrice(product)}
+              </p>
+            }
           </div>
           <div className="flex gap-1 items-center text-xs mt-2">
             <span className="text-gray-500">({product.noOfReviews}) Reviews</span>
