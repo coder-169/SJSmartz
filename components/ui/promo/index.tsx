@@ -24,10 +24,10 @@ export default function PromoSection() {
         !showPromo && "hidden",
       )}
     >
-      <div className="relative mx-auto flex max-w-[1440px] justify-center px-8 py-2">
+      <div className="relative mx-auto flex max-w-[1440px] justify-center px-8">
         {/* promo content */}
         <div className="flex gap-6">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 py-2">
             <DiscountIcon
               fill={cn(isRootPage ? "#FEFEFE" : "#141718")}
               className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6"

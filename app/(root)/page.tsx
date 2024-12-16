@@ -22,11 +22,14 @@ import {
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/types/product";
+import { useGSAP } from "@gsap/react"
+import { gsap } from "gsap/gsap-core";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../global/store";
 import { loadProducts } from "../global/Reducers/ProductReducer";
 import { Coins } from "lucide-react";
 import Loader from "@/components/Loader";
+import ProductSlider from "@/components/ProductSlider";
 
 export default function Home() {
   // const [products, setProducts] = useState([]);
@@ -55,16 +58,25 @@ export default function Home() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useGSAP(() => {
+    gsap.to("#hero-title", {
+      opacity: 1,
+      delay: 2,
+    });
+    gsap.to("#cta", {
+      opacity: 1,
+      y: -50,
+      delay: 2,
+    });
+  }, []);
   return (
     <>
       {/* Hero section */}
       <SectionLayout
         bg=""
-        className="flex h-[60vh] md:h-[110vh] flex-col items-start md:items-center justify-between 
-        bg-[url('/images/hero-2.jpg')]
-         md:bg-[url('/images/hero-3.jpg')]
-          lg:bg-[url('/images/hero-1.jpg')] bg-cover bg-center bg-no-repeat lg:grid lg:grid-cols-2 lg:pt-8"
+        className="flex"
       >
+        <ProductSlider/>
         <div className="hidden"></div>
       </SectionLayout>
       {/* Shop collection section */}
