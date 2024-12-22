@@ -135,7 +135,11 @@ export default function Page() {
   };
   const handleGoogleSignUp = () => {
     signIn("google", {
-      callbackUrl: "/user/dashboard",
+      callbackUrl: "/profile",
+      redirect: true,
+    }).then(res => {
+      if (res?.ok)
+        toast.success("Sign up successful")
     });
   };
   const { status } = useSession()
