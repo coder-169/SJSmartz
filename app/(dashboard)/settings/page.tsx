@@ -92,6 +92,35 @@ const Page = () => {
       setPassLoading(false);
     }
   };
+  const createPassword = async () => {
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      return toast.error("Passwords do not match!");
+    }
+    setPassLoading(true);
+    try {
+      const res = await fetch("/api/user/profile/password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...passwords,
+          userId: session?.user?._id,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        signOut({ callbackUrl: "/sign-in" });
+        router.push("/sign-in");
+        return toast.success(data.message);
+      }
+      toast.error(data.message);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setPassLoading(false);
+    }
+  };
   const [image, setImage] = useState<any>(null);
   const updateProfile = async () => {
     setLoading(true);
@@ -409,11 +438,12 @@ const Page = () => {
         </div>
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-2xl font-semibold text-gray-900">
-            Change Password
+            {session?.user?.password === "" ? "Create" : "Update"} Password
+
           </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-4">
+            {session?.user?.password === "" ? "" : <div className="sm:col-span-4">
               <label
                 htmlFor="oldPassword"
                 className="block text-sm/6 font-medium text-gray-900"
@@ -432,7 +462,9 @@ const Page = () => {
                   className="w-full rounded-md border border-[#6C7275] px-4 py-2 font-inter font-normal text-[#141718] outline-none transition-all  duration-200 placeholder:text-[#6C7275] placeholder:opacity-100 focus:border-[#141718]"
                 />
               </div>
-            </div>
+            </div>}
+
+
             <div className="sm:col-span-3">
               <label
                 htmlFor="newPassword"
@@ -476,7 +508,21 @@ const Page = () => {
           </div>
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          <Button
+          {session?.user?.password === "" ? <Button
+            onClick={createPassword}
+            disabled={passLoading}
+            type="button"
+            className="relative px-6 py-2 text-sm disabled:opacity-60"
+          >
+            {passLoading ? (
+              <span className="flex items-center gap-2">
+                Creating{" "}
+                <Loader2 className="size-4 animate-spin repeat-infinite" />
+              </span>
+            ) : (
+              <span>Create</span>
+            )}
+          </Button> : <Button
             onClick={updatePasswords}
             disabled={passLoading}
             type="button"
@@ -490,7 +536,7 @@ const Page = () => {
             ) : (
               <span>Update</span>
             )}
-          </Button>
+          </Button>}
         </div>
       </div>
     </div>

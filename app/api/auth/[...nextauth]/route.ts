@@ -42,6 +42,7 @@ const handler = NextAuth({
             { username: { $regex: credentials.username, $options: "i" } },
           ],
         });
+        
         if (!user) {
           throw new Error("Invalid credentials");
         }
