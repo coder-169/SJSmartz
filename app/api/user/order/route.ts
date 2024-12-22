@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { ordersReducer } from "@/states/Reducers/OrderReducer";
 import { sendMail } from "@/lib/server_action";
+import User from "@/models/User";
 function formatDeliveryDate(days: number) {
   const now = new Date(); // Get current date and time
   const dt = new Date(now.getTime() + days * 24 * 60 * 60 * 1000); // Calculate future date
@@ -32,6 +33,20 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
+    if (!body.products || body.products.length === 0) {
+      return NextResponse.json({
+        success: false,
+        message: "Cart is empty",
+      });
+    }
+    
+    const user = await User.findById(body.userId);
+    if(user.isVerified === false){
+      return NextResponse.json({
+        success: false,
+        message: "Please verify your account to place order",
+      });
+    }
     for (let i = 0; i < body.products.length; i++) {
       const element = body.products[i];
       const variant = await Variant.findById(element._id);
