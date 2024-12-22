@@ -109,8 +109,8 @@ const handler = NextAuth({
         });
         const htmlContent = `
         <div style="max-width: 600px; margin: auto; width: 100%;">
-            <a href="https://www.sjsmartz.com/images/sj-black.png" style="text-decoration: none;">
-                <img style="width: 35%; max-width: 300px; display: block; margin: 24px auto;" src="https://www.sjsmartz.com/images/sj-black.pngassets/logo-1.png" alt="Logo Wigroup">
+            <a href="https://www.sjsmartz.com" style="text-decoration: none;">
+                <img style="width: 35%; max-width: 300px; display: block; margin: 24px auto;" src="https://www.sjsmartz.com/images/sj-black.png" alt="Logo Wigroup">
             </a>
             <div style="background: #f9f9f9; color: rgb(85, 85, 85); line-height: 150%; font-family: 'Georgia', 'Times', 'Times New Roman', 'serif'; text-align: center; padding: 16px 12px;">
                 <p style="text-align: center; margin: 0px; line-height: 21px;">

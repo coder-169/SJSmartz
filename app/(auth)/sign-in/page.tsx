@@ -145,8 +145,12 @@ export default function Page() {
               type="button"
               onClick={() =>
                 signIn("google", {
-                  callbackUrl: "/dashboard",
+                  callbackUrl: "/profile",
                   redirect: true,
+                }).then((res) => {
+                  if (res?.ok) {
+                    toast.success("Login Successfully");
+                  }
                 })
               }
               className="mx-auto flex items-center gap-2 border border-[#e0e0e0] bg-white py-2.5 font-medium text-black transition-all duration-200 hover:bg-white/70"
