@@ -9,6 +9,7 @@ import AppContextProvider from "@/hooks/AppContext";
 import AuthProvider from "@/hooks/AuthContext";
 import { Providers } from "./global/provider";
 import Script from "next/script";
+import Image from "next/image";
 
 
 export const metadata: Metadata = {
@@ -31,6 +32,26 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+             !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '570584532401428');
+              fbq('track', 'PageView');
+              `,
+        }}
+      ></script>
+
+      <noscript><Image height="1" width="1" className="hidden"
+        src="https://www.facebook.com/tr?id=570584532401428&ev=PageView&noscript=1"
+        alt="" /></noscript>
       {/* <!-- Google tag (gtag.js) --> */}
       <Script async src="https://www.googletagmanager.com/gtag/js?id=G-E01FL4EJBC" />
       <script
