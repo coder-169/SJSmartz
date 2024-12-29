@@ -34,9 +34,6 @@ const ProductSlider = () => {
         const swiper = document.querySelector(".swiper-container");
 
         const handleSlideChange = (index: number) => {
-            console.log(textRef.current); // Should log an array of elements
-            console.log(imageRef.current);
-
             // Animate the text content
             gsap.fromTo(
                 textRef.current[index],
@@ -73,7 +70,7 @@ const ProductSlider = () => {
                 modules={[Autoplay]}
                 pagination={{ clickable: true }}
                 autoplay={{
-                    delay: 10000,
+                    delay: 4000,
                     disableOnInteraction: false,
                 }}
                 loop

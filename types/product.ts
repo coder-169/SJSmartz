@@ -67,6 +67,13 @@ export type Order = {
   paymentMethod: string;
   payment: string;
 };
+export type Refer = {
+  _id: string;
+  username: string;
+  credits: number;
+  createdAt: string;
+  status: string;
+};
 
 export type Review = {
   _id: string;

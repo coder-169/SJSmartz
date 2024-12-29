@@ -39,7 +39,6 @@ const getMaxDiscount = (product: Product): number => {
 
 
 const ProductCard = ({ product }: { product: Product }) => {
-  console.log(product)
   const { addToCart } = useGlobalContext() as any;
   return (
     product && (

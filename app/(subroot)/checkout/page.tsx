@@ -116,8 +116,6 @@ export default function Page() {
     }
   };
   const handleValueChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    console.log(e.target.value)
-    console.log(e.target)
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const createAddress = async (e: FormEvent<HTMLFormElement>) => {
@@ -165,6 +163,7 @@ export default function Page() {
   const [coupon, setCoupon] = useState({ value: "", discount: 0 });
   const [couponApplied, setCouponApplied] = useState<boolean>(false);
   const [applyingCoupon, setApplyingCoupon] = useState<boolean>(false);
+  const [shipping, setShipping] = useState(0)
   const clientSideDiscount = (coupon: any) => {
 
     setCoupon({ value: coupon.couponCode, discount: coupon.discount });
@@ -212,7 +211,8 @@ export default function Page() {
     }
     return val
   }
-  const calculateShipping = () => {
+  const calculateShipping = (state = 'sindh', city = '') => {
+    console.log('called', state, city)
     // const items = localStorage.getItem("sjsmartz-cart-items")
     //   ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
     //   : [];
@@ -221,11 +221,19 @@ export default function Page() {
       const item = cartItems[i];
       if (item.check) {
         if (!item.freeDelivery) {
-          val += item.qty * 200;
+          if (state.toLowerCase() !== 'sindh') {
+            val += item.qty * 250;
+          } else {
+            if (city.toLowerCase() === 'moro' || city.toLowerCase() === 'nawabshah') {
+              val += item.qty * 100;
+            } else {
+              val += item.qty * 200;
+            }
+          }
         }
       }
     }
-    return val
+    setShipping(val)
   }
   const applyCoupon = async () => {
     if (coupon.value === "") return toast.error("Please enter code!");
@@ -256,7 +264,6 @@ export default function Page() {
   const [subTotal, setSubtotal] = useState(0);
   const { cartItems: cart } = useGlobalContext() as any;
   const [total, setTotal] = useState(0);
-  const [shipping, setShipping] = useState(0);
   const calculateSubtotal = () => {
     // const cartItems = localStorage.getItem("sjsmartz-cart-items")
     //   ? JSON.parse(localStorage.getItem("sjsmartz-cart-items")!)
@@ -272,7 +279,10 @@ export default function Page() {
     setTotal(val + val2);
     setShipping(val2);
   };
-
+  useEffect(() => {
+    calculateShipping(values.state, values.city)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.state, values.city])
 
   return (
     <SectionLayout className="relative px-8 py-20">
@@ -554,8 +564,7 @@ export default function Page() {
                     Shipping
                   </p>
                   <p className="font-inter text-sm font-semibold text-[#141718]">
-                    {getSubTotal() < 4000 ? calculateShipping() || 0 : 'Free Shipping'}
-
+                    {getSubTotal() < 4000 ? shipping || 0 : 'Free Shipping'}
                   </p>
                 </div>
                 <div className="flex items-center justify-between py-3">
@@ -572,8 +581,8 @@ export default function Page() {
                   </p>
                   <p className="font-poppins text-lg font-semibold text-[#141718]">
                     <span className="pr-2 text-sm text-[#212425] line-through opacity-80">
-                      {couponApplied ? formatCurrency(getSubTotal() + calculateShipping()) : ""}
-                      {!couponApplied && getSubTotal() > 4000 ? (getSubTotal() + calculateShipping()) : ""}
+                      {couponApplied ? formatCurrency(getSubTotal() + shipping) : ""}
+                      {!couponApplied && getSubTotal() > 4000 ? (getSubTotal() + shipping) : ""}
                     </span>
                     <span>
                       {formatCurrency(getTotal())}

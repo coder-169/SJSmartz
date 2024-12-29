@@ -36,13 +36,17 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  referId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Refer",
+    required: true,
+  },
   subscribed: { type: Boolean },
   isVerified: { type: Boolean, default: false },
   profileImage: {
     type: String,
     default: "",
   },
-  
 });
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);

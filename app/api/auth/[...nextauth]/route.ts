@@ -42,7 +42,7 @@ const handler = NextAuth({
             { username: { $regex: credentials.username, $options: "i" } },
           ],
         });
-        
+        console.log(user, credentials);
         if (!user) {
           throw new Error("Invalid credentials");
         }
@@ -51,7 +51,6 @@ const handler = NextAuth({
           user.password,
         );
         if (!passMatch) throw new Error("Invalid credentials");
-
         return user;
       },
     }),
@@ -71,7 +70,10 @@ const handler = NextAuth({
       const existingUser = await User.aggregate([
         {
           $match: {
-            $or: [{ email: session.user.email }, { name: session.user.name }],
+            $or: [
+              { email: session.user.email },
+              { username: session.user.username },
+            ],
           }, // Match the product by slug
         },
         {
@@ -84,6 +86,7 @@ const handler = NextAuth({
         },
       ]);
       if (existingUser) {
+        console.log(existingUser[0])
         session.user = existingUser[0];
       } else {
         throw new Error("User not found");

@@ -12,21 +12,26 @@ import Input from "@/form/input";
 
 // lib
 import { cn } from "@/lib/utils";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { signIn, useSession } from "next-auth/react";
 import { Loader, Loader2 } from "lucide-react";
 import BtnLoader from "@/components/BtnLoader";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 export default function Page() {
+  const searchParams = useSearchParams()
 
+  const [showPassword, setShowPassword] = useState(false)
   const [values, setValues] = useState({
     username: "",
     email: "",
     first_name: "",
     last_name: "",
     password: "",
+    confirmPassword: '',
+    referId: ''
   });
   const [check, setCheck] = useState<boolean>(false)
   const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,8 +41,9 @@ export default function Page() {
   const [loading, setLoading] = useState<boolean>(false);
   const [code, setCode] = useState("");
   const [signUp, setSignUp] = useState<boolean>(false);
+  const [resendLoading, setResendLoading] = useState<boolean>(false);
+  const { status } = useSession();
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(check)
     e.preventDefault()
 
     if (
@@ -74,7 +80,6 @@ export default function Page() {
       toast.error(error.message);
     }
   };
-
   const handleSubmitCode = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -105,7 +110,6 @@ export default function Page() {
     }
     setLoading(false);
   };
-  const [resendLoading, setResendLoading] = useState<boolean>(false);
   const resendEmail = async () => {
     try {
       setResendLoading(true);
@@ -142,8 +146,14 @@ export default function Page() {
         toast.success("Sign up successful")
     });
   };
-  const { status } = useSession()
-  if (status === "authenticated") return router.push("/");
+  useEffect(() => {
+    const id = searchParams.get('id')
+    if (id) {
+      setValues({ ...values, referId: id })
+    }
+
+    if (status === "authenticated") return router.push("/");
+  }, []);
   return (
     <div className="relative bg-[#F3F5F7] lg:min-h-screen">
       <div
@@ -233,12 +243,43 @@ export default function Page() {
                 <div className="border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
                   <Input
                     intent="secondary"
-                    type="password"
-                    placeholder="Password"
+                    type="text"
+                    placeholder="Refer Id (optional)"
+                    name="referId"
+                    value={values.referId}
+                    onChange={handler}
+                  />
+                </div>
+                <div className="relative border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
+                  <Input
+                    intent="secondary"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="********"
                     name="password"
                     value={values.password}
                     onChange={handler}
+                    className="w-full"
                   />
+                  {(values.password.length > 0 && showPassword) ?
+                    (<button type="button" className="absolute top-2 right-4" onClick={() => setShowPassword(false)}><FaEyeSlash /></button>)
+                    :
+                    ((values.password.length > 0 && !showPassword) && <button type="button" className="absolute top-2 right-4" onClick={() => setShowPassword(true)} ><FaEye /></button>)
+                  }
+                </div>
+                <div className="relative border-b border-[#E8ECEF] pb-2 focus-within:border-[#141718]">
+                  <Input
+                    intent="secondary"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="********"
+                    name="confirmPassword"
+                    value={values.confirmPassword}
+                    onChange={handler}
+                  />
+                  {(values.confirmPassword.length > 0 && showPassword) ?
+                    (<button type="button" className="absolute top-2 right-4" onClick={() => setShowPassword(false)}><FaEyeSlash /></button>)
+                    :
+                    ((values.confirmPassword.length > 0 && !showPassword) && <button type="button" className="absolute top-2 right-4" onClick={() => setShowPassword(true)} ><FaEye /></button>)
+                  }
                 </div>
                 <div className="flex items-center gap-3">
                   <input

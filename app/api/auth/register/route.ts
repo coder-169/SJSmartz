@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import User from "@/models/User";
 import dbConnect from "@/lib/db";
 import { generateCode, sendMail } from "@/lib/server_action";
+import Refer from "@/models/Refer";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,22 +15,35 @@ export async function POST(req: NextRequest) {
         { username: { $regex: body.username, $options: "i" } },
       ],
     });
-    console.log(user);
     if (user)
       return NextResponse.json({
         message: "Try different Credentials",
         success: false,
       });
-    const { username, email, password, first_name, last_name } = body;
+    const { username, email, password, first_name, last_name, referId } = body;
     const hash = await bcrypt.hash(password, 10);
-
+    let credits = 0;
+    let referral = null;
+    if (referId) {
+      const referUser = await User.findOne({
+        username: { $regex: referId, $options: "i" },
+      }).select("_id");
+      referral = await Refer.create({
+        credits: 5000,
+        userId: referUser._id,
+        username
+      });
+    }
     const newUser = await User.create({
       username,
       first_name,
       last_name,
       email,
       password: hash,
+      referId: referId ? referral._id : null,
+      credits,
     });
+
     const code = await generateCode();
     const hashedCode = await bcrypt.hash(code, 10);
     // const expireTime = new Date().getTime() + 1000;

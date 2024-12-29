@@ -9,6 +9,7 @@ import { ObjectId } from "mongodb";
 import { ordersReducer } from "@/states/Reducers/OrderReducer";
 import { sendMail } from "@/lib/server_action";
 import User from "@/models/User";
+
 function formatDeliveryDate(days: number) {
   const now = new Date(); // Get current date and time
   const dt = new Date(now.getTime() + days * 24 * 60 * 60 * 1000); // Calculate future date
@@ -47,6 +48,7 @@ export async function POST(req: NextRequest) {
         message: "Please verify your account to place order",
       });
     }
+
     for (let i = 0; i < body.products.length; i++) {
       const element = body.products[i];
       const variant = await Variant.findById(element._id);
@@ -80,6 +82,7 @@ export async function POST(req: NextRequest) {
       deliveryDate: formatDeliveryDate(8).deliveryDate,
       createdAt: formatDeliveryDate(8).createdAt,
     });
+    
     if (order)
     {
       const htmlContent = `

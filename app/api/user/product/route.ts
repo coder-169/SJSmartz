@@ -30,7 +30,6 @@ export async function GET(req: NextRequest) {
           },
         },
       ]);
-      console.log("here", products);
       if (products) {
         return NextResponse.json(
           { success: true, message: "Products Found", products },

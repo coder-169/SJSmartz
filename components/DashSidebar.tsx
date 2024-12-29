@@ -6,6 +6,7 @@ import {
   ListChecks,
   Settings,
   UserIcon,
+  Users2Icon,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
@@ -33,6 +34,11 @@ const links = [
     href: "/settings",
     title: "Settings",
     icon: <Settings size={20} />,
+  },
+  {
+    href: "/referrals",
+    title: "Referrals",
+    icon: <Users2Icon size={20} />,
   },
 ];
 const DashSidebar = () => {

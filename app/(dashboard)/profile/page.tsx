@@ -50,8 +50,9 @@ const Page = () => {
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm/6 font-medium text-gray-900">Credits</dt>
-            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 flex gap-1">
               {session?.user?.credits}{" "}
+              <Image src={'/icons/coin.png'} width={5000} height={5000} className="w-6" alt="SJ Coin" />
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
