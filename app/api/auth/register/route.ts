@@ -24,24 +24,24 @@ export async function POST(req: NextRequest) {
     const hash = await bcrypt.hash(password, 10);
     let credits = 0;
     let referral = null;
-    if (referId) {
-      
-      const referUser = await User.findOne({
-        username: { $regex: referId, $options: "i" },
-      }).select("_id");
+    const referUser = await User.findOne({
+      username: { $regex: referId, $options: "i" },
+    }).select("_id");
+    if (referUser) {
       referral = await Refer.create({
         credits: 5000,
         userId: referUser._id,
-        username
+        username,
       });
     }
+
     const newUser = await User.create({
       username,
       first_name,
       last_name,
       email,
       password: hash,
-      referId: referId ? referral._id : null,
+      referId: referUser ? referral._id : null,
       credits,
     });
 
