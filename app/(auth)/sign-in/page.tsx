@@ -145,7 +145,7 @@ export default function Page() {
               type="button"
               onClick={() =>
                 signIn("google", {
-                  callbackUrl: "/profile",
+                  callbackUrl: "/profile?auth=true",
                   redirect: true,
                 }).then((res) => {
                   if (res?.ok) {

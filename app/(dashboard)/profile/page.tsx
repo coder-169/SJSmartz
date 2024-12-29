@@ -3,9 +3,23 @@ import SectionLayout from "@/layouts/sectionLayout";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { Suspense, useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Page = () => {
+  const searchParams = useSearchParams()
+  const router = useRouter();
+  useEffect(() => {
+    if (searchParams.get('auth')) {
+      toast.success('Login Successful!')
+      return router.push('/profile')
+    }
+    if (searchParams.get('signup')) {
+      toast.success('Sign Up Successful!')
+      return router.push('/profile')
+    }
+  }, [router, searchParams])
   const { data: session } = useSession();
   return (
     <div className="w-full space-y-6 rounded-md px-20 py-8">
@@ -70,4 +84,9 @@ const Page = () => {
   );
 };
 
-export default Page;
+const SignUp = () => {
+  return <Suspense>
+    <Page />
+  </Suspense>
+}
+export default SignUp;
