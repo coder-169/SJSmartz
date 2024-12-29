@@ -163,6 +163,28 @@ export default function Page() {
               />
               Continue With Google
             </Button>
+            <Button
+              type="button"
+              onClick={() =>
+                signIn("facebook", {
+                  callbackUrl: "/profile?auth=true",
+                  redirect: true,
+                }).then((res) => {
+                  if (res?.ok) {
+                    toast.success("Login Successfully");
+                  }
+                })
+              }
+              className="mx-auto flex items-center gap-2 border border-[#e0e0e0] bg-white py-2.5 font-medium text-black transition-all duration-200 hover:bg-white/70"
+            >
+              <Image
+                src={"/icons/fb.png"}
+                width={20}
+                height={20}
+                alt="Google Sign in"
+              />
+              Continue With Facebook
+            </Button>
           </form>
         </div>
       </div >

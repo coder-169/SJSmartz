@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
               <p style="text-align: center; font-size: 14px; margin: 0px; line-height: 21px;">Thanks for Shopping With 🎧 Sj Smartz    </p>
               <br/>
               <p style="text-align: center; margin: 0px; line-height: 18px;">
-                  <span style="font-size: 14px;"><b><i>WIN Support Team</i></b></span>
+                  <span style="font-size: 14px;"><b><i>SJ Smartz Support Team</i></b></span>
               </p>
           </div>
       </div>

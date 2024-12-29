@@ -40,7 +40,7 @@ Here is your verification code. Please verify your account within 10 minutes.   
             </p>
             <br/>
             <p style="text-align: center; margin: 0px; line-height: 18px;">
-                <span style="font-size: 14px;"><b><i>WIN Support Team</i></b></span>
+                <span style="font-size: 14px;"><b><i>SJ Smartz Support Team</i></b></span>
             </p>
         </div>
     </div>

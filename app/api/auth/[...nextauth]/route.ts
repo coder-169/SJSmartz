@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
+import FacebookProvider from "next-auth/providers/facebook";
 import bcrypt from "bcrypt";
 import User from "@/models/User";
 import dbConnect from "@/lib/db";
@@ -11,6 +12,10 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID!,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     }),
     CredentialProvider({
       name: "credentials",
@@ -86,7 +91,6 @@ const handler = NextAuth({
         },
       ]);
       if (existingUser) {
-        console.log(existingUser[0])
         session.user = existingUser[0];
       } else {
         throw new Error("User not found");
@@ -128,7 +132,7 @@ const handler = NextAuth({
 Your account has been created successfully using Google authentication.     </p>
                 <br/>
                 <p style="text-align: center; margin: 0px; line-height: 18px;">
-                    <span style="font-size: 14px;"><b><i>WIN Support Team</i></b></span>
+                    <span style="font-size: 14px;"><b><i>SJ Smartz Support Team</i></b></span>
                 </p>
             </div>
         </div>
