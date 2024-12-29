@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
     let credits = 0;
     let referral = null;
     if (referId) {
+      
       const referUser = await User.findOne({
         username: { $regex: referId, $options: "i" },
       }).select("_id");

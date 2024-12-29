@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema({
   referId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Refer",
-    required: true,
+    default:null
   },
   subscribed: { type: Boolean },
   isVerified: { type: Boolean, default: false },
